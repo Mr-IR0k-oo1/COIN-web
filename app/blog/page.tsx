@@ -29,10 +29,10 @@ export default function BlogPage() {
     <>
       <Header />
       <main className="flex-1">
-        <Section className="bg-slate-50 border-b border-slate-200 pt-32 pb-16">
+        <Section className="bg-slate-50 dark:bg-black border-b border-slate-200 dark:border-slate-800 pt-32 pb-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 className="text-4xl md:text-5xl font-heading font-bold text-slate-900 mb-6">
-              CoIN Blog
+            <h1 className="text-4xl md:text-6xl font-display font-extrabold text-slate-900 dark:text-white mb-6 uppercase tracking-tighter">
+              CoIN <span className="text-gradient">Blog</span>
             </h1>
             <p className="text-lg text-slate-600 max-w-2xl">
               Success stories, announcements, and insights from the SREC innovation community.
@@ -40,7 +40,7 @@ export default function BlogPage() {
           </div>
         </Section>
 
-        <Section className="bg-white">
+        <Section className="bg-white dark:bg-black">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Filters */}
             <div className="mb-10 flex flex-wrap gap-2">
@@ -83,7 +83,7 @@ export default function BlogPage() {
                   <Link
                     key={post.id}
                     href={`/blog/${post.slug}`}
-                    className="group bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl hover:shadow-coin-900/5 hover:border-coin-200 transition-all duration-300 flex flex-col h-full"
+                    className="group bg-white dark:bg-black rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:shadow-xl hover:shadow-coin-900/5 hover:border-coin-200 transition-all duration-300 flex flex-col h-full"
                   >
                     <div className="p-8 flex flex-col h-full">
                       <div className="flex items-center justify-between mb-6">
@@ -103,7 +103,7 @@ export default function BlogPage() {
                         <span className="text-xs text-slate-400 font-medium uppercase tracking-wider">{formatDate(post.createdAt)}</span>
                       </div>
 
-                      <h2 className="text-2xl font-bold font-heading text-slate-900 mb-4 group-hover:text-coin-600 transition-colors line-clamp-2">
+                      <h2 className="text-2xl font-bold font-fancy tracking-tight text-slate-900 dark:text-white mb-4 group-hover:text-coin-600 dark:group-hover:text-coin-400 transition-colors line-clamp-2 leading-tight">
                         {post.title}
                       </h2>
 

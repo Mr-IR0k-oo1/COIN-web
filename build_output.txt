@@ -1,0 +1,32 @@
+
+> coin-srec@1.0.0 build
+> next build
+
+  ▲ Next.js 14.2.35
+  - Environments: .env.local
+
+   Creating an optimized production build ...
+Failed to compile.
+
+./app/admin/participation/page.tsx
+Error: 
+  [31mx[0m Unexpected token `AdminLayout`. Expected jsx identifier
+    ,-[[36;1;4m/home/ir0k/Projects/hackweb/app/admin/participation/page.tsx[0m:43:1]
+ [2m43[0m |   })
+ [2m44[0m | 
+ [2m45[0m |   return (
+ [2m46[0m |     <AdminLayout>
+    : [31;1m     ^^^^^^^^^^^[0m
+ [2m47[0m |       <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+ [2m48[0m |         <div>
+ [2m49[0m |           <h1 className="text-3xl font-bold text-slate-900 dark:text-white font-heading tracking-tight mb-2">
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/admin/participation/page.tsx
+
+
+> Build failed because of webpack errors

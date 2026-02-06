@@ -7,18 +7,18 @@
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
   }
- 
+
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
   }
-  
+
   * {
-    @apply border-gray-200;
+    @apply border-gray-200 dark:border-slate-800;
   }
 
   body {
-    @apply bg-slate-50 text-slate-900 antialiased selection:bg-coin-500/30 selection:text-coin-900;
+    @apply bg-slate-50 text-slate-900 dark:bg-black dark:text-slate-50 antialiased selection:bg-coin-500/30 selection:text-coin-900;
   }
 }
 
@@ -26,24 +26,43 @@
   .glass {
     @apply bg-white/70 backdrop-blur-lg border border-white/20 shadow-xl;
   }
-  
+
   .glass-dark {
-    @apply bg-slate-900/70 backdrop-blur-lg border border-slate-700/30 shadow-xl;
+    @apply bg-black/80 backdrop-blur-lg border border-slate-800/50 shadow-xl;
   }
 
   .text-balance {
     text-wrap: balance;
   }
 
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-br from-coin-400 via-coin-600 to-blue-600;
+  }
+
+  .text-outline {
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
+    color: transparent;
+  }
+
+  .fancy-heading {
+    @apply font-display font-extrabold tracking-tighter uppercase;
+  }
+
+  .tech-label {
+    @apply font-tech text-[10px] uppercase tracking-[0.3em] font-bold opacity-60;
+  }
+
   /* Hide scrollbar for Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
-      display: none;
+    display: none;
   }
 
   /* Hide scrollbar for IE, Edge and Firefox */
   .no-scrollbar {
-      -ms-overflow-style: none;  /* IE and Edge */
-      scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
   }
 }
 
@@ -57,9 +76,9 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-slate-300 rounded-full border-4 border-slate-50;
+  @apply bg-slate-300 dark:bg-slate-700 rounded-full border-4 border-slate-50 dark:border-slate-950;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-slate-400;
+  @apply bg-slate-400 dark:bg-slate-600;
 }

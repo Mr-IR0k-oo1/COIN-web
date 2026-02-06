@@ -1,0 +1,54 @@
+
+> coin-srec@1.0.0 build
+> next build
+
+  ▲ Next.js 14.2.35
+  - Environments: .env.local
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+
+./app/submit/page.tsx
+64:6  Warning: React Hook useEffect has a missing dependency: 'participants'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+76:6  Warning: React Hook useEffect has a missing dependency: 'mentors'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
+   Collecting page data ...
+   Generating static pages (0/19) ...
+ ⨯ useSearchParams() should be wrapped in a suspense boundary at page "/submit". Read more: https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout
+    at a (/home/ir0k/Projects/hackweb/.next/server/chunks/46.js:1:11409)
+    at c (/home/ir0k/Projects/hackweb/.next/server/chunks/46.js:1:22345)
+    at h (/home/ir0k/Projects/hackweb/.next/server/app/submit/page.js:1:1922)
+    at nj (/home/ir0k/Projects/hackweb/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:46252)
+    at nM (/home/ir0k/Projects/hackweb/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47572)
+    at nL (/home/ir0k/Projects/hackweb/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64547)
+    at nI (/home/ir0k/Projects/hackweb/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47011)
+    at nM (/home/ir0k/Projects/hackweb/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47718)
+    at nM (/home/ir0k/Projects/hackweb/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:61547)
+    at nL (/home/ir0k/Projects/hackweb/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64547)
+
+Error occurred prerendering page "/submit". Read more: https://nextjs.org/docs/messages/prerender-error
+
+   Generating static pages (4/19) 
+ ⨯ useSearchParams() should be wrapped in a suspense boundary at page "/success". Read more: https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout
+    at a (/home/ir0k/Projects/hackweb/.next/server/chunks/46.js:1:11409)
+    at c (/home/ir0k/Projects/hackweb/.next/server/chunks/46.js:1:22345)
+    at l (/home/ir0k/Projects/hackweb/.next/server/app/success/page.js:1:1716)
+    at nj (/home/ir0k/Projects/hackweb/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:46252)
+    at nM (/home/ir0k/Projects/hackweb/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47572)
+    at nL (/home/ir0k/Projects/hackweb/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64547)
+    at nI (/home/ir0k/Projects/hackweb/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47011)
+    at nM (/home/ir0k/Projects/hackweb/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:47718)
+    at nM (/home/ir0k/Projects/hackweb/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:61547)
+    at nL (/home/ir0k/Projects/hackweb/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:64547)
+
+Error occurred prerendering page "/success". Read more: https://nextjs.org/docs/messages/prerender-error
+
+   Generating static pages (9/19) 
+   Generating static pages (14/19) 
+ ✓ Generating static pages (19/19)
+
+> Export encountered errors on following paths:
+	/submit/page: /submit
+	/success/page: /success

@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { cn } from '@/lib/utils'
+import { ModeToggle } from '@/components/mode-toggle'
 
 interface HeaderProps {
   hideNav?: boolean
@@ -31,7 +32,7 @@ export default function Header({ hideNav = false }: HeaderProps) {
     <header
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-transparent',
-        scrolled ? 'glass border-white/20 py-2' : 'bg-transparent py-4'
+        scrolled ? 'glass dark:bg-black/70 dark:border-white/10 dark:shadow-black/50 py-2' : 'bg-transparent py-4'
       )}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -42,7 +43,7 @@ export default function Header({ hideNav = false }: HeaderProps) {
                 C
               </div>
               <div className="flex flex-col">
-                <span className="text-xl font-bold tracking-tight text-slate-900 group-hover:text-coin-600 transition-colors font-heading">
+                <span className="text-xl font-bold tracking-tight text-slate-900 dark:text-white group-hover:text-coin-600 transition-colors font-heading">
                   CoIN
                 </span>
                 <span className="hidden sm:block text-[10px] font-medium tracking-wider text-slate-500 uppercase">
@@ -59,21 +60,24 @@ export default function Header({ hideNav = false }: HeaderProps) {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-coin-600 hover:bg-slate-50/50 rounded-full transition-all"
+                    className="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-coin-600 dark:hover:text-white hover:bg-slate-50/50 dark:hover:bg-white/5 rounded-full transition-all"
                   >
                     {link.label}
                   </Link>
                 ))}
                 <Link
                   href="/admin/login"
-                  className="ml-2 px-5 py-2 text-sm font-medium text-white bg-slate-900 hover:bg-slate-800 rounded-full shadow-md hover:shadow-lg transition-all"
+                  className="ml-2 px-5 py-2 text-sm font-medium text-white bg-slate-900 dark:bg-white dark:text-black hover:bg-slate-800 dark:hover:bg-slate-200 rounded-full shadow-md hover:shadow-lg transition-all"
                 >
                   Admin
                 </Link>
+                <div className="ml-2">
+                  <ModeToggle />
+                </div>
               </nav>
 
               <button
-                className="md:hidden p-2 text-slate-600"
+                className="md:hidden p-2 text-slate-600 dark:text-slate-300"
                 onClick={() => setIsOpen(!isOpen)}
               >
                 <div className="space-y-1.5">
@@ -114,7 +118,7 @@ export default function Header({ hideNav = false }: HeaderProps) {
                 key={link.href}
                 href={link.href}
                 onClick={() => setIsOpen(false)}
-                className="block px-4 py-3 text-slate-600 hover:text-coin-600 hover:bg-slate-50 rounded-xl font-medium transition-colors"
+                className="block px-4 py-3 text-slate-600 dark:text-slate-400 hover:text-coin-600 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-white/5 rounded-xl font-medium transition-colors"
               >
                 {link.label}
               </Link>
@@ -122,10 +126,14 @@ export default function Header({ hideNav = false }: HeaderProps) {
             <Link
               href="/admin/login"
               onClick={() => setIsOpen(false)}
-              className="block px-4 py-3 text-coin-600 font-semibold hover:bg-coin-50 rounded-xl transition-colors"
+              className="block px-4 py-3 text-coin-600 dark:text-coin-400 font-semibold hover:bg-coin-50 dark:hover:bg-white/5 rounded-xl transition-colors"
             >
               Admin Login
             </Link>
+            <div className="px-4 py-3 flex items-center justify-between">
+              <span className="text-slate-600 dark:text-slate-400 font-medium">Theme</span>
+              <ModeToggle />
+            </div>
           </nav>
         </div>
       </div>

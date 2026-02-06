@@ -1,195 +1,125 @@
 'use client'
 
 import AdminLayout from '@/components/AdminLayout'
+import { BookOpen, Shield, Target, Zap, Heart, MessageSquare, AlertCircle, CheckCircle2, Flag } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 export default function GuidelinesPage() {
+  const sections = [
+    {
+      title: "Opportunity Lifecycle",
+      icon: Target,
+      color: "text-blue-500",
+      bg: "bg-blue-500/10",
+      rules: [
+        "Names must be descriptive and institutional (e.g., 'National IoT Summit 2.0')",
+        "Always verify eligibility criteria with the department heads",
+        "Registration links must point directly to the official platform",
+        "Status 'Active' should only be set when registration is actually open"
+      ]
+    },
+    {
+      title: "Intelligence Integrity",
+      icon: Shield,
+      color: "text-green-500",
+      bg: "bg-green-500/10",
+      rules: [
+        "Participant domains must strictly be @srec.edu.in",
+        "Team names are subject to moderation for appropriateness",
+        "External registration confirmation is mandatory for all entries",
+        "Duplicate submissions should be flagged and merged"
+      ]
+    },
+    {
+      title: "Broadcasting Standards",
+      icon: Zap,
+      color: "text-purple-500",
+      bg: "bg-purple-500/10",
+      rules: [
+        "Professional tone (Institutional voice, no slang)",
+        "Winner posts must feature all team members and their specific roles",
+        "Use high-quality markdown for structured long-form content",
+        "Include relevant tags for the global search index"
+      ]
+    },
+    {
+      title: "Operational Ethics",
+      icon: Heart,
+      color: "text-red-500",
+      bg: "bg-red-500/10",
+      rules: [
+        "Protect student privacy in all publicly broadcasted data",
+        "Ensure fair representation across all departments",
+        "Respond to student queries via official channels within 24h",
+        "Maintain current and accurate timelines for all events"
+      ]
+    }
+  ]
+
   return (
     <AdminLayout>
-      <div className="space-y-8 max-w-4xl">
-        <div>
-          <h1 className="section-heading mb-2">Admin Guidelines</h1>
-          <p className="text-gray-600">Best practices for managing CoIN</p>
+      <div className="max-w-5xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
+        <div className="text-center space-y-4">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-coin-500/10 text-coin-600 rounded-full text-xs font-bold uppercase tracking-widest border border-coin-500/20">
+            <BookOpen size={14} />
+            Operating Procedures
+          </div>
+          <h1 className="text-5xl font-bold text-slate-900 dark:text-white font-heading tracking-tight">
+            The CoIN <span className="text-gradient">Protocol</span>
+          </h1>
+          <p className="text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">
+            Governing principles and operational guidelines for the SREC Innovation Ecosystem.
+            Follow these standards to maintain system integrity.
+          </p>
         </div>
 
-        <div className="space-y-6">
-          {/* Hackathon Management */}
-          <div className="card p-8">
-            <h2 className="heading-md mb-4">Hackathon Management</h2>
-
-            <div className="space-y-4 text-gray-700">
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-2">Publishing Hackathons</h3>
-                <ul className="list-disc list-inside space-y-1 text-sm">
-                  <li>Use clear, descriptive names (e.g., "IoT Innovate 2024")</li>
-                  <li>Include comprehensive eligibility criteria</li>
-                  <li>Provide direct link to official registration page</li>
-                  <li>Set accurate registration deadlines</li>
-                  <li>Specify mode (In-Person, Online, Hybrid) and location if applicable</li>
-                </ul>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {sections.map((section, idx) => (
+            <div key={idx} className="bg-white dark:bg-neutral-900 border border-slate-200 dark:border-slate-800 p-8 rounded-[40px] shadow-sm hover:shadow-xl hover:shadow-black/5 transition-all">
+              <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center mb-6", section.bg, section.color)}>
+                <section.icon size={26} />
               </div>
-
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-2">Status Management</h3>
-                <ul className="list-disc list-inside space-y-1 text-sm">
-                  <li>
-                    <strong>Active:</strong> Registration open, hackathon is current
+              <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6 font-heading">{section.title}</h2>
+              <ul className="space-y-4">
+                {section.rules.map((rule, ridx) => (
+                  <li key={ridx} className="flex items-start gap-4">
+                    <CheckCircle2 className="text-slate-300 dark:text-slate-700 mt-1 flex-shrink-0" size={18} />
+                    <span className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">{rule}</span>
                   </li>
-                  <li>
-                    <strong>Upcoming:</strong> Scheduled for future dates
-                  </li>
-                  <li>
-                    <strong>Closed:</strong> Registration closed, hackathon may be running
-                  </li>
-                  <li>
-                    <strong>Completed:</strong> Event has ended
-                  </li>
-                </ul>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        {/* Support Vector */}
+        <div className="bg-slate-900 dark:bg-neutral-950 rounded-[40px] p-10 text-white overflow-hidden relative">
+          <div className="flex flex-col md:flex-row items-center gap-10 relative z-10">
+            <div className="w-20 h-20 bg-white/10 rounded-3xl flex items-center justify-center text-coin-400 flex-shrink-0">
+              <MessageSquare size={40} />
+            </div>
+            <div className="space-y-4 text-center md:text-left">
+              <h3 className="text-2xl font-bold font-heading">Protocol Deviation?</h3>
+              <p className="text-slate-400 max-w-xl">
+                If you encounter scenarios not covered by this manual or system failures,
+                contact the Central Innovation Committee immediately. Do not attempt unsanctioned modifications.
+              </p>
+              <div className="flex flex-wrap gap-4 justify-center md:justify-start pt-2">
+                <button className="px-6 py-2 bg-white text-black font-bold rounded-xl hover:scale-105 transition-all text-sm">
+                  Contact Support
+                </button>
+                <button className="px-6 py-2 bg-white/10 text-white font-bold rounded-xl hover:bg-white/20 transition-all text-sm flex items-center gap-2">
+                  <Flag size={14} /> Report Violation
+                </button>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Participation Tracking */}
-          <div className="card p-8">
-            <h2 className="heading-md mb-4">Participation Tracking</h2>
-
-            <div className="space-y-4 text-gray-700">
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-2">Reviewing Submissions</h3>
-                <ul className="list-disc list-inside space-y-1 text-sm">
-                  <li>Verify participant email addresses are college emails</li>
-                  <li>Check team names are appropriate and non-duplicate</li>
-                  <li>Confirm external registration was completed (checkbox validation)</li>
-                  <li>Review mentor information if applicable</li>
-                </ul>
-              </div>
-
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-2">Key Metrics to Track</h3>
-                <ul className="list-disc list-inside space-y-1 text-sm">
-                  <li>Student participation by department</li>
-                  <li>Mentor involvement rates</li>
-                  <li>Year-wise participation distribution</li>
-                  <li>Hackathon popularity (submissions per event)</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          {/* Blog Management */}
-          <div className="card p-8">
-            <h2 className="heading-md mb-4">Blog Management</h2>
-
-            <div className="space-y-4 text-gray-700">
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-2">Creating Posts</h3>
-                <ul className="list-disc list-inside space-y-1 text-sm">
-                  <li>Use informative titles that match content</li>
-                  <li>Write clear summaries (1-2 sentences)</li>
-                  <li>Categorize posts correctly (Article, Winner, Announcement)</li>
-                  <li>Link to related hackathons when applicable</li>
-                  <li>Use tags for better searchability</li>
-                  <li>Save as Draft before publishing to review</li>
-                </ul>
-              </div>
-
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-2">Content Guidelines</h3>
-                <ul className="list-disc list-inside space-y-1 text-sm">
-                  <li>Maintain institutional tone (no emojis, professional language)</li>
-                  <li>For Winner posts: Include team name, hackathon, position</li>
-                  <li>For Announcements: Be clear about deadlines and actions</li>
-                  <li>Use markdown formatting for readability (## for headings, - for lists)</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          {/* Reporting */}
-          <div className="card p-8">
-            <h2 className="heading-md mb-4">Reporting & Analytics</h2>
-
-            <div className="space-y-4 text-gray-700">
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-2">Exporting Data</h3>
-                <ul className="list-disc list-inside space-y-1 text-sm">
-                  <li>Export formats: CSV and Excel</li>
-                  <li>One row per participant (expanded view of teams)</li>
-                  <li>Includes all demographic and team information</li>
-                  <li>Timestamps show when submission was made</li>
-                  <li>External confirmation status is captured</li>
-                </ul>
-              </div>
-
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-2">Using Dashboard Metrics</h3>
-                <ul className="list-disc list-inside space-y-1 text-sm">
-                  <li>Monitor total hackathons and participation trends</li>
-                  <li>Track unique students involved in innovation</li>
-                  <li>Identify most active departments</li>
-                  <li>Review submission timestamps for activity patterns</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          {/* Best Practices */}
-          <div className="card p-8 bg-blue-50 border border-blue-200">
-            <h2 className="heading-md mb-4">Best Practices</h2>
-
-            <div className="space-y-3 text-gray-700 text-sm">
-              <p className="flex items-start gap-3">
-                <span className="text-coin-600 font-bold">1</span>
-                <span>
-                  <strong>Regularity:</strong> Publish hackathons well in advance (2-3 weeks
-                  minimum before registration opens)
-                </span>
-              </p>
-              <p className="flex items-start gap-3">
-                <span className="text-coin-600 font-bold">2</span>
-                <span>
-                  <strong>Communication:</strong> Share blog posts announcing upcoming hackathons
-                  and celebrating winners
-                </span>
-              </p>
-              <p className="flex items-start gap-3">
-                <span className="text-coin-600 font-bold">3</span>
-                <span>
-                  <strong>Engagement:</strong> Feature success stories from winning teams to
-                  motivate future participation
-                </span>
-              </p>
-              <p className="flex items-start gap-3">
-                <span className="text-coin-600 font-bold">4</span>
-                <span>
-                  <strong>Data Quality:</strong> Ensure accurate department names and email
-                  formats for cleaner reporting
-                </span>
-              </p>
-              <p className="flex items-start gap-3">
-                <span className="text-coin-600 font-bold">5</span>
-                <span>
-                  <strong>Cross-Department:</strong> Encourage interdisciplinary participation
-                  by highlighting diverse hackathons
-                </span>
-              </p>
-            </div>
-          </div>
-
-          {/* Support */}
-          <div className="card p-8">
-            <h2 className="heading-md mb-4">Support & Issues</h2>
-
-            <div className="space-y-4 text-gray-700 text-sm">
-              <p>
-                For technical issues or questions about CoIN administration, contact the SREC
-                IT department or the innovation committee.
-              </p>
-              <p className="font-semibold">
-                Remember: CoIN is a tool to facilitate and track student innovation. The goal
-                is to make participation easy and recognition transparent.
-              </p>
-            </div>
-          </div>
+        {/* Footer Warning */}
+        <div className="flex items-center justify-center gap-3 text-slate-400 text-xs font-bold uppercase tracking-[0.3em] py-10 opacity-50">
+          <AlertCircle size={14} />
+          Restricted to Level 3 Administrative Personnel
         </div>
       </div>
     </AdminLayout>

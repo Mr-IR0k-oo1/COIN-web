@@ -36,10 +36,10 @@ export default function Home() {
         />
 
         {/* What CoIN Does */}
-        <Section className="bg-white">
+        <Section className="bg-white dark:bg-black transition-colors duration-300">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-slate-900 mb-16 text-center">
-              The Innovation Ecosystem
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-extrabold tracking-tighter text-slate-900 dark:text-white mb-16 text-center uppercase">
+              The <span className="text-gradient">Innovation</span> Ecosystem
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -68,7 +68,7 @@ export default function Home() {
               ].map((item, idx) => (
                 <div
                   key={idx}
-                  className="group bg-slate-50 p-8 rounded-2xl border border-slate-100 hover:border-coin-200 hover:shadow-xl hover:shadow-coin-900/5 transition-all duration-300"
+                  className="group bg-slate-50 dark:bg-white/5 p-8 rounded-2xl border border-slate-100 dark:border-slate-800 hover:border-coin-200 hover:shadow-xl hover:shadow-coin-900/5 transition-all duration-300"
                 >
                   <div className="h-10 w-10 bg-coin-100 rounded-lg flex items-center justify-center mb-6 text-coin-600 group-hover:bg-coin-600 group-hover:text-white transition-colors">
                     <svg
@@ -85,10 +85,10 @@ export default function Home() {
                       />
                     </svg>
                   </div>
-                  <h3 className="text-xl font-bold text-slate-900 mb-3 font-heading">
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 font-fancy tracking-tight">
                     {item.title}
                   </h3>
-                  <p className="text-slate-600 leading-relaxed">{item.desc}</p>
+                  <p className="text-slate-600 dark:text-slate-400 leading-relaxed">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -96,10 +96,10 @@ export default function Home() {
         </Section>
 
         {/* Who It's For */}
-        <Section className="bg-slate-50/50 border-y border-slate-200">
+        <Section className="bg-slate-50/50 dark:bg-white/[0.02] border-y border-slate-200 dark:border-slate-800 transition-colors duration-300">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-slate-900 mb-16 text-center">
-              Designed for Everyone
+            <h2 className="text-4xl md:text-5xl font-display font-extrabold tracking-tighter text-slate-900 dark:text-white mb-16 text-center uppercase">
+              Designed for <span className="text-gradient">Everyone</span>
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -132,13 +132,13 @@ export default function Home() {
                   ],
                 },
               ].map((card, idx) => (
-                <div key={idx} className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
-                  <h3 className="text-2xl font-bold text-slate-900 mb-6 font-heading">
+                <div key={idx} className="bg-white dark:bg-black p-8 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 transition-colors duration-300">
+                  <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-6 font-display tracking-tight uppercase">
                     {card.who}
                   </h3>
                   <ul className="space-y-4">
                     {card.features.map((feat, i) => (
-                      <li key={i} className="flex items-start gap-3 text-slate-600">
+                      <li key={i} className="flex items-start gap-3 text-slate-600 dark:text-slate-400">
                         <span className="flex-shrink-0 h-5 w-5 rounded-full bg-coin-100 text-coin-600 flex items-center justify-center text-xs mt-0.5">
                           ✓
                         </span>
@@ -153,14 +153,14 @@ export default function Home() {
         </Section>
 
         {/* How It Works */}
-        <Section className="bg-white">
+        <Section className="bg-white dark:bg-black transition-colors duration-300">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row gap-16 items-center">
               <div className="md:w-1/2">
-                <h2 className="text-3xl md:text-4xl font-heading font-bold text-slate-900 mb-6">
-                  Streamlined Workflow
+                <h2 className="text-4xl md:text-5xl font-display font-extrabold tracking-tighter text-slate-900 dark:text-white mb-6 uppercase">
+                  Streamlined <span className="text-gradient">Workflow</span>
                 </h2>
-                <p className="text-lg text-slate-600 mb-8 leading-relaxed">
+                <p className="text-lg text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
                   CoIN simplifies the complexity of tracking innovation activities across the campus.
                   From discovery to documentation, we've got it covered.
                 </p>
@@ -173,11 +173,11 @@ export default function Home() {
                     { num: '05', text: 'CoIN tracks outcomes and showcases achievements' },
                   ].map((item, idx) => (
                     <div key={idx} className="flex gap-6">
-                      <div className="flex-shrink-0 w-12 h-12 bg-white border border-slate-200 text-coin-600 rounded-xl flex items-center justify-center font-bold text-lg shadow-sm">
+                      <div className="flex-shrink-0 w-12 h-12 bg-white dark:bg-black border border-slate-200 dark:border-slate-700 text-coin-600 dark:text-coin-400 rounded-xl flex items-center justify-center font-bold text-lg shadow-sm transition-colors duration-300">
                         {item.num}
                       </div>
                       <div className="flex-1 pt-2">
-                        <p className="text-lg font-medium text-slate-800">{item.text}</p>
+                        <p className="text-lg font-bold text-slate-800 dark:text-slate-200 font-fancy tracking-tight">{item.text}</p>
                       </div>
                     </div>
                   ))}
@@ -207,18 +207,18 @@ export default function Home() {
 
         {/* Current Hackathons */}
         {activeHackathons.length > 0 && (
-          <Section className="bg-slate-50 border-y border-slate-200">
+          <Section className="bg-slate-50 dark:bg-black border-y border-slate-200 dark:border-slate-800 transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex justify-between items-end mb-12">
                 <div>
-                  <h2 className="text-3xl md:text-4xl font-heading font-bold text-slate-900 mb-4">
-                    Active Hackathons
+                  <h2 className="text-4xl md:text-5xl font-display font-extrabold tracking-tighter text-slate-900 dark:text-white mb-4 uppercase">
+                    Active <span className="text-gradient">Hackathons</span>
                   </h2>
-                  <p className="text-slate-600">Opportunities closing soon</p>
+                  <p className="text-slate-600 dark:text-slate-400">Opportunities closing soon</p>
                 </div>
                 <Link
                   href="/hackathons"
-                  className="hidden md:inline-flex items-center text-coin-600 font-medium hover:text-coin-700 hover:underline"
+                  className="hidden md:inline-flex items-center text-coin-600 dark:text-coin-400 font-medium hover:text-coin-700 hover:underline"
                 >
                   View All Hackathons &rarr;
                 </Link>
@@ -228,29 +228,29 @@ export default function Home() {
                 {activeHackathons.slice(0, 3).map((hackathon) => (
                   <div
                     key={hackathon.id}
-                    className="group bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl hover:shadow-coin-900/5 hover:border-coin-200 transition-all duration-300 flex flex-col"
+                    className="group bg-white dark:bg-black rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:shadow-xl hover:shadow-coin-900/5 hover:border-coin-200 dark:hover:border-coin-700 transition-all duration-300 flex flex-col"
                   >
                     <div className="p-6 flex-1">
                       <div className="flex justify-between items-start mb-4">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
                           {hackathon.mode}
                         </span>
-                        <span className="text-xs text-slate-500 font-medium">
+                        <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
                           Deadline: {formatDate(hackathon.registrationDeadline)}
                         </span>
                       </div>
-                      <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-coin-600 transition-colors">
+                      <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-coin-600 dark:group-hover:text-coin-400 transition-colors font-fancy tracking-tight">
                         {hackathon.name}
                       </h3>
-                      <p className="text-sm text-slate-500 mb-4">{hackathon.organizer}</p>
-                      <p className="text-slate-600 text-sm line-clamp-2">
+                      <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">{hackathon.organizer}</p>
+                      <p className="text-slate-600 dark:text-slate-300 text-sm line-clamp-2">
                         {hackathon.description}
                       </p>
                     </div>
                     <div className="p-6 pt-0 mt-auto">
                       <Link
                         href={`/hackathons/${hackathon.slug}`}
-                        className="block w-full text-center px-4 py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-slate-900 hover:border-slate-300 transition-colors"
+                        className="block w-full text-center px-4 py-2 border border-slate-200 dark:border-slate-800 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-neutral-900 hover:text-slate-900 dark:hover:text-white hover:border-slate-300 transition-colors"
                       >
                         View Details
                       </Link>
@@ -275,8 +275,8 @@ export default function Home() {
         <Section className="bg-slate-900 text-white relative overflow-hidden">
           <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20" />
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-            <h2 className="text-3xl md:text-5xl font-heading font-bold mb-8 leading-tight">
-              Fueling the Future of Innovation.
+            <h2 className="text-4xl md:text-7xl font-display font-extrabold mb-8 leading-[0.9] tracking-tighter uppercase">
+              Fueling the <span className="text-outline">Future</span> of Innovation.
             </h2>
             <p className="text-lg md:text-xl text-slate-300 leading-relaxed max-w-2xl mx-auto">
               We believe in tracking impact and celebrating achievements that drive progress.
@@ -287,9 +287,9 @@ export default function Home() {
 
         {/* Latest Blog Posts */}
         {latestPosts.length > 0 && (
-          <Section className="bg-white">
+          <Section className="bg-white dark:bg-black transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <h2 className="text-3xl md:text-4xl font-heading font-bold text-slate-900 mb-12 text-center">
+              <h2 className="text-3xl md:text-4xl font-heading font-bold text-slate-900 dark:text-white mb-12 text-center">
                 Latest Updates
               </h2>
 
@@ -298,16 +298,16 @@ export default function Home() {
                   <Link
                     key={post.id}
                     href={`/blog/${post.slug}`}
-                    className="group flex flex-col bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl hover:shadow-coin-900/5 hover:border-coin-200 transition-all duration-300"
+                    className="group flex flex-col bg-white dark:bg-black rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:shadow-xl hover:shadow-coin-900/5 hover:border-coin-200 dark:hover:border-coin-700 transition-all duration-300"
                   >
                     <div className="p-6 flex-1">
                       <div className="flex items-center justify-between mb-4">
                         <span
                           className={`px-3 py-1 rounded-full text-xs font-semibold ${post.category === 'Winner'
-                            ? 'bg-amber-100 text-amber-700'
+                            ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
                             : post.category === 'Announcement'
-                              ? 'bg-blue-100 text-blue-700'
-                              : 'bg-indigo-100 text-indigo-700'
+                              ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                              : 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400'
                             }`}
                         >
                           {post.category}
@@ -316,15 +316,15 @@ export default function Home() {
                           {formatDate(post.createdAt)}
                         </span>
                       </div>
-                      <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-coin-600 transition-colors line-clamp-2">
+                      <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-coin-600 dark:group-hover:text-coin-400 transition-colors line-clamp-2">
                         {post.title}
                       </h3>
-                      <p className="text-slate-600 text-sm line-clamp-3 leading-relaxed">
+                      <p className="text-slate-600 dark:text-slate-400 text-sm line-clamp-3 leading-relaxed">
                         {post.summary}
                       </p>
                     </div>
                     <div className="px-6 pb-6 pt-0">
-                      <span className="text-sm font-medium text-coin-600 group-hover:underline">
+                      <span className="text-sm font-medium text-coin-600 dark:text-coin-400 group-hover:underline">
                         Read Article &rarr;
                       </span>
                     </div>
@@ -335,7 +335,7 @@ export default function Home() {
               <div className="text-center mt-12">
                 <Link
                   href="/blog"
-                  className="inline-flex items-center px-6 py-3 border border-slate-200 rounded-xl text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 transition-colors"
+                  className="inline-flex items-center px-6 py-3 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-300 bg-white dark:bg-black hover:bg-slate-50 dark:hover:bg-neutral-900 transition-colors"
                 >
                   View All Updates
                 </Link>

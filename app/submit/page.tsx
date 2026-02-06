@@ -164,17 +164,17 @@ export default function SubmitPage() {
   return (
     <>
       <Header />
-      <main className="flex-1 bg-slate-50 min-h-screen pt-24 pb-20">
+      <main className="flex-1 bg-slate-50 dark:bg-black min-h-screen pt-24 pb-20">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h1 className="text-3xl font-heading font-bold text-slate-900 mb-2">Report Participation</h1>
-            <p className="text-slate-600">Track your innovation journey with CoIN.</p>
+            <h1 className="text-3xl font-heading font-bold text-slate-900 dark:text-white mb-2">Report Participation</h1>
+            <p className="text-slate-600 dark:text-slate-400">Track your innovation journey with CoIN.</p>
           </div>
 
           {/* Enhanced Progress Indicator */}
           <div className="mb-10">
             <div className="relative flex items-center justify-between">
-              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-slate-200 -z-0 rounded-full" />
+              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-slate-200 dark:bg-slate-800 -z-0 rounded-full" />
               <div
                 className="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-coin-500 transition-all duration-500 ease-out z-0 rounded-full"
                 style={{ width: `${(currentStepIndex / (steps.length - 1)) * 100}%` }}
@@ -189,14 +189,14 @@ export default function SubmitPage() {
                     <div className={cn(
                       "w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold border-2 transition-all duration-300",
                       isCompleted ? "bg-coin-500 border-coin-500 text-white" :
-                        isCurrent ? "bg-white border-coin-500 text-coin-600 shadow-md ring-4 ring-coin-100" :
-                          "bg-white border-slate-200 text-slate-400"
+                        isCurrent ? "bg-white dark:bg-black border-coin-500 text-coin-600 shadow-md ring-4 ring-coin-100 dark:ring-coin-900/40" :
+                          "bg-white dark:bg-black border-slate-200 dark:border-slate-800 text-slate-400"
                     )}>
                       {isCompleted ? '✓' : idx + 1}
                     </div>
                     <span className={cn(
                       "absolute top-10 text-xs font-medium capitalize whitespace-nowrap transition-colors duration-300",
-                      isCurrent ? "text-coin-700" : "text-slate-400"
+                      isCurrent ? "text-coin-700 dark:text-coin-400" : "text-slate-400"
                     )}>
                       {step}
                     </span>
@@ -206,7 +206,7 @@ export default function SubmitPage() {
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 md:p-10">
+          <div className="bg-white dark:bg-black rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 md:p-10">
             {/* Hackathon Selection */}
             {currentStep === 'hackathon' && (
               <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">

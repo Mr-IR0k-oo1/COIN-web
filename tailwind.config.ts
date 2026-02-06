@@ -1,6 +1,7 @@
 import type { Config } from 'tailwindcss'
 
 const config: Config = {
+  darkMode: 'class',
   content: [
     './app/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -10,6 +11,9 @@ const config: Config = {
       fontFamily: {
         sans: ['var(--font-inter)', 'sans-serif'],
         heading: ['var(--font-outfit)', 'sans-serif'],
+        display: ['var(--font-syne)', 'sans-serif'],
+        fancy: ['var(--font-bricolage)', 'sans-serif'],
+        tech: ['var(--font-space)', 'monospace'],
       },
       colors: {
         coin: {

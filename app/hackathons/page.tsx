@@ -23,8 +23,8 @@ export default function HackathonsPage() {
       <main className="flex-1">
         <Section className="bg-slate-50 border-b border-slate-200 pt-32 pb-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 className="text-4xl md:text-5xl font-heading font-bold text-slate-900 mb-6">
-              Find Your Next Challenge
+            <h1 className="text-4xl md:text-6xl font-display font-extrabold text-slate-900 dark:text-white mb-6 uppercase tracking-tighter">
+              Find Your Next <span className="text-gradient">Challenge</span>
             </h1>
             <p className="text-lg text-slate-600 max-w-2xl">
               Discover upcoming hackathons, coding competitions, and innovation opportunities at
@@ -85,7 +85,7 @@ export default function HackathonsPage() {
                     <div className="flex flex-col md:flex-row gap-8">
                       <div className="flex-1">
                         <div className="flex flex-wrap items-center gap-3 mb-4">
-                          <h2 className="text-2xl font-bold text-slate-900 font-heading">
+                          <h2 className="text-2xl font-bold text-slate-900 dark:text-white font-fancy tracking-tight">
                             {hackathon.name}
                           </h2>
                           <Badge

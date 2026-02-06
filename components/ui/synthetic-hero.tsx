@@ -254,7 +254,7 @@ const SyntheticHero = ({
             uniforms={shaderUniforms}
           />
         </Canvas>
-        <div className="absolute inset-0 bg-slate-900/60" />
+        <div className="absolute inset-0 bg-black/60" />
       </div>
 
       <div className="relative z-10 flex flex-col items-center text-center px-4 md:px-6 w-full max-w-7xl mx-auto">
