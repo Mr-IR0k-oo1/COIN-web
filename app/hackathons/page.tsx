@@ -1,17 +1,23 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import Link from 'next/link'
 import { useHackathonStore } from '@/lib/store/hackathonStore'
 import { formatDate } from '@/lib/utils'
-import { useState } from 'react'
 import Section from '@/components/ui/Section'
 import { Badge } from '@/components/ui/badge'
 
 export default function HackathonsPage() {
-  const hackathons = useHackathonStore((state) => state.getAllHackathons())
+  const hackathons = useHackathonStore((state) => state.hackathons)
+  const fetchHackathons = useHackathonStore((state) => state.fetchHackathons)
+  const isLoading = useHackathonStore((state) => state.isLoading)
   const [statusFilter, setStatusFilter] = useState<string>('All')
+
+  useEffect(() => {
+    fetchHackathons()
+  }, [fetchHackathons])
 
   const filtered = hackathons.filter(
     (h) => statusFilter === 'All' || h.status === statusFilter
@@ -62,7 +68,11 @@ export default function HackathonsPage() {
               </div>
             </div>
 
-            {filtered.length === 0 ? (
+            {isLoading ? (
+              <div className="flex items-center justify-center py-24">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-coin-600"></div>
+              </div>
+            ) : filtered.length === 0 ? (
               <div className="text-center py-24 bg-slate-50 rounded-3xl border border-dashed border-slate-200">
                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-100 mb-4 text-slate-400">
                   <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">

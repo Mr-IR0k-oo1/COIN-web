@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect } from 'react'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import Link from 'next/link'
@@ -10,9 +11,18 @@ import SyntheticHero from '@/components/ui/synthetic-hero'
 import Section from '@/components/ui/Section'
 
 export default function Home() {
+  const fetchPosts = useBlogStore((state) => state.fetchPosts)
   const latestPosts = useBlogStore((state) => state.getLatestPosts(3))
-  const allHackathons = useHackathonStore((state) => state.getAllHackathons())
+
+  const fetchHackathons = useHackathonStore((state) => state.fetchHackathons)
+  const allHackathons = useHackathonStore((state) => state.hackathons)
   const activeHackathons = allHackathons.filter((h) => h.status === 'Active')
+
+  useEffect(() => {
+    fetchPosts()
+    fetchHackathons()
+  }, [fetchPosts, fetchHackathons])
+
 
   return (
     <>
@@ -20,18 +30,18 @@ export default function Home() {
       <main className="flex-1 overflow-hidden">
         {/* Modern 3D/GL Hero */}
         <SyntheticHero
-          title="Innovate. Collaborate. Excel."
-          description="CoIN is Sri Ramakrishna Engineering College's central hub for organizing, tracking, and showcasing innovation. Join the movement."
-          badgeText="SREC CoIN"
-          badgeLabel="Official"
+          title="Engineering the Next Dimension."
+          description="CoIN is the central intelligence hub for SREC's innovation ecosystem – an advanced platform for tracking, showcasing, and fueling student-led engineering breakthroughs."
+          badgeText="SREC CoIN v2.0"
+          badgeLabel="System Status: Active"
           ctaButtons={[
-            { text: 'Browse Hackathons', href: '/hackathons', primary: true },
-            { text: 'My Participation', href: '/submit' },
+            { text: 'Discover Opportunities', href: '/hackathons', primary: true },
+            { text: 'Register Participation', href: '/submit' },
           ]}
           microDetails={[
-            'Participation Tracking',
-            'Faculty Mentorship',
-            'Innovation Analytics',
+            'Advanced Analytics',
+            'Cross-Departmental Synergy',
+            'Technical Mentorship',
           ]}
         />
 

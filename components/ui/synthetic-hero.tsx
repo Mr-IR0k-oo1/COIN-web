@@ -1,8 +1,6 @@
 'use client'
 
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { useMemo, useRef } from 'react'
-import * as THREE from 'three'
+import { useRef } from 'react'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { SplitText } from 'gsap/SplitText'
@@ -10,112 +8,6 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 
 gsap.registerPlugin(SplitText, useGSAP)
-
-interface ShaderPlaneProps {
-  vertexShader: string
-  fragmentShader: string
-  uniforms: { [key: string]: { value: unknown } }
-}
-
-const ShaderPlane = ({
-  vertexShader,
-  fragmentShader,
-  uniforms,
-}: ShaderPlaneProps) => {
-  const meshRef = useRef<THREE.Mesh>(null)
-  const { size } = useThree()
-
-  useFrame((state) => {
-    if (meshRef.current) {
-      const material = meshRef.current.material as THREE.ShaderMaterial
-      material.uniforms.u_time.value = state.clock.elapsedTime * 0.5
-      material.uniforms.u_resolution.value.set(size.width, size.height, 1.0)
-    }
-  })
-
-  return (
-    <mesh ref={meshRef}>
-      <planeGeometry args={[2, 2]} />
-      <shaderMaterial
-        vertexShader={vertexShader}
-        fragmentShader={fragmentShader}
-        uniforms={uniforms}
-        side={THREE.FrontSide}
-        depthTest={false}
-        depthWrite={false}
-      />
-    </mesh>
-  )
-}
-
-const vertexShader = `
-  varying vec2 vUv;
-  void main() {
-    vUv = uv;
-    gl_Position = vec4(position, 1.0);
-  }
-`
-
-const fragmentShader = `
-  precision highp float;
-
-  varying vec2 vUv;
-  uniform float u_time;
-  uniform vec3 u_resolution;
-  uniform sampler2D u_channel0;
-
-  vec2 toPolar(vec2 p) {
-      float r = length(p);
-      float a = atan(p.y, p.x);
-      return vec2(r, a);
-  }
-
-  vec2 fromPolar(vec2 polar) {
-      return vec2(cos(polar.y), sin(polar.y)) * polar.x;
-  }
-
-  void mainImage(out vec4 fragColor, in vec2 fragCoord) {
-      vec2 p = 6.0 * ((fragCoord.xy - 0.5 * u_resolution.xy) / u_resolution.y);
-
-      vec2 polar = toPolar(p);
-      float r = polar.x;
-      float a = polar.y;
-
-      vec2 i = p;
-      float c = 0.0;
-      float rot = r + u_time + p.x * 0.100;
-      for (float n = 0.0; n < 4.0; n++) {
-          float rr = r + 0.15 * sin(u_time*0.7 + float(n) + r*2.0);
-          p *= mat2(
-              cos(rot - sin(u_time / 10.0)), sin(rot),
-              -sin(cos(rot) - u_time / 10.0), cos(rot)
-          ) * -0.25;
-
-          float t = r - u_time / (n + 30.0);
-          i -= p + sin(t - i.y) + rr;
-
-          c += 2.2 / length(vec2(
-              (sin(i.x + t) / 0.15),
-              (cos(i.y + t) / 0.15)
-          ));
-      }
-
-      c /= 8.0;
-
-      // Updated base color to match 'coin' blue/indigo theme
-      vec3 baseColor = vec3(0.2, 0.3, 0.9); 
-      vec3 finalColor = baseColor * smoothstep(0.0, 1.0, c * 0.6);
-
-      fragColor = vec4(finalColor, 1.0);
-  }
-
-  void main() {
-      vec4 fragColor;
-      vec2 fragCoord = vUv * u_resolution.xy;
-      mainImage(fragColor, fragCoord);
-      gl_FragColor = fragColor;
-  }
-`
 
 interface HeroProps {
   title?: string
@@ -147,13 +39,6 @@ const SyntheticHero = ({
   const paragraphRef = useRef<HTMLParagraphElement | null>(null)
   const ctaRef = useRef<HTMLDivElement | null>(null)
   const microRef = useRef<HTMLUListElement | null>(null)
-  const shaderUniforms = useMemo(
-    () => ({
-      u_time: { value: 0 },
-      u_resolution: { value: new THREE.Vector3(1, 1, 1) },
-    }),
-    [],
-  )
 
   useGSAP(
     () => {
@@ -244,17 +129,11 @@ const SyntheticHero = ({
   return (
     <section
       ref={sectionRef}
-      className="relative flex items-center justify-center min-h-[90vh] md:min-h-screen overflow-hidden pt-20 md:pt-0"
+      className="relative flex items-center justify-center min-h-[70vh] md:min-h-[85vh] overflow-hidden pt-20 md:pt-0 bg-white dark:bg-black transition-colors duration-500"
     >
-      <div className="absolute inset-0 z-0">
-        <Canvas>
-          <ShaderPlane
-            vertexShader={vertexShader}
-            fragmentShader={fragmentShader}
-            uniforms={shaderUniforms}
-          />
-        </Canvas>
-        <div className="absolute inset-0 bg-black/60" />
+      {/* Background patterns removed as requested */}
+      <div className="absolute inset-0 z-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none">
+        <div className="absolute inset-0 bg-[radial-gradient(#000_1px,transparent_1px)] dark:bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:24px_24px]" />
       </div>
 
       <div className="relative z-10 flex flex-col items-center text-center px-4 md:px-6 w-full max-w-7xl mx-auto">
@@ -272,14 +151,14 @@ const SyntheticHero = ({
 
         <h1
           ref={headingRef}
-          className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-heading font-bold tracking-tight text-white mb-6 leading-[1.1]"
+          className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-heading font-bold tracking-tight text-slate-900 dark:text-white mb-6 leading-[1.1]"
         >
           {title}
         </h1>
 
         <p
           ref={paragraphRef}
-          className="text-slate-200 text-lg md:text-xl max-w-2xl mx-auto mb-12 font-light leading-relaxed"
+          className="text-slate-600 dark:text-slate-400 text-lg md:text-xl max-w-2xl mx-auto mb-12 font-light leading-relaxed"
         >
           {description}
         </p>
@@ -291,8 +170,8 @@ const SyntheticHero = ({
           {ctaButtons.map((button, index) => {
             const isPrimary = button.primary ?? index === 0
             const classes = isPrimary
-              ? 'w-full sm:w-auto px-8 py-4 rounded-xl text-base font-bold bg-coin-600 text-white hover:bg-coin-500 shadow-lg shadow-coin-900/20 transition-all cursor-pointer'
-              : 'w-full sm:w-auto px-8 py-4 rounded-xl text-base font-medium border border-white/20 text-white hover:bg-white/10 backdrop-blur-sm transition-all cursor-pointer'
+              ? 'w-full sm:w-auto px-8 py-4 rounded-xl text-base font-bold bg-coin-600 text-white hover:bg-coin-500 shadow-lg shadow-coin-900/10 transition-all cursor-pointer'
+              : 'w-full sm:w-auto px-8 py-4 rounded-xl text-base font-medium border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-white/5 transition-all cursor-pointer'
 
             if (button.href) {
               return (
@@ -322,11 +201,11 @@ const SyntheticHero = ({
         {microDetails.length > 0 && (
           <ul
             ref={microRef}
-            className="mt-12 flex flex-wrap justify-center gap-x-8 gap-y-3 text-xs md:text-sm font-medium tracking-wide text-slate-300/80 uppercase"
+            className="mt-12 flex flex-wrap justify-center gap-x-8 gap-y-3 text-xs md:text-sm font-medium tracking-wide text-slate-500 dark:text-slate-400 uppercase"
           >
             {microDetails.map((detail, index) => (
               <li key={index} className="flex items-center gap-2">
-                <span className="h-1 w-1 rounded-full bg-coin-400" />
+                <span className="h-1 w-1 rounded-full bg-coin-500 dark:bg-coin-400" />
                 {detail}
               </li>
             ))}

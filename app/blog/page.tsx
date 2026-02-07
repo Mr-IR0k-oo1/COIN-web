@@ -1,11 +1,11 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import Link from 'next/link'
 import { useBlogStore } from '@/lib/store/blogStore'
 import { formatDate, cn } from '@/lib/utils'
-import { useState } from 'react'
 import { BlogCategory } from '@/lib/types'
 import Section from '@/components/ui/Section'
 import { Badge } from '@/components/ui/badge'
@@ -13,8 +13,14 @@ import { Badge } from '@/components/ui/badge'
 const CATEGORIES: BlogCategory[] = ['Article', 'Winner', 'Announcement']
 
 export default function BlogPage() {
+  const fetchPosts = useBlogStore((state) => state.fetchPosts)
   const allPosts = useBlogStore((state) => state.getPublishedPosts())
+  const isLoading = useBlogStore((state) => state.isLoading)
   const [selectedCategory, setSelectedCategory] = useState<BlogCategory | 'All'>('All')
+
+  useEffect(() => {
+    fetchPosts()
+  }, [fetchPosts])
 
   const filtered =
     selectedCategory === 'All'
@@ -72,7 +78,11 @@ export default function BlogPage() {
             </div>
 
             {/* Blog Posts */}
-            {sorted.length === 0 ? (
+            {isLoading ? (
+              <div className="flex items-center justify-center py-24">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-coin-600"></div>
+              </div>
+            ) : sorted.length === 0 ? (
               <div className="text-center py-24 bg-slate-50 rounded-3xl border border-dashed border-slate-200">
                 <p className="text-slate-900 font-medium mb-2">No posts found</p>
                 <p className="text-slate-500">There are no posts in this category yet.</p>

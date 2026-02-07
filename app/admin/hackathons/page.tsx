@@ -2,15 +2,18 @@
 
 import AdminLayout from '@/components/AdminLayout'
 import { useHackathonStore } from '@/lib/store/hackathonStore'
-import { formatDate, slugify, generateId, cn } from '@/lib/utils'
-import { useState } from 'react'
+import { formatDate, cn } from '@/lib/utils'
+import { useEffect, useState } from 'react'
 import { Hackathon, HackathonMode, HackathonStatus } from '@/lib/types'
-import { Plus, Search, Edit2, Calendar, Globe, MapPin, ExternalLink, Info, CheckCircle2, Clock, XCircle, MoreVertical } from 'lucide-react'
+import { Plus, Search, Edit2, Calendar, Globe, MapPin, ExternalLink, Info, CheckCircle2, Clock, XCircle, MoreVertical, Trash2 } from 'lucide-react'
 
 export default function HackathonsPage() {
-  const hackathons = useHackathonStore((state) => state.getAllHackathons())
+  const hackathons = useHackathonStore((state) => state.hackathons)
+  const fetchHackathons = useHackathonStore((state) => state.fetchHackathons)
+  const isLoading = useHackathonStore((state) => state.isLoading)
   const addHackathon = useHackathonStore((state) => state.addHackathon)
   const updateHackathon = useHackathonStore((state) => state.updateHackathon)
+  const deleteHackathon = useHackathonStore((state) => state.deleteHackathon)
 
   const [showForm, setShowForm] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -29,6 +32,10 @@ export default function HackathonsPage() {
     semester: '',
     status: 'Upcoming' as HackathonStatus,
   })
+
+  useEffect(() => {
+    fetchHackathons()
+  }, [fetchHackathons])
 
   const handleOpenForm = (hackathon?: Hackathon) => {
     if (hackathon) {
@@ -54,37 +61,37 @@ export default function HackathonsPage() {
     setShowForm(true)
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
+    const payload = {
+      name: formData.name || '',
+      organizer: formData.organizer || '',
+      description: formData.description || '',
+      mode: formData.mode || 'Hybrid',
+      location: formData.location || '',
+      startDate: formData.startDate || '',
+      endDate: formData.endDate || '',
+      registrationDeadline: formData.registrationDeadline || '',
+      officialLink: formData.officialLink || '',
+      eligibility: formData.eligibility || '',
+      semester: formData.semester || '',
+      status: formData.status || 'Upcoming',
+    }
+
     if (editingId) {
-      updateHackathon(editingId, {
-        ...formData,
-        updatedAt: new Date().toISOString(),
-      })
+      await updateHackathon(editingId, payload)
     } else {
-      const newHackathon: Hackathon = {
-        id: generateId(),
-        slug: slugify(formData.name || ''),
-        name: formData.name || '',
-        organizer: formData.organizer || '',
-        description: formData.description || '',
-        mode: formData.mode || 'Hybrid',
-        location: formData.location,
-        startDate: formData.startDate || '',
-        endDate: formData.endDate || '',
-        registrationDeadline: formData.registrationDeadline || '',
-        officialLink: formData.officialLink || '',
-        eligibility: formData.eligibility || '',
-        semester: formData.semester || '',
-        status: formData.status || 'Upcoming',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      }
-      addHackathon(newHackathon)
+      await addHackathon(payload)
     }
 
     setShowForm(false)
+  }
+
+  const handleDelete = async (id: string) => {
+    if (confirm('Are you sure you want to delete this hackathon?')) {
+      await deleteHackathon(id)
+    }
   }
 
   const filteredHackathons = hackathons.filter(h =>
@@ -194,7 +201,7 @@ export default function HackathonsPage() {
                       <label className="text-sm font-bold text-slate-700 dark:text-slate-300 ml-1">Start Date</label>
                       <input
                         type="date"
-                        value={formData.startDate || ''}
+                        value={formData.startDate ? formData.startDate.split('T')[0] : ''}
                         onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
                         className="w-full px-5 py-3 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-slate-800 rounded-2xl focus:ring-2 focus:ring-coin-500/20 focus:border-coin-500 transition-all outline-none"
                         required
@@ -205,7 +212,7 @@ export default function HackathonsPage() {
                       <label className="text-sm font-bold text-slate-700 dark:text-slate-300 ml-1">End Date</label>
                       <input
                         type="date"
-                        value={formData.endDate || ''}
+                        value={formData.endDate ? formData.endDate.split('T')[0] : ''}
                         onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
                         className="w-full px-5 py-3 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-slate-800 rounded-2xl focus:ring-2 focus:ring-coin-500/20 focus:border-coin-500 transition-all outline-none"
                         required
@@ -216,7 +223,7 @@ export default function HackathonsPage() {
                       <label className="text-sm font-bold text-slate-700 dark:text-slate-300 ml-1">Registration Deadline</label>
                       <input
                         type="date"
-                        value={formData.registrationDeadline || ''}
+                        value={formData.registrationDeadline ? formData.registrationDeadline.split('T')[0] : ''}
                         onChange={(e) => setFormData({ ...formData, registrationDeadline: e.target.value })}
                         className="w-full px-5 py-3 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-slate-800 rounded-2xl focus:ring-2 focus:ring-coin-500/20 focus:border-coin-500 transition-all outline-none"
                         required
@@ -316,7 +323,11 @@ export default function HackathonsPage() {
 
         {/* Hackathons Grid */}
         <div className="grid grid-cols-1 gap-4">
-          {filteredHackathons.length === 0 ? (
+          {isLoading ? (
+            <div className="flex items-center justify-center py-20">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-coin-600"></div>
+            </div>
+          ) : filteredHackathons.length === 0 ? (
             <div className="p-20 text-center bg-white dark:bg-neutral-900 border border-dashed border-slate-200 dark:border-slate-800 rounded-3xl">
               <Info className="mx-auto text-slate-300 dark:text-slate-700 mb-4" size={48} />
               <p className="text-slate-500 dark:text-slate-400 font-medium">
@@ -364,10 +375,17 @@ export default function HackathonsPage() {
                   <div className="flex items-center gap-3 w-full md:w-auto">
                     <button
                       onClick={() => handleOpenForm(hackathon)}
-                      className="flex-1 md:flex-none px-5 py-2.5 bg-slate-50 dark:bg-white/5 text-slate-700 dark:text-slate-300 font-bold rounded-xl hover:bg-coin-50 dark:hover:bg-coin-500/10 hover:text-coin-600 dark:hover:text-coin-400 transition-all flex items-center justify-center gap-2"
+                      className="px-5 py-2.5 bg-slate-50 dark:bg-white/5 text-slate-700 dark:text-slate-300 font-bold rounded-xl hover:bg-coin-50 dark:hover:bg-coin-500/10 hover:text-coin-600 dark:hover:text-coin-400 transition-all flex items-center justify-center gap-2"
                     >
                       <Edit2 size={16} />
                       Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(hackathon.id)}
+                      className="p-2.5 text-slate-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl transition-all"
+                      title="Delete"
+                    >
+                      <Trash2 size={20} />
                     </button>
                     <a
                       href={hackathon.officialLink}
@@ -378,9 +396,6 @@ export default function HackathonsPage() {
                     >
                       <ExternalLink size={20} />
                     </a>
-                    <button className="p-2.5 text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">
-                      <MoreVertical size={20} />
-                    </button>
                   </div>
                 </div>
               )

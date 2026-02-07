@@ -6,6 +6,8 @@ import Link from 'next/link'
 import { useHackathonStore } from '@/lib/store/hackathonStore'
 import { formatDate } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { Hackathon } from '@/lib/types'
 
 interface PageProps {
   params: {
@@ -15,21 +17,47 @@ interface PageProps {
 
 export default function HackathonDetailPage({ params }: PageProps) {
   const router = useRouter()
-  const hackathon = useHackathonStore((state) => state.getHackathonBySlug(params.slug))
+  const getHackathonBySlug = useHackathonStore((state) => state.getHackathonBySlug)
+  const [hackathon, setHackathon] = useState<Hackathon | undefined>(undefined)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchHackathon = async () => {
+      setLoading(true)
+      const data = await getHackathonBySlug(params.slug)
+      setHackathon(data)
+      setLoading(false)
+    }
+    fetchHackathon()
+  }, [params.slug, getHackathonBySlug])
+
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <main className="flex-1">
+          <section className="py-24 flex items-center justify-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-coin-600"></div>
+          </section>
+        </main>
+        <Footer />
+      </>
+    )
+  }
 
   if (!hackathon) {
     return (
       <>
         <Header />
         <main className="flex-1">
-          <section className="py-12">
+          <section className="py-24">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-              <h1 className="section-heading mb-4">Hackathon Not Found</h1>
+              <h1 className="text-4xl font-bold mb-4">Opportunity Not Found</h1>
               <p className="text-gray-600 mb-8">
-                The hackathon you're looking for does not exist.
+                The intelligence record you're seeking protocol for does not exist in our nodes.
               </p>
-              <Link href="/hackathons" className="btn-primary">
-                Back to Hackathons
+              <Link href="/hackathons" className="px-8 py-3 bg-slate-900 text-white font-bold rounded-2xl">
+                Back to Feed
               </Link>
             </div>
           </section>
@@ -43,137 +71,114 @@ export default function HackathonDetailPage({ params }: PageProps) {
     <>
       <Header />
       <main className="flex-1">
-        <section className="py-12 bg-white border-b border-gray-200">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="pt-32 pb-12 bg-white dark:bg-black border-b border-gray-100 dark:border-white/10">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <button
               onClick={() => router.back()}
-              className="text-coin-600 hover:text-coin-700 font-medium text-sm mb-6"
+              className="text-coin-600 hover:text-coin-700 font-bold text-sm mb-6 flex items-center gap-2"
             >
-              ← Back
+              ← Back to Overview
             </button>
-            <h1 className="section-heading mb-2">{hackathon.name}</h1>
-            <p className="text-gray-600">by {hackathon.organizer}</p>
+            <div className="flex flex-wrap items-center gap-4 mb-4">
+              <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white font-heading tracking-tight">
+                {hackathon.name}
+              </h1>
+              <span className={`px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-widest ${hackathon.status === 'Active' ? 'bg-green-100 text-green-700' :
+                  hackathon.status === 'Upcoming' ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-700'
+                }`}>
+                {hackathon.status}
+              </span>
+            </div>
+            <p className="text-lg text-slate-500 font-medium">Platform Infrastructure provided by <span className="text-slate-900 dark:text-white">{hackathon.organizer}</span></p>
           </div>
         </section>
 
-        <section className="py-12 bg-gray-50">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {/* Main Content */}
-              <div className="lg:col-span-2">
-                {/* Overview */}
-                <div className="card p-8 mb-8">
-                  <h2 className="heading-md mb-4">Overview</h2>
-                  <p className="text-gray-700 mb-6">{hackathon.description}</p>
+        <section className="py-16 bg-slate-50 dark:bg-black/50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+              <div className="lg:col-span-2 space-y-12">
+                <div className="bg-white dark:bg-neutral-900 p-10 rounded-[40px] border border-slate-200 dark:border-slate-800 shadow-sm">
+                  <h2 className="text-2xl font-bold dark:text-white font-heading mb-6">Mission Overview</h2>
+                  <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-lg">{hackathon.description}</p>
 
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-8 pt-6 border-t border-gray-200">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 pt-12 border-t border-slate-100 dark:border-slate-800">
                     <div>
-                      <p className="text-sm text-gray-600 mb-1">
-                        <strong>Mode</strong>
-                      </p>
-                      <p className="text-gray-900">{hackathon.mode}</p>
+                      <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Protocol Mode</p>
+                      <p className="text-slate-900 dark:text-white font-bold">{hackathon.mode}</p>
                     </div>
                     {hackathon.location && (
                       <div>
-                        <p className="text-sm text-gray-600 mb-1">
-                          <strong>Location</strong>
-                        </p>
-                        <p className="text-gray-900">{hackathon.location}</p>
+                        <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Physical Node</p>
+                        <p className="text-slate-900 dark:text-white font-bold">{hackathon.location}</p>
                       </div>
                     )}
                     <div>
-                      <p className="text-sm text-gray-600 mb-1">
-                        <strong>Semester</strong>
-                      </p>
-                      <p className="text-gray-900">{hackathon.semester}</p>
+                      <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Temporal Node</p>
+                      <p className="text-slate-900 dark:text-white font-bold">{hackathon.semester}</p>
                     </div>
                   </div>
                 </div>
 
-                {/* Important Dates */}
-                <div className="card p-8 mb-8">
-                  <h2 className="heading-md mb-4">Important Dates</h2>
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center pb-4 border-b border-gray-200">
-                      <span className="text-gray-700">
-                        <strong>Start Date</strong>
-                      </span>
-                      <span className="text-gray-900">{formatDate(hackathon.startDate)}</span>
+                <div className="bg-white dark:bg-neutral-900 p-10 rounded-[40px] border border-slate-200 dark:border-slate-800 shadow-sm">
+                  <h2 className="text-2xl font-bold dark:text-white font-heading mb-8">Temporal Markers</h2>
+                  <div className="space-y-6">
+                    <div className="flex justify-between items-center pb-6 border-b border-slate-100 dark:border-slate-800">
+                      <span className="font-bold text-slate-500">Execution Phase Start</span>
+                      <span className="text-slate-900 dark:text-white font-mono font-bold">{formatDate(hackathon.startDate)}</span>
                     </div>
-                    <div className="flex justify-between items-center pb-4 border-b border-gray-200">
-                      <span className="text-gray-700">
-                        <strong>End Date</strong>
-                      </span>
-                      <span className="text-gray-900">{formatDate(hackathon.endDate)}</span>
+                    <div className="flex justify-between items-center pb-6 border-b border-slate-100 dark:border-slate-800">
+                      <span className="font-bold text-slate-500">Execution Phase Termination</span>
+                      <span className="text-slate-900 dark:text-white font-mono font-bold">{formatDate(hackathon.endDate)}</span>
                     </div>
-                    <div className="flex justify-between items-center pt-4">
-                      <span className="text-gray-700">
-                        <strong>Registration Deadline</strong>
-                      </span>
-                      <span className="text-red-600 font-medium">
+                    <div className="flex justify-between items-center pt-2">
+                      <span className="font-bold text-slate-500">Registration Flux Deadline</span>
+                      <span className="text-red-500 font-mono font-bold">
                         {formatDate(hackathon.registrationDeadline)}
                       </span>
                     </div>
                   </div>
                 </div>
 
-                {/* Eligibility */}
-                <div className="card p-8 mb-8">
-                  <h2 className="heading-md mb-4">Eligibility</h2>
-                  <p className="text-gray-700">{hackathon.eligibility}</p>
+                <div className="bg-white dark:bg-neutral-900 p-10 rounded-[40px] border border-slate-200 dark:border-slate-800 shadow-sm">
+                  <h2 className="text-2xl font-bold dark:text-white font-heading mb-6">Access Clearance</h2>
+                  <p className="text-slate-600 dark:text-slate-400 leading-relaxed">{hackathon.eligibility}</p>
                 </div>
               </div>
 
-              {/* Sidebar */}
               <div className="lg:col-span-1">
-                <div className="card p-8 sticky top-8">
-                  <div className="mb-6 pb-6 border-b border-gray-200">
-                    <p className="text-sm text-gray-600 mb-2">
-                      <strong>Status</strong>
-                    </p>
-                    <span
-                      className={`badge ${
-                        hackathon.status === 'Active'
-                          ? 'bg-green-100 text-green-700'
-                          : hackathon.status === 'Upcoming'
-                            ? 'bg-blue-100 text-blue-700'
-                            : hackathon.status === 'Closed'
-                              ? 'bg-red-100 text-red-700'
-                              : 'bg-gray-100 text-gray-700'
-                      }`}
-                    >
-                      {hackathon.status}
-                    </span>
+                <div className="bg-slate-900 dark:bg-neutral-900 p-10 rounded-[40px] text-white sticky top-32 border border-white/5 shadow-2xl overflow-hidden group">
+                  <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform">
+                    <svg className="w-24 h-24" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
                   </div>
 
-                  <div className="space-y-6">
+                  <div className="relative z-10 space-y-8">
                     <div>
-                      <p className="text-xs text-gray-500 uppercase tracking-wide mb-2">
-                        Important
-                      </p>
-                      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-sm text-yellow-800">
-                        <p>
-                          <strong>Register on the official hackathon website</strong>, then submit
-                          participation on CoIN.
-                        </p>
+                      <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Command Actions</p>
+                      <div className="space-y-4">
+                        <a
+                          href={hackathon.officialLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-full flex items-center justify-center p-4 bg-white text-slate-900 font-bold rounded-2xl hover:scale-105 transition-all text-sm"
+                        >
+                          Visit Official Node
+                        </a>
+                        <Link
+                          href={`/submit?hackathon=${hackathon.id}`}
+                          className="w-full flex items-center justify-center p-4 bg-white/10 text-white font-bold rounded-2xl hover:bg-white/20 transition-all text-sm border border-white/10"
+                        >
+                          Report Participation
+                        </Link>
                       </div>
                     </div>
 
-                    <div>
-                      <a
-                        href={hackathon.officialLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn-primary block text-center"
-                      >
-                        Visit Official Website
-                      </a>
-                    </div>
-
-                    <div>
-                      <Link href={`/submit?hackathon=${hackathon.id}`} className="btn-secondary block text-center">
-                        Report Participation
-                      </Link>
+                    <div className="pt-8 border-t border-white/10">
+                      <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Node Instructions</p>
+                      <div className="bg-white/5 rounded-2xl p-6 text-sm text-slate-300 leading-relaxed border border-white/5">
+                        Register on the official third-party platform first, then document your engagement on the CoIN framework for institutional credit.
+                      </div>
                     </div>
                   </div>
                 </div>

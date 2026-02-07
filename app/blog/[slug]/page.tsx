@@ -7,6 +7,8 @@ import { useBlogStore } from '@/lib/store/blogStore'
 import { useHackathonStore } from '@/lib/store/hackathonStore'
 import { formatDate } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { BlogPost, Hackathon } from '@/lib/types'
 
 interface PageProps {
   params: {
@@ -16,20 +18,54 @@ interface PageProps {
 
 export default function BlogDetailPage({ params }: PageProps) {
   const router = useRouter()
-  const post = useBlogStore((state) => state.getPostBySlug(params.slug))
+  const getPostBySlug = useBlogStore((state) => state.getPostBySlug)
   const getHackathonById = useHackathonStore((state) => state.getHackathonById)
+
+  const [post, setPost] = useState<BlogPost | undefined>(undefined)
+  const [loading, setLoading] = useState(true)
+  const [relatedHackathon, setRelatedHackathon] = useState<Hackathon | undefined>(undefined)
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      setLoading(true)
+      const data = await getPostBySlug(params.slug)
+      if (data) {
+        setPost(data)
+        if (data.relatedHackathon) {
+          const hackathon = await getHackathonById(data.relatedHackathon)
+          setRelatedHackathon(hackathon)
+        }
+      }
+      setLoading(false)
+    }
+    fetchPost()
+  }, [params.slug, getPostBySlug, getHackathonById])
+
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <main className="flex-1">
+          <section className="py-24 flex items-center justify-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-coin-600"></div>
+          </section>
+        </main>
+        <Footer />
+      </>
+    )
+  }
 
   if (!post) {
     return (
       <>
         <Header />
         <main className="flex-1">
-          <section className="py-12">
+          <section className="py-24">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-              <h1 className="section-heading mb-4">Article Not Found</h1>
-              <p className="text-gray-600 mb-8">The article you are looking for does not exist.</p>
-              <Link href="/blog" className="btn-primary">
-                Back to Blog
+              <h1 className="text-4xl font-bold mb-4">Transmission Not Found</h1>
+              <p className="text-gray-600 mb-8">The broadcast signal for this channel has been terminated or relocated.</p>
+              <Link href="/blog" className="px-8 py-3 bg-slate-900 text-white font-bold rounded-2xl">
+                Return to Media Engine
               </Link>
             </div>
           </section>
@@ -39,57 +75,53 @@ export default function BlogDetailPage({ params }: PageProps) {
     )
   }
 
-  const relatedHackathon = post.relatedHackathon ? getHackathonById(post.relatedHackathon) : null
-
   return (
     <>
       <Header />
       <main className="flex-1">
         <article>
-          {/* Header */}
-          <section className="py-12 bg-white border-b border-gray-200">
+          <section className="pt-32 pb-16 bg-white dark:bg-black border-b border-slate-100 dark:border-white/10">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
               <button
                 onClick={() => router.back()}
-                className="text-coin-600 hover:text-coin-700 font-medium text-sm mb-6"
+                className="text-coin-600 hover:text-coin-700 font-bold text-sm mb-8 block transition-colors"
               >
-                ← Back
+                ← Back to Feed
               </button>
 
-              <div className="flex items-center gap-3 mb-4">
+              <div className="flex items-center gap-4 mb-6">
                 <span
-                  className={`badge ${
-                    post.category === 'Winner'
-                      ? 'bg-green-100 text-green-700'
+                  className={`px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-widest border ${post.category === 'Winner'
+                      ? 'bg-green-500/10 text-green-600 border-green-500/20'
                       : post.category === 'Announcement'
-                        ? 'bg-blue-100 text-blue-700'
-                        : 'bg-purple-100 text-purple-700'
-                  }`}
+                        ? 'bg-blue-500/10 text-blue-600 border-blue-500/20'
+                        : 'bg-purple-500/10 text-purple-600 border-purple-500/20'
+                    }`}
                 >
                   {post.category}
                 </span>
-                <span className="text-gray-500">{formatDate(post.createdAt)}</span>
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">{formatDate(post.createdAt)}</span>
               </div>
 
-              <h1 className="section-heading mb-4">{post.title}</h1>
-              <p className="text-xl text-gray-600">{post.summary}</p>
+              <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 dark:text-white font-heading tracking-tight mb-6 leading-tight">
+                {post.title}
+              </h1>
+              <p className="text-xl text-slate-500 dark:text-slate-400 font-medium leading-relaxed italic border-l-4 border-coin-500 pl-6">
+                {post.summary}
+              </p>
             </div>
           </section>
 
-          {/* Content */}
-          <section className="py-12 bg-gray-50">
+          <section className="py-20 bg-slate-50 dark:bg-black/50">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="card p-8">
-                {/* Meta Info */}
-                <div className="mb-8 pb-8 border-b border-gray-200">
+              <div className="bg-white dark:bg-neutral-900 p-10 md:p-16 rounded-[40px] border border-slate-200 dark:border-slate-800 shadow-sm">
+                <div className="mb-12 pb-12 border-b border-slate-100 dark:border-slate-800 flex flex-wrap gap-8 items-start justify-between">
                   {relatedHackathon && (
-                    <div className="mb-4">
-                      <p className="text-sm text-gray-600 mb-1">
-                        <strong>Related Hackathon</strong>
-                      </p>
+                    <div className="space-y-2">
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Linked Opportunity</p>
                       <Link
                         href={`/hackathons/${relatedHackathon.slug}`}
-                        className="text-coin-600 hover:text-coin-700 font-medium"
+                        className="text-coin-600 hover:underline font-bold text-lg"
                       >
                         {relatedHackathon.name}
                       </Link>
@@ -97,17 +129,15 @@ export default function BlogDetailPage({ params }: PageProps) {
                   )}
 
                   {post.tags.length > 0 && (
-                    <div>
-                      <p className="text-sm text-gray-600 mb-2">
-                        <strong>Tags</strong>
-                      </p>
+                    <div className="space-y-3">
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Metadata Tags</p>
                       <div className="flex flex-wrap gap-2">
                         {post.tags.map((tag) => (
                           <span
                             key={tag}
-                            className="bg-coin-50 text-coin-700 px-3 py-1 rounded-full text-sm"
+                            className="bg-slate-50 dark:bg-white/5 text-slate-500 border border-slate-200 dark:border-white/10 px-3 py-1 rounded-full text-xs font-bold"
                           >
-                            {tag}
+                            #{tag}
                           </span>
                         ))}
                       </div>
@@ -115,27 +145,26 @@ export default function BlogDetailPage({ params }: PageProps) {
                   )}
                 </div>
 
-                {/* Body */}
-                <div className="prose prose-sm max-w-none">
+                <div className="prose prose-slate max-w-none dark:prose-invert">
                   {post.content.split('\n\n').map((paragraph, idx) => {
                     if (paragraph.startsWith('## ')) {
                       return (
-                        <h2 key={idx} className="heading-md mt-8 mb-4">
+                        <h2 key={idx} className="text-2xl font-bold font-heading mt-12 mb-6 dark:text-white">
                           {paragraph.slice(3)}
                         </h2>
                       )
                     }
                     if (paragraph.startsWith('- ')) {
                       return (
-                        <ul key={idx} className="list-disc list-inside space-y-2 text-gray-700 mb-4">
+                        <ul key={idx} className="list-disc list-inside space-y-3 text-slate-600 dark:text-slate-400 mb-8">
                           {paragraph.split('\n').map((line, lineIdx) => (
-                            <li key={lineIdx}>{line.slice(2)}</li>
+                            <li key={lineIdx} className="leading-relaxed">{line.slice(2)}</li>
                           ))}
                         </ul>
                       )
                     }
                     return (
-                      <p key={idx} className="text-gray-700 mb-4 leading-relaxed">
+                      <p key={idx} className="text-slate-700 dark:text-slate-300 mb-6 leading-relaxed text-lg">
                         {paragraph}
                       </p>
                     )
@@ -143,9 +172,9 @@ export default function BlogDetailPage({ params }: PageProps) {
                 </div>
               </div>
 
-              <div className="text-center mt-12">
-                <Link href="/blog" className="btn-outline">
-                  Read More Articles
+              <div className="text-center mt-16">
+                <Link href="/blog" className="inline-flex items-center gap-2 px-10 py-4 bg-slate-900 text-white font-bold rounded-2xl hover:scale-105 active:scale-95 transition-all">
+                  Browse More Transmissions
                 </Link>
               </div>
             </div>

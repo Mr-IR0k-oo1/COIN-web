@@ -1,45 +1,74 @@
 import { create } from 'zustand'
+import { backendService } from '../services/backend'
+
+interface AdminUser {
+  id: string
+  name: string
+  email: string
+}
 
 interface AuthStore {
   isAuthenticated: boolean
   adminName: string
-  login: (password: string, name: string) => boolean
+  adminEmail: string
+  token: string | null
+  login: (email: string, password: string) => Promise<boolean>
   logout: () => void
   initializeAuth: () => void
 }
 
-const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'CoIN2024SREC'
-
 export const useAuthStore = create<AuthStore>((set) => ({
   isAuthenticated: false,
   adminName: '',
+  adminEmail: '',
+  token: null,
 
-  login: (password: string, name: string) => {
-    if (password === ADMIN_PASSWORD) {
-      set({ isAuthenticated: true, adminName: name })
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('coin_auth', JSON.stringify({ isAuthenticated: true, adminName: name }))
+  login: async (email: string, password: string) => {
+    try {
+      const response = await backendService.login(email, password)
+
+      if (response.token) {
+        set({
+          isAuthenticated: true,
+          adminName: response.admin.name,
+          adminEmail: response.admin.email,
+          token: response.token,
+        })
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('coin_token', response.token)
+          localStorage.setItem('coin_auth', JSON.stringify({
+            isAuthenticated: true,
+            adminName: response.admin.name,
+            adminEmail: response.admin.email,
+          }))
+        }
+        return true
       }
-      return true
+      return false
+    } catch (error) {
+      console.error('Login failed:', error)
+      return false
     }
-    return false
   },
 
   logout: () => {
-    set({ isAuthenticated: false, adminName: '' })
+    set({ isAuthenticated: false, adminName: '', adminEmail: '', token: null })
     if (typeof window !== 'undefined') {
+      localStorage.removeItem('coin_token')
       localStorage.removeItem('coin_auth')
     }
   },
 
   initializeAuth: () => {
     if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('coin_token')
       const stored = localStorage.getItem('coin_auth')
-      if (stored) {
+      if (token && stored) {
         try {
-          const { isAuthenticated, adminName } = JSON.parse(stored)
-          set({ isAuthenticated, adminName })
+          const { isAuthenticated, adminName, adminEmail } = JSON.parse(stored)
+          set({ isAuthenticated, adminName, adminEmail, token })
         } catch {
+          localStorage.removeItem('coin_token')
           localStorage.removeItem('coin_auth')
         }
       }

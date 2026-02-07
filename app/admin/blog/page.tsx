@@ -3,16 +3,19 @@
 import AdminLayout from '@/components/AdminLayout'
 import { useBlogStore } from '@/lib/store/blogStore'
 import { useHackathonStore } from '@/lib/store/hackathonStore'
-import { formatDate, slugify, generateId, cn } from '@/lib/utils'
-import { useState } from 'react'
+import { formatDate, cn } from '@/lib/utils'
+import { useEffect, useState } from 'react'
 import { BlogPost, BlogCategory } from '@/lib/types'
-import { Plus, Search, Edit2, Trash2, Layout, Tag, Send, FileText, XCircle, Info, MoreHorizontal, CheckCircle2, LayoutList, Clock } from 'lucide-react'
+import { Plus, Search, Edit2, Trash2, Layout, Tag, Send, FileText, XCircle, MoreHorizontal, CheckCircle2, Clock } from 'lucide-react'
 
 const CATEGORIES: BlogCategory[] = ['Article', 'Winner', 'Announcement']
 
 export default function BlogManagementPage() {
-  const posts = useBlogStore((state) => state.getAllPosts())
-  const hackathons = useHackathonStore((state) => state.getAllHackathons())
+  const posts = useBlogStore((state) => state.posts)
+  const fetchPosts = useBlogStore((state) => state.fetchPosts)
+  const isLoading = useBlogStore((state) => state.isLoading)
+  const hackathons = useHackathonStore((state) => state.hackathons)
+  const fetchHackathons = useHackathonStore((state) => state.fetchHackathons)
   const addPost = useBlogStore((state) => state.addPost)
   const updatePost = useBlogStore((state) => state.updatePost)
   const deletePost = useBlogStore((state) => state.deletePost)
@@ -30,6 +33,11 @@ export default function BlogManagementPage() {
     status: 'Draft',
   })
   const [tagInput, setTagInput] = useState('')
+
+  useEffect(() => {
+    fetchPosts()
+    fetchHackathons()
+  }, [fetchPosts, fetchHackathons])
 
   const handleOpenForm = (post?: BlogPost) => {
     if (post) {
@@ -52,7 +60,7 @@ export default function BlogManagementPage() {
     setShowForm(true)
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     const tags = tagInput
@@ -60,30 +68,29 @@ export default function BlogManagementPage() {
       .map((t) => t.trim())
       .filter((t) => t.length > 0)
 
+    const payload = {
+      title: formData.title || '',
+      summary: formData.summary || '',
+      content: formData.content || '',
+      category: formData.category || 'Article',
+      tags,
+      relatedHackathon: formData.relatedHackathon,
+      status: formData.status || 'Draft',
+    }
+
     if (editingId) {
-      updatePost(editingId, {
-        ...formData,
-        tags,
-        updatedAt: new Date().toISOString(),
-      })
+      await updatePost(editingId, payload)
     } else {
-      const newPost: BlogPost = {
-        id: generateId(),
-        slug: slugify(formData.title || ''),
-        title: formData.title || '',
-        summary: formData.summary || '',
-        content: formData.content || '',
-        category: formData.category || 'Article',
-        tags,
-        relatedHackathon: formData.relatedHackathon,
-        status: formData.status || 'Draft',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      }
-      addPost(newPost)
+      await addPost(payload)
     }
 
     setShowForm(false)
+  }
+
+  const handleDelete = async (id: string) => {
+    if (confirm('Are you sure you want to delete this post?')) {
+      await deletePost(id)
+    }
   }
 
   const filteredPosts = posts.filter(p =>
@@ -149,7 +156,6 @@ export default function BlogManagementPage() {
 
                 <form onSubmit={handleSubmit} className="space-y-10">
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                    {/* Left: Metadata */}
                     <div className="lg:col-span-1 space-y-6">
                       <div className="space-y-2">
                         <label className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Context Category</label>
@@ -214,7 +220,6 @@ export default function BlogManagementPage() {
                       </div>
                     </div>
 
-                    {/* Right: Content */}
                     <div className="lg:col-span-2 space-y-8">
                       <div className="space-y-2">
                         <label className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Broadcast Title</label>
@@ -285,7 +290,11 @@ export default function BlogManagementPage() {
 
         {/* Posts Inventory */}
         <div className="grid grid-cols-1 gap-4">
-          {filteredPosts.length === 0 ? (
+          {isLoading ? (
+            <div className="flex items-center justify-center py-20">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-coin-600"></div>
+            </div>
+          ) : filteredPosts.length === 0 ? (
             <div className="p-32 text-center bg-white dark:bg-neutral-900 rounded-[40px] border border-dashed border-slate-200 dark:border-slate-800">
               <FileText className="mx-auto text-slate-200 dark:text-slate-800 mb-6" size={64} />
               <p className="text-slate-500 dark:text-slate-400 font-bold text-xl">The airwaves are silent.</p>
@@ -343,14 +352,11 @@ export default function BlogManagementPage() {
                       <Edit2 size={18} />
                     </button>
                     <button
-                      onClick={() => deletePost(post.id)}
+                      onClick={() => handleDelete(post.id)}
                       className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-white/5 text-slate-400 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center shadow-sm"
                       title="Delete Post"
                     >
                       <Trash2 size={18} />
-                    </button>
-                    <button className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-white/5 text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all flex items-center justify-center">
-                      <MoreHorizontal size={20} />
                     </button>
                   </div>
                 </div>
