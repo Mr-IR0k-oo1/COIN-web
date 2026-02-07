@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: coin-postgres
+    environment:
+      POSTGRES_USER: coin_user
+      POSTGRES_PASSWORD: coin_password
+      POSTGRES_DB: coin_srec
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U coin_user -d coin_srec"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - coin-network
+
+  # pgAdmin for database management (optional)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: coin-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@coin.local
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - coin-network
+    profiles:
+      - admin
+
+  # Redis for caching (optional)
+  redis:
+    image: redis:7-alpine
+    container_name: coin-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - coin-network
+    profiles:
+      - cache
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  coin-network:
+    driver: bridge
+
+# Usage:
+# Start all services: docker-compose up -d
+# Start with pgAdmin: docker-compose --profile admin up -d
+# Start with Redis: docker-compose --profile cache up -d
+# View logs: docker-compose logs -f
+# Stop: docker-compose down
+# Clean up: docker-compose down -v

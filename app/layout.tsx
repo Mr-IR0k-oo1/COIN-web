@@ -29,7 +29,7 @@ export default function RootLayout({
           syne.variable,
           bricolage.variable,
           spaceGrotesk.variable,
-          'min-h-screen bg-slate-50 font-sans antialiased'
+          'min-h-screen bg-ash-50 dark:bg-ash-950 font-sans antialiased'
         )}
       >
         <ThemeProvider

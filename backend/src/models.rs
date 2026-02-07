@@ -257,3 +257,59 @@ pub struct SubmissionDetail {
     pub external_confirmed: bool,
     pub status: String,
 }
+
+// Student
+#[derive(Debug, Clone, Serialize, Deserialize, sqlx::FromRow)]
+pub struct Student {
+    pub id: Uuid,
+    pub name: String,
+    pub email: String,
+    pub password_hash: String,
+    pub year: i32,
+    pub branch: String,
+    pub bio: Option<String>,
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct StudentPublic {
+    pub id: String,
+    pub name: String,
+    pub email: String,
+    pub year: i32,
+    pub branch: String,
+    pub bio: Option<String>,
+    pub skills: Vec<String>,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct RegisterStudentRequest {
+    pub name: String,
+    pub email: String,
+    pub password: String,
+    pub year: i32,
+    pub branch: String,
+}
+
+#[derive(Debug, Serialize)]
+pub struct StudentLoginResponse {
+    pub token: String,
+    pub student: StudentPublic,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct UpdateStudentRequest {
+    pub name: Option<String>,
+    pub year: Option<i32>,
+    pub branch: Option<String>,
+    pub bio: Option<String>,
+    pub skills: Option<Vec<String>>,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct StudentSearchRequest {
+    pub year: Option<i32>,
+    pub branch: Option<String>,
+    pub skills: Option<String>,
+}

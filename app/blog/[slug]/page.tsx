@@ -47,7 +47,7 @@ export default function BlogDetailPage({ params }: PageProps) {
         <Header />
         <main className="flex-1">
           <section className="py-24 flex items-center justify-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-coin-600"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-flame-600"></div>
           </section>
         </main>
         <Footer />
@@ -63,8 +63,8 @@ export default function BlogDetailPage({ params }: PageProps) {
           <section className="py-24">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
               <h1 className="text-4xl font-bold mb-4">Transmission Not Found</h1>
-              <p className="text-gray-600 mb-8">The broadcast signal for this channel has been terminated or relocated.</p>
-              <Link href="/blog" className="px-8 py-3 bg-slate-900 text-white font-bold rounded-2xl">
+              <p className="text-ash-600 mb-8">The broadcast signal for this channel has been terminated or relocated.</p>
+              <Link href="/blog" className="px-8 py-3 bg-ash-900 text-white font-bold rounded-2xl">
                 Return to Media Engine
               </Link>
             </div>
@@ -80,11 +80,11 @@ export default function BlogDetailPage({ params }: PageProps) {
       <Header />
       <main className="flex-1">
         <article>
-          <section className="pt-32 pb-16 bg-white dark:bg-black border-b border-slate-100 dark:border-white/10">
+          <section className="pt-32 pb-16 bg-white dark:bg-ash-950 border-b border-ash-100 dark:border-ash-700">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
               <button
                 onClick={() => router.back()}
-                className="text-coin-600 hover:text-coin-700 font-bold text-sm mb-8 block transition-colors"
+                className="text-flame-600 hover:text-flame-700 font-bold text-sm mb-8 block transition-colors"
               >
                 ← Back to Feed
               </button>
@@ -92,36 +92,36 @@ export default function BlogDetailPage({ params }: PageProps) {
               <div className="flex items-center gap-4 mb-6">
                 <span
                   className={`px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-widest border ${post.category === 'Winner'
-                      ? 'bg-green-500/10 text-green-600 border-green-500/20'
-                      : post.category === 'Announcement'
-                        ? 'bg-blue-500/10 text-blue-600 border-blue-500/20'
-                        : 'bg-purple-500/10 text-purple-600 border-purple-500/20'
+                    ? 'bg-flame-500/10 text-flame-600 border-flame-500/20'
+                    : post.category === 'Announcement'
+                      ? 'bg-ember-500/10 text-ember-600 border-ember-500/20'
+                      : 'bg-ember-500/10 text-ember-600 border-ember-500/20'
                     }`}
                 >
                   {post.category}
                 </span>
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">{formatDate(post.createdAt)}</span>
+                <span className="text-xs font-bold text-ash-400 uppercase tracking-widest">{formatDate(post.createdAt)}</span>
               </div>
 
-              <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 dark:text-white font-heading tracking-tight mb-6 leading-tight">
+              <h1 className="text-4xl md:text-6xl font-extrabold text-ash-900 dark:text-white font-heading tracking-tight mb-6 leading-tight">
                 {post.title}
               </h1>
-              <p className="text-xl text-slate-500 dark:text-slate-400 font-medium leading-relaxed italic border-l-4 border-coin-500 pl-6">
+              <p className="text-xl text-ash-500 dark:text-ash-400 font-medium leading-relaxed italic border-l-4 border-flame-500 pl-6">
                 {post.summary}
               </p>
             </div>
           </section>
 
-          <section className="py-20 bg-slate-50 dark:bg-black/50">
+          <section className="py-20 bg-ash-50 dark:bg-ash-900/50">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="bg-white dark:bg-neutral-900 p-10 md:p-16 rounded-[40px] border border-slate-200 dark:border-slate-800 shadow-sm">
-                <div className="mb-12 pb-12 border-b border-slate-100 dark:border-slate-800 flex flex-wrap gap-8 items-start justify-between">
+              <div className="bg-white dark:bg-ash-900 p-10 md:p-16 rounded-[40px] border border-ash-200 dark:border-ash-800 shadow-sm">
+                <div className="mb-12 pb-12 border-b border-ash-100 dark:border-ash-800 flex flex-wrap gap-8 items-start justify-between">
                   {relatedHackathon && (
                     <div className="space-y-2">
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Linked Opportunity</p>
+                      <p className="text-[10px] font-bold text-ash-400 uppercase tracking-widest">Linked Opportunity</p>
                       <Link
                         href={`/hackathons/${relatedHackathon.slug}`}
-                        className="text-coin-600 hover:underline font-bold text-lg"
+                        className="text-flame-600 hover:underline font-bold text-lg"
                       >
                         {relatedHackathon.name}
                       </Link>
@@ -130,12 +130,12 @@ export default function BlogDetailPage({ params }: PageProps) {
 
                   {post.tags.length > 0 && (
                     <div className="space-y-3">
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Metadata Tags</p>
+                      <p className="text-[10px] font-bold text-ash-400 uppercase tracking-widest">Metadata Tags</p>
                       <div className="flex flex-wrap gap-2">
                         {post.tags.map((tag) => (
                           <span
                             key={tag}
-                            className="bg-slate-50 dark:bg-white/5 text-slate-500 border border-slate-200 dark:border-white/10 px-3 py-1 rounded-full text-xs font-bold"
+                            className="bg-ash-50 dark:bg-ash-900 text-ash-500 border border-ash-200 dark:border-ash-700 px-3 py-1 rounded-full text-xs font-bold"
                           >
                             #{tag}
                           </span>
@@ -156,7 +156,7 @@ export default function BlogDetailPage({ params }: PageProps) {
                     }
                     if (paragraph.startsWith('- ')) {
                       return (
-                        <ul key={idx} className="list-disc list-inside space-y-3 text-slate-600 dark:text-slate-400 mb-8">
+                        <ul key={idx} className="list-disc list-inside space-y-3 text-ash-600 dark:text-ash-400 mb-8">
                           {paragraph.split('\n').map((line, lineIdx) => (
                             <li key={lineIdx} className="leading-relaxed">{line.slice(2)}</li>
                           ))}
@@ -164,7 +164,7 @@ export default function BlogDetailPage({ params }: PageProps) {
                       )
                     }
                     return (
-                      <p key={idx} className="text-slate-700 dark:text-slate-300 mb-6 leading-relaxed text-lg">
+                      <p key={idx} className="text-ash-700 dark:text-ash-300 mb-6 leading-relaxed text-lg">
                         {paragraph}
                       </p>
                     )
@@ -173,7 +173,7 @@ export default function BlogDetailPage({ params }: PageProps) {
               </div>
 
               <div className="text-center mt-16">
-                <Link href="/blog" className="inline-flex items-center gap-2 px-10 py-4 bg-slate-900 text-white font-bold rounded-2xl hover:scale-105 active:scale-95 transition-all">
+                <Link href="/blog" className="inline-flex items-center gap-2 px-10 py-4 bg-ash-900 text-white font-bold rounded-2xl hover:scale-105 active:scale-95 transition-all">
                   Browse More Transmissions
                 </Link>
               </div>

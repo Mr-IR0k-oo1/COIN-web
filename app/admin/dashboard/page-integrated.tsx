@@ -12,9 +12,9 @@ import { Loader2, BarChart3, BookOpen, Zap, Users } from 'lucide-react'
 
 export default function AdminDashboard() {
   const router = useRouter()
-  const { isAuthenticated, admin } = useAuthStore()
+  const { isAuthenticated, adminName, adminEmail } = useAuthStore()
   const { fetchHackathons, hackathons } = useHackathonStore()
-  const { fetchBlogPosts, posts } = useBlogStore()
+  const { fetchPosts, posts } = useBlogStore()
   const [metrics, setMetrics] = useState<DashboardMetrics | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
@@ -29,7 +29,7 @@ export default function AdminDashboard() {
         setIsLoading(true)
         await Promise.all([
           fetchHackathons(),
-          fetchBlogPosts(),
+          fetchPosts(),
           (async () => {
             const data = await backendService.getMetrics()
             setMetrics(data)
@@ -43,13 +43,13 @@ export default function AdminDashboard() {
     }
 
     loadData()
-  }, [isAuthenticated, router, fetchHackathons, fetchBlogPosts])
+  }, [isAuthenticated, router, fetchHackathons, fetchPosts])
 
   if (!isAuthenticated || isLoading) {
     return (
       <AdminLayout>
         <div className="flex items-center justify-center min-h-screen">
-          <Loader2 className="w-8 h-8 animate-spin text-coin-600" />
+          <Loader2 className="w-8 h-8 animate-spin text-flame-600" />
         </div>
       </AdminLayout>
     )
@@ -60,19 +60,19 @@ export default function AdminDashboard() {
       title: 'Total Hackathons',
       value: metrics?.totalHackathons || 0,
       icon: Zap,
-      color: 'bg-blue-100 text-blue-600',
+      color: 'bg-ember-100 text-ember-600',
     },
     {
       title: 'Total Submissions',
       value: metrics?.totalSubmissions || 0,
       icon: BarChart3,
-      color: 'bg-green-100 text-green-600',
+      color: 'bg-flame-100 text-flame-600',
     },
     {
       title: 'Total Students',
       value: metrics?.totalStudents || 0,
       icon: Users,
-      color: 'bg-purple-100 text-purple-600',
+      color: 'bg-ember-100 text-ember-600',
     },
     {
       title: 'Total Mentors',
@@ -87,10 +87,10 @@ export default function AdminDashboard() {
       <div className="max-w-7xl mx-auto">
         {/* Welcome Section */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
-            Welcome, {admin?.name}
+          <h1 className="text-3xl font-bold text-ash-900 dark:text-white">
+            Welcome, {adminName}
           </h1>
-          <p className="text-slate-600 dark:text-slate-400 mt-2">
+          <p className="text-ash-600 dark:text-ash-400 mt-2">
             Here's your innovation ecosystem at a glance
           </p>
         </div>
@@ -102,17 +102,17 @@ export default function AdminDashboard() {
             return (
               <div
                 key={card.title}
-                className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6"
+                className="bg-white dark:bg-ash-900 rounded-2xl border border-ash-200 dark:border-ash-800 p-6"
               >
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-sm font-medium text-slate-600 dark:text-slate-400">
+                  <h3 className="text-sm font-medium text-ash-600 dark:text-ash-400">
                     {card.title}
                   </h3>
                   <div className={`p-2 rounded-lg ${card.color}`}>
                     <Icon size={20} />
                   </div>
                 </div>
-                <p className="text-3xl font-bold text-slate-900 dark:text-white">
+                <p className="text-3xl font-bold text-ash-900 dark:text-white">
                   {card.value}
                 </p>
               </div>
@@ -122,27 +122,27 @@ export default function AdminDashboard() {
 
         {/* Recent Hackathons */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6">
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4">
+          <div className="bg-white dark:bg-ash-900 rounded-2xl border border-ash-200 dark:border-ash-800 p-6">
+            <h2 className="text-xl font-bold text-ash-900 dark:text-white mb-4">
               Recent Hackathons
             </h2>
             <div className="space-y-3">
               {hackathons.slice(0, 5).map((h) => (
                 <div
                   key={h.id}
-                  className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800 rounded-lg"
+                  className="flex items-center justify-between p-3 bg-ash-50 dark:bg-ash-800 rounded-lg"
                 >
                   <div>
-                    <p className="font-medium text-slate-900 dark:text-white">{h.name}</p>
-                    <p className="text-sm text-slate-500">{h.organizer}</p>
+                    <p className="font-medium text-ash-900 dark:text-white">{h.name}</p>
+                    <p className="text-sm text-ash-500">{h.organizer}</p>
                   </div>
                   <span
                     className={`px-3 py-1 rounded-full text-xs font-semibold ${
                       h.status === 'Active'
-                        ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
+                        ? 'bg-flame-100 text-flame-800 dark:bg-flame-900/30 dark:text-flame-400'
                         : h.status === 'Upcoming'
-                        ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'
-                        : 'bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-400'
+                        ? 'bg-ember-100 text-ember-800 dark:bg-ember-900/30 dark:text-ember-400'
+                        : 'bg-ash-100 text-ash-800 dark:bg-ash-800 dark:text-ash-400'
                     }`}
                   >
                     {h.status}
@@ -153,27 +153,27 @@ export default function AdminDashboard() {
           </div>
 
           {/* Recent Blog Posts */}
-          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6">
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4">
+          <div className="bg-white dark:bg-ash-900 rounded-2xl border border-ash-200 dark:border-ash-800 p-6">
+            <h2 className="text-xl font-bold text-ash-900 dark:text-white mb-4">
               Recent Blog Posts
             </h2>
             <div className="space-y-3">
               {posts.slice(0, 5).map((p) => (
                 <div
                   key={p.id}
-                  className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800 rounded-lg"
+                  className="flex items-center justify-between p-3 bg-ash-50 dark:bg-ash-800 rounded-lg"
                 >
                   <div>
-                    <p className="font-medium text-slate-900 dark:text-white line-clamp-1">
+                    <p className="font-medium text-ash-900 dark:text-white line-clamp-1">
                       {p.title}
                     </p>
-                    <p className="text-sm text-slate-500">{p.category}</p>
+                    <p className="text-sm text-ash-500">{p.category}</p>
                   </div>
                   <span
                     className={`px-3 py-1 rounded-full text-xs font-semibold ${
                       p.status === 'Published'
-                        ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
-                        : 'bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-400'
+                        ? 'bg-flame-100 text-flame-800 dark:bg-flame-900/30 dark:text-flame-400'
+                        : 'bg-ash-100 text-ash-800 dark:bg-ash-800 dark:text-ash-400'
                     }`}
                   >
                     {p.status}

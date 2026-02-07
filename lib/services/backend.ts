@@ -82,6 +82,19 @@ interface LoginResponse {
   }
 }
 
+interface StudentLoginResponse {
+  token: string
+  student: {
+    id: string
+    name: string
+    email: string
+    year: number
+    branch: string
+    bio?: string
+    skills: string[]
+  }
+}
+
 interface MetricsResponse {
   total_hackathons: number
   total_submissions: number
@@ -363,6 +376,48 @@ export const backendService = {
       email,
       password,
     })
+  },
+
+  // Student endpoints
+  async studentRegister(data: {
+    name: string
+    email: string
+    password: string
+    year: number
+    branch: string
+  }): Promise<StudentLoginResponse> {
+    return api.post<StudentLoginResponse>('/student/register', data)
+  },
+
+  async studentLogin(email: string, password: string): Promise<StudentLoginResponse> {
+    return api.post<StudentLoginResponse>('/student/login', {
+      email,
+      password,
+    })
+  },
+
+  async searchStudents(filters?: {
+    year?: number
+    branch?: string
+    skills?: string
+  }): Promise<any[]> {
+    const response = await api.get<any>('/student/search', {
+      params: filters,
+    })
+    return response.students || []
+  },
+
+  async updateStudentProfile(
+    studentId: string,
+    updates: {
+      name?: string
+      year?: number
+      branch?: string
+      bio?: string
+      skills?: string[]
+    }
+  ): Promise<any> {
+    return api.put(`/student/${studentId}`, updates)
   },
 
   // Metrics

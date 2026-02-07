@@ -63,6 +63,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .route("/blog/:slug", get(handlers::public::get_blog_post))
         .route("/submit", post(handlers::public::submit_participation));
 
+    let student_routes = Router::new()
+        .route("/register", post(handlers::student::register))
+        .route("/login", post(handlers::student::login))
+        .route("/:id", get(handlers::student::get_profile))
+        .route("/:id", put(handlers::student::update_profile))
+        .route("/search", get(handlers::student::search));
+
     let admin_routes = Router::new()
         .route("/login", post(handlers::admin::login))
         .route(
@@ -100,6 +107,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let app = Router::new()
         .nest("/api", public_routes)
+        .nest("/api/student", student_routes)
         .nest("/api/admin", admin_routes)
         .layer(middleware::jwt_layer(state.jwt_secret.clone()))
         .layer(CorsLayer::permissive())

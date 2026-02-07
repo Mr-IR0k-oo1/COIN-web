@@ -1,5 +1,6 @@
 pub mod admin;
 pub mod public;
+pub mod student;
 
 use axum::Json;
 use serde_json::json;

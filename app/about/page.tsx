@@ -4,141 +4,180 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import Link from 'next/link'
 import Section from '@/components/ui/Section'
-import Image from 'next/image'
+import { ArrowRight, Check } from 'lucide-react'
+
 
 export default function AboutPage() {
   return (
     <>
       <Header />
       <main className="flex-1">
-        {/* Hero */}
-        <Section className="bg-slate-900 text-white border-b border-slate-800 pt-32 pb-20 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20" />
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            <h1 className="text-4xl md:text-6xl font-heading font-bold mb-6 tracking-tight">
-              Empowering Innovation at SREC
+        {/* Hero Section */}
+        <section className="min-h-[60vh] bg-gradient-to-br from-ash-900 to-ash-950 dark:from-black dark:to-ash-950 flex items-center justify-center px-4 py-32 relative overflow-hidden">
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-20 left-10 w-72 h-72 bg-flame-500 rounded-full mix-blend-multiply filter blur-3xl" />
+            <div className="absolute bottom-20 right-10 w-72 h-72 bg-ember-500 rounded-full mix-blend-multiply filter blur-3xl" />
+          </div>
+          
+          <div className="max-w-4xl mx-auto text-center relative z-10">
+            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 font-display">
+              Empowering Innovation
             </h1>
-            <p className="text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed">
-              CoIN (Collaborative Innovation Center) is the digital backbone for organizing, tracking, and celebrating student innovation.
+            <p className="text-xl md:text-2xl text-ash-300 mb-10 leading-relaxed">
+              CoIN is the digital backbone for organizing, tracking, and celebrating student innovation at SREC.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                href="/hackathons"
+                className="inline-flex items-center px-8 py-4 bg-white text-ash-950 font-semibold rounded-lg hover:bg-ash-100 transition-colors"
+              >
+                Explore Hackathons
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+              <Link
+                href="/student/login"
+                className="inline-flex items-center px-8 py-4 border border-white/30 text-white font-semibold rounded-lg hover:border-white/50 transition-colors"
+              >
+                Student Portal
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* Purpose */}
+        <Section className="bg-white dark:bg-ash-950">
+          <div className="max-w-4xl mx-auto text-center mb-24">
+            <h2 className="text-4xl md:text-5xl font-display font-extrabold text-ash-900 dark:text-white mb-8 uppercase tracking-tighter">Unified <span className="text-gradient">Knowledge</span></h2>
+            <p className="text-xl text-ash-600 dark:text-ash-400 leading-relaxed font-light">
+              CoIN serves as a centralized hub where faculty publish hackathons, students discover opportunities, and teams report their participation and achievements. More than just a platform, it is an institutional commitment to structured innovation.
             </p>
           </div>
-        </Section>
 
-        {/* Mission */}
-        <Section className="bg-white">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="prose prose-lg mx-auto text-slate-600">
-              <h2 className="text-3xl font-heading font-bold text-slate-900 mb-6 text-center">What is CoIN?</h2>
-              <p className="text-center text-lg leading-relaxed mb-12">
-                CoIN serves as a centralized hub where faculty publish hackathons, students discover opportunities, and teams report their participation and achievements. More than just a platform, it is an institutional commitment to structured innovation.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 my-16">
-              <div className="bg-slate-50 p-8 rounded-2xl border border-slate-100">
-                <h3 className="text-xl font-bold text-slate-900 mb-4 font-heading">For Students</h3>
-                <p className="text-slate-600 mb-4">
-                  A central place to discover and participate in hackathons without searching across multiple fragmented sources.
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12">
+            <div className="md:col-span-7 group premium-card p-10 md:p-14">
+              <div className="premium-card-inner" />
+              <div className="relative z-10">
+                <div className="text-xs font-black uppercase tracking-[0.4em] text-flame-500 mb-6 flex items-center gap-3">
+                  <span className="w-8 h-px bg-flame-500" />
+                  For the Builders
+                </div>
+                <h3 className="text-4xl font-bold text-ash-900 dark:text-white mb-8 font-display tracking-tighter uppercase group-hover:text-gradient transition-all">For Students</h3>
+                <p className="text-xl text-ash-600 dark:text-ash-400 mb-10 leading-relaxed font-light">
+                  A central place to discover and participate in hackathons without searching across multiple fragmented sources. Your innovation journey starts here.
                 </p>
-                <ul className="space-y-2 text-sm text-slate-500">
-                  <li className="flex items-center gap-2">✓ Unified discovery platform</li>
-                  <li className="flex items-center gap-2">✓ Verified participation records</li>
-                  <li className="flex items-center gap-2">✓ Recognition for achievements</li>
+                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  {['Unified discovery', 'Verified records', 'Institutional memory', 'Direct mentorship'].map(item => (
+                    <li key={item} className="flex items-center gap-4 text-[10px] font-black text-ash-500 uppercase tracking-widest bg-ash-50 dark:bg-ash-900/50 p-4 rounded-xl border border-ash-200 dark:border-ash-800 group-hover:border-flame-500/20 transition-all">
+                      <Check className="h-3 w-3 text-flame-500" />
+                      {item}
+                    </li>
+                  ))}
                 </ul>
               </div>
-              <div className="bg-slate-50 p-8 rounded-2xl border border-slate-100">
-                <h3 className="text-xl font-bold text-slate-900 mb-4 font-heading">For Institution</h3>
-                <p className="text-slate-600 mb-4">
-                  Visibility into innovation outcomes, department engagement, and student success metrics across the campus.
+            </div>
+            <div className="md:col-span-5 group premium-card p-10 md:p-14 md:mt-12">
+              <div className="premium-card-inner" />
+              <div className="relative z-10">
+                <div className="text-xs font-black uppercase tracking-[0.4em] text-ember-500 mb-6 flex items-center gap-3">
+                  <span className="w-8 h-px bg-ember-500" />
+                  For the Future
+                </div>
+                <h3 className="text-4xl font-bold text-ash-900 dark:text-white mb-8 font-display tracking-tighter uppercase group-hover:text-gradient transition-all">Institution</h3>
+                <p className="text-xl text-ash-600 dark:text-ash-400 mb-10 leading-relaxed font-light">
+                  Visibility into innovation outcomes, department engagement, and student success metrics.
                 </p>
-                <ul className="space-y-2 text-sm text-slate-500">
-                  <li className="flex items-center gap-2">✓ Centralized data tracking</li>
-                  <li className="flex items-center gap-2">✓ Mentorship coordination</li>
-                  <li className="flex items-center gap-2">✓ Outcome analysis</li>
-                </ul>
+                <div className="space-y-4">
+                  {['Data Analytics', 'Strategic Insights', 'Unified Reporting'].map(item => (
+                    <div key={item} className="flex items-center justify-between p-4 rounded-xl border border-ash-200 dark:border-ash-800 bg-ash-50 dark:bg-ash-900/30">
+                      <span className="text-xs font-bold uppercase tracking-widest text-ash-500">{item}</span>
+                      <div className="w-2 h-2 rounded-full bg-ember-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]" />
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         </Section>
 
         {/* Workflow */}
-        <Section className="bg-slate-50 border-y border-slate-200">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl font-heading font-bold text-slate-900 mb-4">How It Works</h2>
-              <p className="text-slate-600">A seamless process from discovery to documentation.</p>
-            </div>
+        <Section className="bg-ash-50 dark:bg-ash-950 border-y border-ash-200 dark:border-ash-800">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-heading font-bold text-ash-900 mb-4">How It Works</h2>
+            <p className="text-ash-600">A seamless process from discovery to documentation.</p>
+          </div>
 
-            <div className="relative">
-              {/* Connecting Line (Desktop) */}
-              <div className="hidden md:block absolute left-1/2 top-4 bottom-4 w-0.5 bg-slate-200 transform -translate-x-1/2" />
+          <div className="relative">
+            {/* Connecting Line (Desktop) */}
+            <div className="hidden md:block absolute left-1/2 top-4 bottom-4 w-0.5 bg-ash-200 transform -translate-x-1/2" />
 
-              <div className="space-y-12">
-                {[
-                  {
-                    title: 'Faculty Publish',
-                    desc: 'Faculty create event listings with official registration links and details.',
-                    num: '01'
-                  },
-                  {
-                    title: 'Students Discover',
-                    desc: 'Students browse CoIN to find hackathons that match their skills and interests.',
-                    num: '02'
-                  },
-                  {
-                    title: 'External Registration',
-                    desc: 'Teams register on the official event platforms (e.g., Devfolio, Unstop).',
-                    num: '03'
-                  },
-                  {
-                    title: 'Report Participation',
-                    desc: 'After registering, teams log their participation entry in CoIN for tracking.',
-                    num: '04'
-                  },
-                  {
-                    title: 'Track & Celebrate',
-                    desc: 'Outcomes are verified, winners are showcased, and data is aggregated.',
-                    num: '05'
-                  }
-                ].map((step, idx) => (
-                  <div key={idx} className={`relative flex items-center justify-between md:justify-center group ${idx % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
-                    {/* Center Dot */}
-                    <div className="absolute left-0 md:left-1/2 w-8 h-8 bg-white border-4 border-coin-500 rounded-full z-10 transform -translate-x-1/2 flex items-center justify-center shadow-sm">
-                      <div className="w-2 h-2 bg-coin-500 rounded-full" />
-                    </div>
+            <div className="space-y-12">
+              {[
+                {
+                  title: 'Faculty Publish',
+                  desc: 'Faculty create event listings with official registration links and details.',
+                  num: '01'
+                },
+                {
+                  title: 'Students Discover',
+                  desc: 'Students browse CoIN to find hackathons that match their skills and interests.',
+                  num: '02'
+                },
+                {
+                  title: 'External Registration',
+                  desc: 'Teams register on the official event platforms (e.g., Devfolio, Unstop).',
+                  num: '03'
+                },
+                {
+                  title: 'Report Participation',
+                  desc: 'After registering, teams log their participation entry in CoIN for tracking.',
+                  num: '04'
+                },
+                {
+                  title: 'Track & Celebrate',
+                  desc: 'Outcomes are verified, winners are showcased, and data is aggregated.',
+                  num: '05'
+                }
+              ].map((step, idx) => (
+                <div key={idx} className={`relative flex items-center justify-between md:justify-center group ${idx % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
+                  {/* Center Dot */}
+                  <div className="absolute left-0 md:left-1/2 w-8 h-8 bg-white dark:bg-ash-900 border-4 border-flame-500 rounded-full z-10 transform -translate-x-1/2 flex items-center justify-center shadow-sm">
+                    <div className="w-2 h-2 bg-flame-500 rounded-full" />
+                  </div>
 
-                    {/* Content Card */}
-                    <div className={`ml-12 md:ml-0 md:w-5/12 ${idx % 2 === 0 ? 'md:mr-auto md:text-right' : 'md:ml-auto md:text-left'}`}>
-                      <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-                        <span className="text-xs font-bold text-coin-500 tracking-wider uppercase mb-2 block">Step {step.num}</span>
-                        <h3 className="text-xl font-bold text-slate-900 mb-2">{step.title}</h3>
-                        <p className="text-slate-600 text-sm leading-relaxed">{step.desc}</p>
-                      </div>
+                  {/* Content Card */}
+                  <div className={`ml-12 md:ml-0 md:w-5/12 ${idx % 2 === 0 ? 'md:mr-auto md:text-right' : 'md:ml-auto md:text-left'}`}>
+                    <div className="bg-white dark:bg-ash-900 p-6 rounded-2xl border border-ash-200 dark:border-ash-800 shadow-sm hover:shadow-md transition-shadow">
+                      <span className="text-xs font-bold text-flame-500 tracking-wider uppercase mb-2 block">Step {step.num}</span>
+                      <h3 className="text-xl font-bold text-ash-900 mb-2">{step.title}</h3>
+                      <p className="text-ash-600 text-sm leading-relaxed">{step.desc}</p>
                     </div>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
           </div>
         </Section>
 
         {/* CTA */}
-        <Section className="bg-white">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div className="bg-slate-900 rounded-3xl p-12 relative overflow-hidden text-white">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-coin-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 -mr-16 -mt-16" />
-              <div className="absolute bottom-0 left-0 w-48 h-48 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 -ml-16 -mb-16" />
+        <Section className="bg-white dark:bg-ash-950">
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-br from-flame-600/30 via-ember-600/30 to-ember-600/30 rounded-[3rem] blur-3xl opacity-50 group-hover:opacity-80 transition-opacity duration-700" />
+            <div className="relative bg-ash-950 rounded-[3rem] p-16 md:p-24 overflow-hidden border border-white/10 text-center">
+              <div className="absolute top-0 right-0 -mr-24 -mt-24 w-96 h-96 bg-flame-600 rounded-full mix-blend-screen filter blur-[120px] opacity-20" />
 
-              <h2 className="text-3xl font-heading font-bold mb-6 relative z-10">Ready to get involved?</h2>
-              <p className="text-slate-300 mb-8 max-w-lg mx-auto relative z-10">
-                Join the innovation movement at SREC. Whether you're organized or participating, CoIN is your starting point.
+              <h2 className="text-4xl md:text-6xl font-display font-extrabold text-white mb-8 uppercase tracking-tighter relative z-10 leading-tight">Ready to get <span className="text-gradient">involved?</span></h2>
+              <p className="text-xl text-ash-400 mb-12 max-w-2xl mx-auto relative z-10 font-light leading-relaxed">
+                Join the innovation movement at SREC. Whether you're organizing or participating, CoIN is your digital command center.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center relative z-10">
-                <Link href="/hackathons" className="px-6 py-3 bg-white text-slate-900 rounded-xl font-medium hover:bg-slate-100 transition-colors">
-                  Browse Hackathons
+              <div className="flex flex-col sm:flex-row gap-6 justify-center relative z-10">
+                <Link href="/hackathons" className="group/btn px-10 py-5 bg-white text-ash-950 rounded-full font-bold hover:bg-flame-50 transition-all shadow-2xl shadow-white/10 transform hover:-translate-y-1 active:scale-95 flex items-center justify-center">
+                  EXPLORE HACKATHONS
+                  <ArrowRight className="ml-3 h-5 w-5 transition-transform group-hover/btn:translate-x-1" />
                 </Link>
-                <Link href="/submit" className="px-6 py-3 bg-slate-800 text-white rounded-xl font-medium border border-slate-700 hover:bg-slate-700 transition-colors">
-                  Submit Participation
+                <Link href="/submit" className="group/btn px-10 py-5 bg-white/5 text-white border border-white/10 rounded-full font-bold hover:bg-white/10 transition-all transform hover:-translate-y-1 active:scale-95 flex items-center justify-center">
+                  SUBMIT PARTICIPATION
+                  <ArrowRight className="ml-3 h-5 w-5 transition-transform group-hover/btn:translate-x-1" />
                 </Link>
               </div>
             </div>
