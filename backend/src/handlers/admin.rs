@@ -420,7 +420,7 @@ pub struct ExportQuery {
 pub async fn export_data(
     State(state): State<AppState>,
     Query(query): Query<ExportQuery>,
-) -> AppResult<(StatusCode, axum::response::IntoResponse)> {
+) -> AppResult<(StatusCode, axum::response::Response)> {
     let format = query.format.as_deref().unwrap_or("csv");
 
     // Build dynamic query with optional filters

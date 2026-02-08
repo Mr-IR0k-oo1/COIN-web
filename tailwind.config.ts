@@ -9,11 +9,11 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['var(--font-inter)', 'sans-serif'],
-        heading: ['var(--font-outfit)', 'sans-serif'],
-        display: ['var(--font-syne)', 'sans-serif'],
-        fancy: ['var(--font-bricolage)', 'sans-serif'],
-        tech: ['var(--font-space)', 'monospace'],
+        sans: ['var(--font-manrope)', 'sans-serif'],
+        heading: ['var(--font-sora)', 'sans-serif'],
+        display: ['var(--font-unbounded)', 'sans-serif'],
+        fancy: ['var(--font-fraunces)', 'serif'],
+        tech: ['var(--font-jetbrains)', 'monospace'],
       },
       colors: {
         border: "hsl(var(--border))",
