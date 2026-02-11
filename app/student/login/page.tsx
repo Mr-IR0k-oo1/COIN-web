@@ -38,7 +38,7 @@ export default function StudentLoginPage() {
                 <div className="absolute -top-20 -left-20 w-64 h-64 bg-flame-600/10 rounded-full blur-3xl" />
                 <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-ember-600/10 rounded-full blur-3xl" />
 
-                <div className="relative group premium-card p-10">
+                <div className="relative group card-premium p-10">
                     <div className="premium-card-inner" />
 
                     <div className="relative z-10">

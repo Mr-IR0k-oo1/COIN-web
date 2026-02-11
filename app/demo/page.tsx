@@ -1,9 +1,13 @@
-import EtherealBeamsHero from "@/components/ui/ethereal-beams-hero";
+import { PageHero } from "@/components/ui/page-hero";
 
 export default function DemoOne() {
     return (
         <main>
-            <EtherealBeamsHero />
+            <PageHero
+                badge="Demo"
+                title="Page Hero Demo"
+                description="This is a demonstration of the standard PageHero component."
+            />
         </main>
     );
 }

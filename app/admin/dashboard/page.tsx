@@ -83,7 +83,7 @@ export default function DashboardPage() {
           {metrics.map((metric, idx) => (
             <div
               key={idx}
-              className={`p-6 bg-white dark:bg-ash-900 border ${metric.border} rounded-3xl shadow-sm hover:shadow-md transition-shadow transition-colors duration-500 relative overflow-hidden group`}
+              className={`p-6 bg-white dark:bg-ash-900 border ${metric.border} rounded-3xl shadow-sm hover:shadow-md hover:scale-[1.02] transition-all duration-500 relative overflow-hidden group`}
             >
               <div className={`absolute top-0 right-0 p-8 transform translate-x-4 -translate-y-4 opacity-5 group-hover:scale-125 group-hover:opacity-10 transition-all duration-700`}>
                 <metric.icon size={80} />

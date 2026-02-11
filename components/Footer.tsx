@@ -23,14 +23,20 @@ export default function Footer() {
   ]
 
   return (
-    <footer className="bg-white dark:bg-ash-950 border-t border-ash-200 dark:border-ash-800 text-ash-500 py-24 mt-32 overflow-hidden">
-      <div className="max-w-[90rem] mx-auto px-4 sm:px-12 lg:px-16">
+    <footer className="relative bg-white dark:bg-black border-t border-slate-200 dark:border-white/10 text-slate-500 py-24 mt-32 overflow-hidden">
+      {/* Background Grid */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.03] dark:opacity-20 bg-grid-black dark:bg-grid-white bg-[length:32px_32px]" />
+
+      {/* Top Gradient */}
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-flame-500/50 to-transparent" />
+
+      <div className="relative z-10 max-w-[90rem] mx-auto px-4 sm:px-12 lg:px-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 mb-24">
           <div className="lg:col-span-6">
-            <h3 className="text-8xl md:text-[12rem] font-display font-black text-ash-900 dark:text-white leading-[0.7] tracking-tighter opacity-10 mb-12 select-none">
-              COIN.
+            <h3 className="text-8xl md:text-[12rem] font-display font-black text-slate-100 dark:text-neutral-900 leading-[0.7] tracking-tighter mb-12 select-none mix-blend-difference">
+              CoIN.
             </h3>
-            <p className="text-xl text-ash-600 dark:text-ash-400 max-w-md leading-relaxed font-light">
+            <p className="text-xl text-slate-600 dark:text-slate-400 max-w-md leading-relaxed font-light">
               Designing the future of institutional innovation. The collaborative hub for SREC's next-gen engineering breakthroughs.
             </p>
           </div>
@@ -38,7 +44,7 @@ export default function Footer() {
           <div className="lg:col-span-6 grid grid-cols-2 gap-12 pt-4">
             {links.map((group) => (
               <div key={group.title}>
-                <h4 className="text-[10px] font-black text-ash-900 dark:text-white uppercase tracking-[0.4em] mb-10">
+                <h4 className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-[0.4em] mb-10">
                   {group.title}
                 </h4>
                 <ul className="space-y-6">
@@ -46,7 +52,7 @@ export default function Footer() {
                     <li key={item.label}>
                       <Link
                         href={item.href}
-                        className="text-ash-500 dark:text-ash-400 hover:text-flame-500 dark:hover:text-white transition-all duration-300 text-sm font-medium"
+                        className="text-slate-500 dark:text-slate-400 hover:text-flame-500 dark:hover:text-white transition-all duration-300 text-sm font-medium hover:pl-2"
                       >
                         {item.label}
                       </Link>
@@ -58,19 +64,26 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="pt-12 border-t border-ash-100 dark:border-ash-900 flex flex-col md:flex-row justify-between items-center gap-8">
+        <div className="pt-12 border-t border-slate-100 dark:border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex flex-col md:flex-row items-center gap-8">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-ash-400">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
               &copy; {new Date().getFullYear()} Sri Ramakrishna Engineering College
             </p>
             <div className="flex gap-8 text-[10px] font-bold uppercase tracking-widest">
-              <span className="hover:text-ash-900 dark:hover:text-white transition-colors cursor-pointer">Privacy</span>
-              <span className="hover:text-ash-900 dark:hover:text-white transition-colors cursor-pointer">Security</span>
+              <Link href="/privacy" className="hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">
+                Privacy
+              </Link>
+              <Link href="/security" className="hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">
+                Security
+              </Link>
+              <Link href="/contact" className="hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">
+                Contact
+              </Link>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-ash-400">Status</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Status</span>
             <div className="flex items-center gap-2 px-3 py-1 bg-green-500/10 rounded-full border border-green-500/20">
               <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
               <span className="text-[8px] font-black text-green-600 uppercase tracking-widest">Operational</span>

@@ -63,7 +63,7 @@ export default function StudentDashboard() {
                 </div>
 
                 {/* Search & Filter Bar */}
-                <div className="group premium-card p-8 mb-12">
+                <div className="group card-premium p-8 mb-12">
                     <div className="premium-card-inner" />
                     <div className="relative z-10">
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -119,7 +119,7 @@ export default function StudentDashboard() {
                 {students.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {students.map((student) => (
-                            <div key={student.id} className="group premium-card p-8 flex flex-col h-full">
+                            <div key={student.id} className="group card-premium p-8 flex flex-col h-full">
                                 <div className="premium-card-inner" />
                                 <div className="relative z-10 flex-1">
                                     <div className="flex items-start justify-between mb-6">

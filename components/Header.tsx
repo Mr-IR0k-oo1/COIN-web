@@ -39,10 +39,10 @@ export default function Header({ hideNav = false }: HeaderProps) {
   return (
     <header
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b',
+        'fixed top-0 left-0 right-0 z-50 transition-all duration-500',
         scrolled
-          ? 'bg-white/95 dark:bg-ash-950/95 border-ash-200 dark:border-ash-800 backdrop-blur-md py-2'
-          : 'bg-white/80 dark:bg-ash-950/80 border-transparent backdrop-blur-sm py-4'
+          ? 'glass-premium py-3'
+          : 'bg-transparent border-transparent py-6'
       )}
     >
       <div className="max-w-[90rem] mx-auto px-4 sm:px-12 lg:px-16">
@@ -70,23 +70,23 @@ export default function Header({ hideNav = false }: HeaderProps) {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="relative px-5 py-2.5 text-[10px] font-black uppercase tracking-[0.2em] text-ash-500 dark:text-ash-400 hover:text-ash-950 dark:hover:text-white transition-all"
+                    className="relative px-5 py-2.5 text-[10px] font-black uppercase tracking-[0.2em] text-ash-500 dark:text-ash-400 hover:text-ash-950 dark:hover:text-white transition-all hover:bg-white/5 rounded-lg"
                   >
                     {link.label}
                   </Link>
                 ))}
-                <div className="w-px h-6 bg-ash-100 dark:bg-ash-800 mx-4" />
+                <div className="w-px h-6 bg-ash-200/50 dark:bg-ash-800 mx-4" />
                 {isStudent ? (
                   <Link
                     href="/student/dashboard"
-                    className="px-6 py-2.5 text-[10px] font-black uppercase tracking-[0.2em] text-flame-600 dark:text-flame-400 border border-flame-600/20 rounded-xl hover:bg-flame-50 dark:hover:bg-flame-500/10 transition-all active:scale-95"
+                    className="px-6 py-2.5 text-[10px] font-black uppercase tracking-[0.2em] text-flame-600 dark:text-flame-400 border border-flame-600/20 rounded-xl hover:bg-flame-50 dark:hover:bg-flame-500/10 transition-all active:scale-95 bg-white/50 dark:bg-black/20"
                   >
                     My Dashboard
                   </Link>
                 ) : (
                   <Link
                     href="/student/login"
-                    className="px-6 py-2.5 text-[10px] font-black uppercase tracking-[0.2em] text-ash-950 dark:text-white border border-ash-200 dark:border-ash-800 rounded-xl hover:bg-ash-50 dark:hover:bg-ash-900 transition-all active:scale-95"
+                    className="px-6 py-2.5 text-[10px] font-black uppercase tracking-[0.2em] text-ash-950 dark:text-white border border-ash-200 dark:border-ash-800 rounded-xl hover:bg-ash-50 dark:hover:bg-ash-900 transition-all active:scale-95 bg-white/50 dark:bg-black/20"
                   >
                     Student Portal
                   </Link>
@@ -149,7 +149,7 @@ export default function Header({ hideNav = false }: HeaderProps) {
             isOpen ? 'max-h-96 opacity-100 mt-4' : 'max-h-0 opacity-0'
           )}
         >
-          <div className="glass dark:bg-ash-900/80 dark:border-ash-700/70 rounded-2xl border border-ash-200/70 shadow-lg p-2">
+          <div className="glass-premium rounded-2xl p-2 border border-ash-200/50 dark:border-white/10 shadow-2xl backdrop-blur-3xl bg-white/80 dark:bg-black/80">
             <nav className="flex flex-col gap-1">
               {navLinks.map((link) => (
                 <Link

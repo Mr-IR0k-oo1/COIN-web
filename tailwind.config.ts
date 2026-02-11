@@ -104,6 +104,31 @@ const config: Config = {
       },
       animation: {
         'spin-slow': 'spin 15s linear infinite',
+        'blob': 'blob 7s infinite',
+        'gradient-fast': 'gradient 3s ease infinite',
+        'shimmer': 'shimmer 2s linear infinite',
+      },
+      keyframes: {
+        blob: {
+          '0%, 100%': { transform: 'translate(0, 0) scale(1)' },
+          '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+          '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+        },
+        gradient: {
+          '0%, 100%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+        },
+        shimmer: {
+          from: { backgroundPosition: '0 0' },
+          to: { backgroundPosition: '-200% 0' },
+        },
+      },
+      backgroundSize: {
+        '300%': '300%',
+      },
+      transitionDelay: {
+        '2000': '2000ms',
+        '4000': '4000ms',
       },
     },
   },

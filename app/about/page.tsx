@@ -4,6 +4,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import Link from 'next/link'
 import Section from '@/components/ui/Section'
+import { PageHero } from '@/components/ui/page-hero'
 import { ArrowRight, Check } from 'lucide-react'
 
 
@@ -13,37 +14,30 @@ export default function AboutPage() {
       <Header />
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="min-h-[60vh] bg-gradient-to-br from-ash-900 to-ash-950 dark:from-black dark:to-ash-950 flex items-center justify-center px-4 py-32 relative overflow-hidden">
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-20 left-10 w-72 h-72 bg-flame-500 rounded-full mix-blend-multiply filter blur-3xl" />
-            <div className="absolute bottom-20 right-10 w-72 h-72 bg-ember-500 rounded-full mix-blend-multiply filter blur-3xl" />
+        {/* Hero Section */}
+        <PageHero
+          title="Empowering Innovation"
+          description="CoIN is the digital backbone for organizing, tracking, and celebrating student innovation at SREC."
+          badge="Our Mission"
+          align="center"
+        >
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/hackathons"
+              className="inline-flex items-center px-8 py-4 bg-white text-ash-950 font-semibold rounded-lg hover:bg-ash-100 transition-colors"
+            >
+              Explore Hackathons
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Link>
+            <Link
+              href="/student/login"
+              className="inline-flex items-center px-8 py-4 border border-slate-300 dark:border-white/30 text-slate-900 dark:text-white font-semibold rounded-lg hover:bg-slate-50 dark:hover:border-white/50 transition-colors"
+            >
+              Student Portal
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Link>
           </div>
-          
-          <div className="max-w-4xl mx-auto text-center relative z-10">
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 font-display">
-              Empowering Innovation
-            </h1>
-            <p className="text-xl md:text-2xl text-ash-300 mb-10 leading-relaxed">
-              CoIN is the digital backbone for organizing, tracking, and celebrating student innovation at SREC.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                href="/hackathons"
-                className="inline-flex items-center px-8 py-4 bg-white text-ash-950 font-semibold rounded-lg hover:bg-ash-100 transition-colors"
-              >
-                Explore Hackathons
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-              <Link
-                href="/student/login"
-                className="inline-flex items-center px-8 py-4 border border-white/30 text-white font-semibold rounded-lg hover:border-white/50 transition-colors"
-              >
-                Student Portal
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-            </div>
-          </div>
-        </section>
+        </PageHero>
 
         {/* Purpose */}
         <Section className="bg-white dark:bg-ash-950">
