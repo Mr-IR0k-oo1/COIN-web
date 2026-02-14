@@ -16,6 +16,7 @@ export default function AboutPage() {
         {/* Hero Section */}
         {/* Hero Section */}
         <PageHero
+          fullHeight={true}
           title="Empowering Innovation"
           description="CoIN is the digital backbone for organizing, tracking, and celebrating student innovation at SREC."
           badge="Our Mission"
@@ -40,7 +41,7 @@ export default function AboutPage() {
         </PageHero>
 
         {/* Purpose */}
-        <Section className="bg-white dark:bg-ash-950">
+        <Section fullHeight={true} className="bg-white dark:bg-ash-950">
           <div className="max-w-4xl mx-auto text-center mb-24">
             <h2 className="text-4xl md:text-5xl font-display font-extrabold text-ash-900 dark:text-white mb-8 uppercase tracking-tighter">Unified <span className="text-gradient">Knowledge</span></h2>
             <p className="text-xl text-ash-600 dark:text-ash-400 leading-relaxed font-light">
@@ -95,7 +96,7 @@ export default function AboutPage() {
         </Section>
 
         {/* Workflow */}
-        <Section className="bg-ash-50 dark:bg-ash-950 border-y border-ash-200 dark:border-ash-800">
+        <Section fullHeight={true} className="bg-ash-50 dark:bg-ash-950 border-y border-ash-200 dark:border-ash-800">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-heading font-bold text-ash-900 mb-4">How It Works</h2>
             <p className="text-ash-600">A seamless process from discovery to documentation.</p>
@@ -154,7 +155,7 @@ export default function AboutPage() {
         </Section>
 
         {/* CTA */}
-        <Section className="bg-white dark:bg-ash-950">
+        <Section fullHeight={true} className="bg-white dark:bg-ash-950">
           <div className="relative group">
             <div className="absolute inset-0 bg-gradient-to-br from-flame-600/30 via-ember-600/30 to-ember-600/30 rounded-[3rem] blur-3xl opacity-50 group-hover:opacity-80 transition-opacity duration-700" />
             <div className="relative bg-ash-950 rounded-[3rem] p-16 md:p-24 overflow-hidden border border-white/10 text-center">

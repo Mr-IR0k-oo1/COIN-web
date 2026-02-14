@@ -10,16 +10,17 @@ import { AnimatedGridPattern } from './animated-grid-pattern'
 
 gsap.registerPlugin(ScrollTrigger)
 
-type SectionVariant = 'default' | 'grid' | 'minimal' | 'gradient' | 'dots' | 'animated-grid'
+type SectionVariant = 'default' | 'grid' | 'minimal' | 'gradient' | 'dots' | 'animated-grid' | 'aurora'
 
 interface SectionProps extends React.HTMLAttributes<HTMLDivElement> {
     children: React.ReactNode
     className?: string
     delay?: number
     variant?: SectionVariant
+    fullHeight?: boolean
 }
 
-const Section = ({ children, className, delay = 0, variant = 'default', ...props }: SectionProps) => {
+const Section = ({ children, className, delay = 0, variant = 'default', fullHeight = false, ...props }: SectionProps) => {
     const sectionRef = useRef<HTMLElement>(null)
     const containerRef = useRef<HTMLDivElement>(null)
 
@@ -54,12 +55,16 @@ const Section = ({ children, className, delay = 0, variant = 'default', ...props
     return (
         <section
             ref={sectionRef}
-            className={cn('py-20 md:py-32 relative overflow-hidden', className)}
+            className={cn(
+                'py-20 md:py-32 relative overflow-hidden',
+                fullHeight && 'min-h-screen flex items-center',
+                className
+            )}
             {...props}
         >
             {/* Background Variants */}
             {variant === 'grid' && (
-                <div className="absolute inset-0 pointer-events-none opacity-[0.05] dark:opacity-20 bg-grid-black dark:bg-grid-white bg-[length:32px_32px] mask-radial-fade" />
+                <div className="absolute inset-0 pointer-events-none opacity-[0.05] dark:opacity-20 bg-grid-black dark:bg-grid-white bg-[length:32px_32px] mask-radial-fade transition-opacity duration-1000" />
             )}
 
             {variant === 'animated-grid' && (
@@ -76,41 +81,48 @@ const Section = ({ children, className, delay = 0, variant = 'default', ...props
             )}
 
             {variant === 'dots' && (
-                <div className="absolute inset-0 pointer-events-none opacity-[0.1] dark:opacity-[0.3] mask-radial-fade"
+                <div className="absolute inset-0 pointer-events-none opacity-[0.1] dark:opacity-[0.2] mask-radial-fade transition-opacity duration-1000"
                     style={{ backgroundImage: 'radial-gradient(circle, #808080 1px, transparent 1px)', backgroundSize: '24px 24px' }}
                 />
             )}
 
             {variant === 'gradient' && (
-                <div className="absolute inset-0 pointer-events-none opacity-30">
-                    <div className="absolute inset-0 bg-gradient-to-tr from-flame-500/5 via-transparent to-ember-500/5" />
-                    <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-white dark:from-black to-transparent" />
+                <div className="absolute inset-0 pointer-events-none">
+                    <div className="absolute inset-0 bg-gradient-to-tr from-flame-500/10 via-transparent to-ember-500/10 opacity-30 dark:opacity-50" />
+                    <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-background to-transparent" />
+                </div>
+            )}
+
+            {variant === 'aurora' && (
+                <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                    <div className="aurora top-[-10%] left-[-10%] w-[50%] h-[50%] opacity-30 animate-pulse" />
+                    <div className="aurora bottom-[-10%] right-[-10%] w-[50%] h-[50%] opacity-20 animate-pulse" style={{ animationDelay: '1s' }} />
                 </div>
             )}
 
             {/* Premium Side Decorations (only for default variant) */}
             {variant === 'default' && (
                 <>
-                    <div className="absolute inset-y-0 left-0 w-12 md:w-24 border-r border-ash-200/20 dark:border-ash-800/20 pointer-events-none hidden lg:block">
-                        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 h-32 w-px bg-gradient-to-b from-transparent via-flame-500/50 to-transparent" />
-                        <div className="absolute bottom-1/4 left-1/2 -translate-x-1/2 h-32 w-px bg-gradient-to-b from-transparent via-flame-500/50 to-transparent" />
-                        <div className="absolute top-1/2 left-0 -translate-y-1/2 -rotate-90 origin-left text-[10px] font-black uppercase tracking-[0.5em] text-ash-400/30 dark:text-ash-400/50 whitespace-nowrap">
+                    <div className="absolute inset-y-0 left-0 w-12 md:w-24 border-r border-border/20 pointer-events-none hidden lg:block">
+                        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 h-32 w-px bg-gradient-to-b from-transparent via-primary/30 to-transparent" />
+                        <div className="absolute bottom-1/4 left-1/2 -translate-x-1/2 h-32 w-px bg-gradient-to-b from-transparent via-primary/30 to-transparent" />
+                        <div className="absolute top-1/2 left-0 -translate-y-1/2 -rotate-90 origin-left text-[10px] font-black uppercase tracking-[0.5em] text-muted-foreground/30 dark:text-muted-foreground/40 whitespace-nowrap">
                             Institutional Innovation Signal
                         </div>
                     </div>
-                    <div className="absolute inset-y-0 right-0 w-12 md:w-24 border-l border-ash-200/20 dark:border-ash-800/20 pointer-events-none hidden lg:block">
-                        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 h-32 w-px bg-gradient-to-b from-transparent via-flame-500/50 to-transparent" />
-                        <div className="absolute bottom-1/3 left-1/2 -translate-x-1/2 h-32 w-px bg-gradient-to-b from-transparent via-flame-500/50 to-transparent" />
-                        <div className="absolute top-1/2 right-4 -translate-y-1/2 rotate-90 origin-right text-[10px] font-black uppercase tracking-[0.5em] text-ash-400/30 dark:text-ash-400/50 whitespace-nowrap">
+                    <div className="absolute inset-y-0 right-0 w-12 md:w-24 border-l border-border/20 pointer-events-none hidden lg:block">
+                        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 h-32 w-px bg-gradient-to-b from-transparent via-primary/30 to-transparent" />
+                        <div className="absolute bottom-1/3 left-1/2 -translate-x-1/2 h-32 w-px bg-gradient-to-b from-transparent via-primary/30 to-transparent" />
+                        <div className="absolute top-1/2 right-4 -translate-y-1/2 rotate-90 origin-right text-[10px] font-black uppercase tracking-[0.5em] text-muted-foreground/30 dark:text-muted-foreground/40 whitespace-nowrap">
                             Sri Ramakrishna Engineering College
                         </div>
                     </div>
 
                     {/* Decorative Background Elements */}
-                    <div className="absolute inset-0 pointer-events-none opacity-20 dark:opacity-60">
-                        <div className="absolute top-0 left-[15%] w-px h-full bg-gradient-to-b from-transparent via-flame-500/10 to-transparent" />
-                        <div className="absolute top-0 right-[15%] w-px h-full bg-gradient-to-b from-transparent via-flame-500/10 to-transparent" />
-                        <div className="absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-flame-500/10 to-transparent" />
+                    <div className="absolute inset-0 pointer-events-none opacity-20 dark:opacity-40">
+                        <div className="absolute top-0 left-[15%] w-px h-full bg-gradient-to-b from-transparent via-primary/10 to-transparent" />
+                        <div className="absolute top-0 right-[15%] w-px h-full bg-gradient-to-b from-transparent via-primary/10 to-transparent" />
+                        <div className="absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent" />
                     </div>
                 </>
             )}

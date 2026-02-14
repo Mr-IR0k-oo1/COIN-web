@@ -31,7 +31,7 @@ export default function RootLayout({
           unbounded.variable,
           fraunces.variable,
           jetbrainsMono.variable,
-          'min-h-screen bg-slate-50 dark:bg-black font-sans antialiased text-slate-900 dark:text-slate-50'
+          'min-h-screen bg-background font-sans antialiased text-foreground selection:bg-primary/30 selection:text-primary relative overflow-x-hidden'
         )}
       >
         <ThemeProvider
@@ -40,8 +40,13 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          {/* Noise Overlay */}
+          <div className="fixed inset-0 pointer-events-none z-[100] opacity-[0.03] dark:opacity-[0.05] noise" />
+          
           <Preloader />
-          {children}
+          <div className="relative z-0">
+            {children}
+          </div>
         </ThemeProvider>
       </body>
     </html>

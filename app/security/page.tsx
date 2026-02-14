@@ -11,7 +11,7 @@ export default function SecurityPage() {
         <>
             <Header />
             <main className="flex-1">
-                <Section className="py-24 bg-white dark:bg-black border-b border-slate-200 dark:border-white/10">
+                <Section fullHeight={true} className="py-24 bg-white dark:bg-black border-b border-slate-200 dark:border-white/10">
                     <div className="max-w-4xl mx-auto text-center">
                         <span className="text-green-500 font-bold tracking-widest uppercase text-sm mb-4 block">Infrastructure</span>
                         <h1 className="text-4xl md:text-6xl font-display font-black text-slate-900 dark:text-white mb-6">
@@ -23,7 +23,7 @@ export default function SecurityPage() {
                     </div>
                 </Section>
 
-                <Section className="py-20 bg-slate-50 dark:bg-black">
+                <Section fullHeight={true} className="py-20 bg-slate-50 dark:bg-black">
                     <div className="max-w-6xl mx-auto">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
                             {[

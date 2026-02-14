@@ -37,13 +37,14 @@ export default function BlogPage() {
       <Header />
       <main className="flex-1">
         <PageHero
+          fullHeight={true}
           title={<>CoIN <span className="text-gradient">Updates</span></>}
           description="Success stories, announcements, and insights from the SREC innovation community."
           badge="Our Stories"
           align="center"
         />
 
-        <Section variant="minimal" className="bg-white dark:bg-black">
+        <Section fullHeight={true} variant="minimal" className="bg-white dark:bg-black">
           {/* Filters */}
           <div className="mb-12 flex flex-wrap justify-center gap-3">
             <button

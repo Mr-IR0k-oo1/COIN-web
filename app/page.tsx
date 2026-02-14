@@ -31,6 +31,7 @@ export default function Home() {
       <main className="flex-1 overflow-hidden">
         {/* Hero Section */}
         <PageHero
+          fullHeight={true}
           badge="System v2.0"
           title={
             <>
@@ -58,14 +59,14 @@ export default function Home() {
           </div>
         </PageHero>
         {/* Innovation Ecosystem */}
-        <Section variant="grid" className="bg-slate-50/50 dark:bg-black">
+        <Section fullHeight={true} variant="grid" className="bg-background">
           <div className="relative z-10">
             <div className="text-center mb-24">
-              <span className="tech-label text-flame-500 mb-4 block">System Capabilities</span>
-              <h2 className="text-4xl md:text-7xl font-display font-bold text-slate-900 dark:text-white mb-6 tracking-tight">
+              <span className="tech-label text-primary mb-4 block">System Capabilities</span>
+              <h2 className="text-4xl md:text-7xl font-display font-bold text-foreground mb-6 tracking-tight">
                 The <span className="text-gradient">Innovation</span> Ecosystem
               </h2>
-              <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                 A unified platform to manage, track, and amplify student innovation at scale.
               </p>
             </div>
@@ -115,6 +116,7 @@ export default function Home() {
                   description={item.desc}
                   icon={item.icon}
                   className={item.className}
+                  number={String(idx + 1).padStart(2, '0')}
                 />
               ))}
             </BentoGrid>
@@ -122,22 +124,22 @@ export default function Home() {
         </Section>
 
         {/* Designed for Everyone */}
-        <Section variant="animated-grid" className="bg-white dark:bg-black border-y border-slate-200/50 dark:border-white/5">
+        <Section fullHeight={true} variant="animated-grid" className="bg-background border-y border-border/50">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
             <div className="lg:col-span-5">
               <span className="tech-label text-blue-500 mb-4 block">Target Audience</span>
-              <h2 className="text-4xl md:text-6xl font-display font-bold text-slate-900 dark:text-white mb-8">
+              <h2 className="text-4xl md:text-6xl font-display font-bold text-foreground mb-8 text-balance">
                 Designed for <br /><span className="text-gradient">Everyone</span>
               </h2>
-              <p className="text-lg text-slate-600 dark:text-slate-400 mb-10 leading-relaxed">
+              <p className="text-lg text-muted-foreground mb-10 leading-relaxed text-balance">
                 Whether you're a student building the next big thing, faculty guiding teams, or administration tracking success, CoIN adapts to your needs.
               </p>
 
               <div className="flex gap-4">
-                <Link href="/student/login" className="px-6 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold rounded-lg hover:opacity-90 transition-opacity shadow-lg shadow-blue-500/20">
+                <Link href="/student/login" className="px-8 py-4 bg-foreground text-background font-bold rounded-2xl hover:opacity-90 transition-all shadow-xl shadow-foreground/5 active:scale-95">
                   Student Portal
                 </Link>
-                <Link href="/about" className="px-6 py-3 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 font-medium rounded-lg hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors">
+                <Link href="/about" className="px-8 py-4 border border-border bg-background/50 backdrop-blur-sm text-foreground font-bold rounded-2xl hover:bg-secondary transition-all active:scale-95">
                   Learn More
                 </Link>
               </div>
@@ -195,21 +197,21 @@ export default function Home() {
         </Section>
 
         {/* Visual Workflow Timeline */}
-        <Section variant="gradient" className="bg-slate-50 dark:bg-black">
+        <Section fullHeight={true} variant="gradient" className="bg-background">
           <div className="text-center mb-20">
-            <span className="tech-label text-purple-500 mb-4 block">Process Flow</span>
-            <h2 className="text-4xl md:text-5xl font-display font-bold text-slate-900 dark:text-white mb-6">
+            <span className="tech-label text-primary mb-4 block">Process Flow</span>
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-foreground mb-6">
               Streamlined Workflow
             </h2>
-            <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               From discovery to documentation, we've simplified the entire innovation lifecycle.
             </p>
           </div>
 
           <div className="relative max-w-6xl mx-auto">
             {/* Connecting Line */}
-            <div className="absolute top-12 left-[10%] w-[80%] h-0.5 bg-slate-200 dark:bg-white/10 hidden md:block">
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-flame-500 to-transparent w-1/3 animate-shimmer hidden md:block" />
+            <div className="absolute top-12 left-[10%] w-[80%] h-0.5 bg-border hidden md:block">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary to-transparent w-1/3 animate-shimmer hidden md:block" />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-5 gap-8 relative z-10">
@@ -221,16 +223,16 @@ export default function Home() {
                 { num: '05', title: 'Showcase', desc: 'Celebrate achievements' },
               ].map((step, idx) => (
                 <div key={idx} className="flex flex-col items-center text-center group relative">
-                  <div className="w-24 h-24 rounded-full bg-white dark:bg-black border-4 border-slate-100 dark:border-slate-800 shadow-xl flex items-center justify-center mb-6 relative z-10 group-hover:border-flame-500 group-hover:scale-110 transition-all duration-500">
-                    <span className="font-display font-black text-3xl text-slate-200 dark:text-slate-500 group-hover:text-flame-500 transition-colors">{step.num}</span>
-                    <div className="absolute inset-0 rounded-full border-2 border-dashed border-slate-300 dark:border-slate-600 animate-spin-slow opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="w-24 h-24 rounded-full bg-background border-4 border-secondary shadow-xl flex items-center justify-center mb-6 relative z-10 group-hover:border-primary group-hover:scale-110 transition-all duration-500">
+                    <span className="font-display font-black text-3xl text-muted-foreground group-hover:text-primary transition-colors">{step.num}</span>
+                    <div className="absolute inset-0 rounded-full border-2 border-dashed border-muted rotate-3 animate-spin-slow opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:translate-y-1 transition-transform">{step.title}</h3>
-                  <p className="text-sm text-slate-500 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-300 transition-colors">{step.desc}</p>
+                  <h3 className="text-lg font-bold text-foreground mb-2 group-hover:translate-y-1 transition-transform">{step.title}</h3>
+                  <p className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">{step.desc}</p>
 
                   {/* Mobile connecting line */}
                   {idx < 4 && (
-                    <div className="h-12 w-0.5 bg-slate-200 dark:bg-white/10 md:hidden my-4" />
+                    <div className="h-12 w-0.5 bg-border md:hidden my-4" />
                   )}
                 </div>
               ))}
@@ -240,7 +242,7 @@ export default function Home() {
 
         {/* Action Hackathons */}
         {activeHackathons.length > 0 && (
-          <Section variant="default" className="bg-white dark:bg-black border-t border-slate-200 dark:border-white/5">
+          <Section fullHeight={true} variant="default" className="bg-white dark:bg-black border-t border-slate-200 dark:border-white/5">
             <div className="flex justify-between items-end mb-16">
               <div>
                 <span className="tech-label text-green-500 mb-4 block animate-pulse">Live Now</span>
@@ -296,7 +298,7 @@ export default function Home() {
         )}
 
         {/* Mission Statement */}
-        <Section className="bg-slate-900 dark:bg-slate-950 text-white relative overflow-hidden">
+        <Section fullHeight={true} className="bg-slate-900 dark:bg-slate-950 text-white relative overflow-hidden">
           <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop')] bg-cover bg-center opacity-10 mix-blend-overlay" />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-slate-900" />
 
@@ -315,13 +317,13 @@ export default function Home() {
 
         {/* Latest Updates */}
         {latestPosts.length > 0 && (
-          <Section variant="minimal" className="bg-white dark:bg-black">
+          <Section fullHeight={true} variant="minimal" className="bg-background">
             <div className="flex items-center justify-between mb-12">
-              <h2 className="text-3xl font-display font-bold text-slate-900 dark:text-white">
-                Latest <span className="text-slate-400">Updates</span>
+              <h2 className="text-3xl font-display font-bold text-foreground">
+                Latest <span className="text-muted-foreground">Updates</span>
               </h2>
-              <div className="h-px bg-slate-200 dark:bg-slate-800 flex-1 mx-8" />
-              <Link href="/blog" className="text-sm font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors">
+              <div className="h-px bg-border flex-1 mx-8" />
+              <Link href="/blog" className="text-sm font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors">
                 Read Blog
               </Link>
             </div>
@@ -333,24 +335,24 @@ export default function Home() {
                   href={`/blog/${post.slug}`}
                   className="group block"
                 >
-                  <div className="aspect-video bg-slate-100 dark:bg-slate-900/50 rounded-xl mb-4 overflow-hidden relative">
+                  <div className="aspect-video bg-secondary rounded-2xl mb-6 overflow-hidden relative shadow-sm">
                     {/* Placeholder for image - using gradient for now */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-800 dark:to-slate-900 group-hover:scale-105 transition-transform duration-700" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-secondary to-muted group-hover:scale-105 transition-transform duration-700" />
                     <div className="absolute top-4 left-4">
-                      <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${post.category === 'Winner'
-                        ? 'bg-amber-100 text-amber-800'
-                        : 'bg-blue-100 text-blue-800'
+                      <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider backdrop-blur-md shadow-sm border ${post.category === 'Winner'
+                        ? 'bg-amber-100/80 text-amber-900 border-amber-200'
+                        : 'bg-primary/10 text-primary border-primary/20'
                         }`}>
                         {post.category}
                       </span>
                     </div>
                   </div>
-                  <div className="space-y-2">
-                    <span className="text-xs font-mono text-slate-500">{formatDate(post.createdAt)}</span>
-                    <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-flame-500 transition-colors line-clamp-2">
+                  <div className="space-y-3">
+                    <span className="text-xs font-mono text-muted-foreground">{formatDate(post.createdAt)}</span>
+                    <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2 leading-tight">
                       {post.title}
                     </h3>
-                    <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-2">
+                    <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
                       {post.summary}
                     </p>
                   </div>

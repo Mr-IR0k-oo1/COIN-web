@@ -10,14 +10,14 @@ export default function TermsPage() {
     <>
       <Header />
       <main className="flex-1">
-        <Section className="py-12 bg-white dark:bg-ash-950 border-b border-ash-200 dark:border-ash-800">
+        <Section fullHeight={true} className="py-12 bg-white dark:bg-ash-950 border-b border-ash-200 dark:border-ash-800">
           <h1 className="section-heading mb-2">Terms and Conditions</h1>
           <p className="text-ash-600 dark:text-ash-400">
             Terms of use for CoIN platform at SREC
           </p>
         </Section>
 
-        <Section className="py-12 bg-ash-50 dark:bg-ash-950">
+        <Section fullHeight={true} className="py-12 bg-ash-50 dark:bg-ash-950">
           <div className="card p-8 space-y-8 bg-white dark:bg-ash-900 border border-ash-200 dark:border-ash-800 rounded-3xl">
             <div>
               <h2 className="heading-md mb-4">1. Platform Purpose</h2>

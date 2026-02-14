@@ -10,7 +10,7 @@ export default function PrivacyPage() {
         <>
             <Header />
             <main className="flex-1">
-                <Section className="py-24 bg-white dark:bg-black border-b border-slate-200 dark:border-white/10">
+                <Section fullHeight={true} className="py-24 bg-white dark:bg-black border-b border-slate-200 dark:border-white/10">
                     <div className="max-w-4xl mx-auto text-center">
                         <span className="text-flame-500 font-bold tracking-widest uppercase text-sm mb-4 block">Legal</span>
                         <h1 className="text-4xl md:text-6xl font-display font-black text-slate-900 dark:text-white mb-6">
@@ -22,7 +22,7 @@ export default function PrivacyPage() {
                     </div>
                 </Section>
 
-                <Section className="py-20 bg-slate-50 dark:bg-black">
+                <Section fullHeight={true} className="py-20 bg-slate-50 dark:bg-black">
                     <div className="max-w-4xl mx-auto space-y-12">
                         <div className="bg-white dark:bg-neutral-900/50 p-8 md:p-12 rounded-3xl border border-slate-200 dark:border-white/5 shadow-xl">
                             <h2 className="text-2xl font-display font-bold text-slate-900 dark:text-white mb-6">

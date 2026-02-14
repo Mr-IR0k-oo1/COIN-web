@@ -34,7 +34,7 @@ export default function StudentDashboard() {
 
     return (
         <div className="bg-white dark:bg-ash-950 min-h-screen pb-20">
-            <Section className="pb-10">
+            <Section fullHeight={true} className="pb-10">
                 <div className="text-center md:text-left mb-12">
                     <h1 className="text-4xl md:text-6xl font-display font-black tracking-tighter text-ash-900 dark:text-white uppercase mb-4">
                         Find <span className="text-gradient">Teammates</span>

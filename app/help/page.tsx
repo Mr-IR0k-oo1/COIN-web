@@ -11,7 +11,7 @@ export default function HelpPage() {
         <>
             <Header />
             <main className="flex-1">
-                <Section className="py-24 bg-slate-900 dark:bg-black relative overflow-hidden">
+                <Section fullHeight={true} className="py-24 bg-slate-900 dark:bg-black relative overflow-hidden">
                     <div className="absolute inset-0 bg-flame-500/10 opacity-30 blur-[100px]" />
 
                     <div className="max-w-4xl mx-auto text-center relative z-10 text-white">
@@ -31,7 +31,7 @@ export default function HelpPage() {
                     </div>
                 </Section>
 
-                <Section className="py-20 bg-slate-50 dark:bg-black">
+                <Section fullHeight={true} className="py-20 bg-slate-50 dark:bg-black">
                     <div className="max-w-6xl mx-auto">
                         {/* Categories */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">

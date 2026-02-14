@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 
 export const BentoGrid = ({
     className,
@@ -10,7 +11,7 @@ export const BentoGrid = ({
     return (
         <div
             className={cn(
-                "grid md:auto-rows-[18rem] grid-cols-1 md:grid-cols-3 gap-6 max-w-7xl mx-auto",
+                "grid md:auto-rows-[20rem] grid-cols-1 md:grid-cols-3 gap-6 max-w-7xl mx-auto",
                 className
             )}
         >
@@ -25,34 +26,73 @@ export const BentoGridItem = ({
     description,
     header,
     icon,
+    number,
 }: {
     className?: string;
     title?: string | React.ReactNode;
     description?: string | React.ReactNode;
     header?: React.ReactNode;
     icon?: React.ReactNode;
+    number?: string | number;
 }) => {
     return (
-        <div
+        <motion.div
+            whileHover={{ y: -5 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             className={cn(
-                "row-span-1 rounded-3xl group/bento hover:shadow-2xl transition duration-300 shadow-input p-6 bg-white dark:bg-black border border-slate-200 dark:border-white/20 justify-between flex flex-col space-y-4 overflow-hidden relative",
+                "row-span-1 rounded-[2rem] group/bento transition-all duration-500 p-8 border border-border/50 relative overflow-hidden flex flex-col justify-between",
+                "bg-white dark:bg-neutral-900/40 backdrop-blur-sm",
+                "hover:shadow-[0_24px_80px_rgba(0,0,0,0.06)] dark:hover:shadow-none hover:border-primary/30",
                 className
             )}
         >
-            <div className="group-hover/bento:translate-x-2 transition duration-300 relative z-20 h-full flex flex-col">
-                <div className="mb-4 text-flame-500 bg-flame-50 dark:bg-flame-900/10 w-fit p-3 rounded-2xl border border-flame-100 dark:border-flame-500/20">
-                    {icon}
-                </div>
-                <div className="font-display font-bold text-slate-900 dark:text-neutral-100 mb-2 mt-auto text-xl">
-                    {title}
-                </div>
-                <div className="font-sans font-normal text-slate-600 dark:text-neutral-400 text-sm leading-relaxed">
-                    {description}
+            {/* Number Indicator */}
+            {number && (
+                <motion.div 
+                    initial={{ opacity: 0, x: 20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                    className="absolute top-8 right-8 text-5xl font-display font-black text-foreground/5 group-hover/bento:text-primary/20 group-hover/bento:scale-110 group-hover/bento:-translate-x-2 transition-all duration-700 select-none pointer-events-none"
+                >
+                    {number}
+                </motion.div>
+            )}
+            {/* Ambient Background Glow */}
+            <div className="absolute inset-0 pointer-events-none transition-opacity duration-500 opacity-0 group-hover/bento:opacity-100">
+                <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/10 rounded-full blur-[80px]" />
+                <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-primary/5 rounded-full blur-[80px]" />
+            </div>
+
+            {/* Gradient Overlay for texture */}
+            <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-primary/5 opacity-0 group-hover/bento:opacity-100 transition-opacity duration-500" />
+
+            <div className="relative z-10 flex flex-col h-full space-y-4">
+                {header}
+                
+                <div className="flex flex-col flex-1">
+                    <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-secondary dark:bg-white/5 border border-border/50 text-foreground group-hover/bento:scale-110 group-hover/bento:bg-primary group-hover/bento:text-white transition-all duration-500 group-hover/bento:rotate-3">
+                        {icon}
+                    </div>
+                    
+                    <div className="mt-auto">
+                        <h3 className="font-display font-black text-foreground mb-3 text-2xl tracking-tight leading-tight group-hover/bento:text-primary transition-colors duration-300">
+                            {title}
+                        </h3>
+                        <p className="font-sans font-normal text-muted-foreground text-[15px] leading-relaxed line-clamp-2 transition-colors duration-300 group-hover/bento:text-foreground">
+                            {description}
+                        </p>
+                    </div>
                 </div>
             </div>
 
-            {/* Background decoration */}
-            <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 rounded-full bg-slate-50 dark:bg-white/10 blur-2xl group-hover/bento:bg-flame-500/20 transition-colors duration-500"></div>
-        </div>
+            {/* Decorative "Innovative" Accent */}
+            <div className="absolute top-6 right-8 opacity-0 group-hover/bento:opacity-20 transition-all duration-500 group-hover/bento:translate-x-0 translate-x-4">
+                <div className="flex gap-1.5">
+                    {[1, 2, 3].map((i) => (
+                        <div key={i} className="h-1 w-4 rounded-full bg-primary" />
+                    ))}
+                </div>
+            </div>
+        </motion.div>
     );
 };

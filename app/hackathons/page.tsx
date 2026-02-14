@@ -31,13 +31,14 @@ export default function HackathonsPage() {
       <Header />
       <main className="flex-1">
         <PageHero
+          fullHeight={true}
           title="Find Your Challenge"
           description="Discover upcoming hackathons, coding competitions, and innovation opportunities. Compete, collaborate, and create impact."
           badge="SREC Innovation Hub"
           align="center"
         />
 
-        <Section variant="minimal" className="bg-white dark:bg-black">
+        <Section fullHeight={true} variant="minimal" className="bg-white dark:bg-black">
           <div className="sticky top-24 z-30 mb-16 glass-premium rounded-2xl p-4 md:p-6 border border-slate-200 dark:border-white/10 flex flex-col md:flex-row gap-8 items-center justify-between shadow-xl backdrop-blur-3xl">
             <div className="flex flex-wrap items-center gap-2">
               <div className="mr-4 flex items-center gap-2 text-slate-400 text-xs font-bold uppercase tracking-widest">

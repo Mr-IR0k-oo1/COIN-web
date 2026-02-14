@@ -10,6 +10,7 @@ export default function ShowcasePage() {
       <Header />
       <main className="w-full min-h-screen">
         <PageHero
+          fullHeight={true}
           badge="Innovation"
           title="CoIN — Collaborative Innovation Experience"
           description="Discover a new dimension of innovation tracking. Fluid interactions, responsive feedback, and cutting-edge technology for SREC's innovation platform."
