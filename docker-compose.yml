@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   # PostgreSQL Database
@@ -56,6 +56,43 @@ services:
     profiles:
       - cache
 
+  # Backend Service
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: coin-backend
+    environment:
+      - DATABASE_URL=postgresql://coin_user:coin_password@postgres:5432/coin_srec
+      - JWT_SECRET=${JWT_SECRET:-supersecret}
+      - ADMIN_BOOTSTRAP_EMAIL=${ADMIN_BOOTSTRAP_EMAIL:-admin@srec.ac.in}
+      - ADMIN_BOOTSTRAP_PASSWORD=${ADMIN_BOOTSTRAP_PASSWORD:-changeme}
+      - RUST_LOG=info
+      - FRONTEND_URL=http://localhost:3000
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    networks:
+      - coin-network
+
+  # Frontend Service
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: coin-frontend
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000/api
+      - NEXT_PUBLIC_ADMIN_PASSWORD=${NEXT_PUBLIC_ADMIN_PASSWORD:-CoIN2024SREC}
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+    networks:
+      - coin-network
+
 volumes:
   postgres_data:
     driver: local
@@ -67,9 +104,9 @@ networks:
     driver: bridge
 
 # Usage:
-# Start all services: docker-compose up -d
+# Start everything: docker-compose up -d
 # Start with pgAdmin: docker-compose --profile admin up -d
 # Start with Redis: docker-compose --profile cache up -d
+# Build with fresh changes: docker-compose up -d --build
 # View logs: docker-compose logs -f
 # Stop: docker-compose down
-# Clean up: docker-compose down -v

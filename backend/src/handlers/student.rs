@@ -288,7 +288,7 @@ pub async fn search(
     let mut conditions = vec![];
 
     // Handle year filter
-    if let Some(year) = params.year {
+    if params.year.is_some() {
         conditions.push(format!("s.year = ${}", param_count));
         param_count += 1;
     }

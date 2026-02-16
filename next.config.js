@@ -3,6 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   skipTrailingSlashRedirect: true,
   staticPageGenerationTimeout: 60,
+  output: 'standalone',
 }
 
 module.exports = nextConfig

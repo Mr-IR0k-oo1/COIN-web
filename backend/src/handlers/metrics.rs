@@ -26,7 +26,7 @@ pub async fn get_metrics(
     let mut participant_sql = "SELECT COUNT(DISTINCT p.email) FROM participants p JOIN submissions s ON p.submission_id = s.id JOIN hackathons h ON s.hackathon_id = h.id WHERE 1=1".to_string();
     let mut mentor_sql = "SELECT COUNT(m.*) FROM mentors m JOIN submissions s ON m.submission_id = s.id JOIN hackathons h ON s.hackathon_id = h.id WHERE 1=1".to_string();
 
-    if let Some(sem) = &query.semester {
+    if let Some(_sem) = &query.semester {
         hackathon_sql.push_str(" AND semester = $1");
         submission_sql.push_str(" AND h.semester = $1");
         participant_sql.push_str(" AND h.semester = $1");

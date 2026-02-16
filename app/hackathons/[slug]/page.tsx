@@ -83,8 +83,8 @@ export default function HackathonDetailPage({ params }: PageProps) {
             <h1 className="text-4xl md:text-5xl font-bold text-ash-900 dark:text-white font-heading tracking-tight">
               {hackathon.name}
             </h1>
-            <span className={`px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-widest ${hackathon.status === 'Active' ? 'bg-flame-100 text-flame-700' :
-              hackathon.status === 'Upcoming' ? 'bg-ember-100 text-ember-700' : 'bg-ash-100 text-ash-700'
+            <span className={`px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-widest ${hackathon.status === 'ONGOING' ? 'bg-flame-100 text-flame-700' :
+              hackathon.status === 'UPCOMING' ? 'bg-ember-100 text-ember-700' : 'bg-ash-100 text-ash-700'
               }`}>
               {hackathon.status}
             </span>
@@ -156,7 +156,7 @@ export default function HackathonDetailPage({ params }: PageProps) {
                     <p className="text-xs font-bold text-ash-400 uppercase tracking-widest mb-4">Command Actions</p>
                     <div className="space-y-4">
                       <a
-                        href={hackathon.officialLink}
+                        href={hackathon.officialRegistrationLink}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="w-full flex items-center justify-center p-4 bg-white text-ash-900 font-bold rounded-2xl hover:scale-105 transition-all text-sm"

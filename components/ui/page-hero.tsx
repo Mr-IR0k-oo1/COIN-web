@@ -44,11 +44,11 @@ export function PageHero({
                 />
 
                 {/* Aurora Glows */}
-                <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] aurora opacity-20 dark:opacity-30 blur-[150px] animate-pulse" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] aurora opacity-10 dark:opacity-20 blur-[150px] animate-pulse" style={{ animationDelay: '2s' }} />
+                <div className="absolute top-[-20%] left-[-10%] w-[70%] h-[70%] bg-flame-500/20 blur-[160px] opacity-40 animate-pulse" />
+                <div className="absolute bottom-[-20%] right-[-10%] w-[70%] h-[70%] bg-primary/10 blur-[160px] opacity-30 animate-pulse" style={{ animationDelay: '2s' }} />
                 
                 {/* Secondary Center Glow */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-primary/5 dark:bg-primary/10 rounded-full blur-[120px] opacity-50" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-primary/5 dark:bg-primary/10 rounded-full blur-[160px] opacity-30" />
             </div>
 
             <div className={cn("relative z-10 max-w-5xl mx-auto px-6", align === 'center' ? 'text-center' : 'text-left')}>

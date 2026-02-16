@@ -21,8 +21,19 @@ export default function HackathonsPage() {
     fetchHackathons()
   }, [fetchHackathons])
 
+  const statusMap = {
+    'All': 'All',
+    'Active': 'ONGOING',
+    'Upcoming': 'UPCOMING',
+    'Closed': 'CLOSED'
+  }
+
   const filtered = useMemo(() =>
-    hackathons.filter((h) => statusFilter === 'All' || h.status === statusFilter),
+    hackathons.filter((h) => {
+      if (statusFilter === 'All') return true
+      const backendStatus = statusMap[statusFilter as keyof typeof statusMap]
+      return h.status === backendStatus
+    }),
     [hackathons, statusFilter]
   )
 
@@ -93,11 +104,11 @@ export default function HackathonsPage() {
                   <div className="absolute top-0 right-0 p-8 md:p-10 pointer-events-none">
                     <span className={cn(
                       "inline-flex items-center px-4 py-2 rounded-full text-xs font-black uppercase tracking-wider backdrop-blur-md border",
-                      hackathon.status === 'Active' ? 'bg-green-500/10 text-green-600 border-green-500/20' :
-                        hackathon.status === 'Upcoming' ? 'bg-blue-500/10 text-blue-600 border-blue-500/20' :
+                      hackathon.status === 'ONGOING' ? 'bg-green-500/10 text-green-600 border-green-500/20' :
+                        hackathon.status === 'UPCOMING' ? 'bg-blue-500/10 text-blue-600 border-blue-500/20' :
                           'bg-slate-100 text-slate-500 border-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700'
                     )}>
-                      {hackathon.status}
+                      {hackathon.status === 'ONGOING' ? 'Active' : hackathon.status === 'UPCOMING' ? 'Upcoming' : 'Closed'}
                     </span>
                   </div>
 

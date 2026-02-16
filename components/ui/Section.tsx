@@ -64,60 +64,61 @@ const Section = ({ children, className, delay = 0, variant = 'default', fullHeig
         >
             {/* Background Variants */}
             {variant === 'grid' && (
-                <div className="absolute inset-0 pointer-events-none opacity-[0.05] dark:opacity-20 bg-grid-black dark:bg-grid-white bg-[length:32px_32px] mask-radial-fade transition-opacity duration-1000" />
+                <div className="absolute inset-0 pointer-events-none opacity-[0.03] dark:opacity-[0.1] bg-grid-black dark:bg-grid-white bg-[length:40px_40px] mask-radial-fade transition-opacity duration-1000" />
             )}
 
             {variant === 'animated-grid' && (
                 <AnimatedGridPattern
-                    numSquares={30}
-                    maxOpacity={0.1}
-                    duration={3}
-                    repeatDelay={1}
+                    numSquares={40}
+                    maxOpacity={0.15}
+                    duration={4}
+                    repeatDelay={0.5}
                     className={cn(
-                        "opacity-40 dark:opacity-20",
-                        "inset-x-0 inset-y-[-30%] h-[200%] skew-y-12 fill-slate-400/20 stroke-slate-400/20 dark:fill-white/5 dark:stroke-white/5",
+                        "opacity-30 dark:opacity-40",
+                        "inset-x-0 inset-y-[-30%] h-[200%] skew-y-12 fill-flame-500/10 stroke-flame-500/10 dark:fill-flame-500/5 dark:stroke-flame-500/5",
                     )}
                 />
             )}
 
             {variant === 'dots' && (
-                <div className="absolute inset-0 pointer-events-none opacity-[0.1] dark:opacity-[0.2] transition-opacity duration-1000" />
+                <div className="absolute inset-0 pointer-events-none opacity-[0.1] dark:opacity-[0.15] bg-dot-pattern text-ash-300 dark:text-ash-700 transition-opacity duration-1000" />
             )}
 
             {variant === 'gradient' && (
-                <div className="absolute inset-0 pointer-events-none bg-flame-500/5 dark:bg-flame-900/10" />
+                <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-flame-500/5 to-transparent dark:via-flame-500/10" />
             )}
 
             {variant === 'aurora' && (
                 <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                    <div className="aurora top-[-10%] left-[-10%] w-[50%] h-[50%] opacity-30 animate-pulse" />
-                    <div className="aurora bottom-[-10%] right-[-10%] w-[50%] h-[50%] opacity-20 animate-pulse" style={{ animationDelay: '1s' }} />
+                    <div className="aurora top-[-20%] left-[-10%] w-[70%] h-[70%] bg-flame-500/30 blur-[160px] opacity-40 animate-pulse" />
+                    <div className="aurora bottom-[-20%] right-[-10%] w-[70%] h-[70%] bg-ember-500/20 blur-[160px] opacity-30 animate-pulse" style={{ animationDelay: '2s' }} />
                 </div>
             )}
 
             {/* Premium Side Decorations (only for default variant) */}
             {variant === 'default' && (
                 <>
-                    <div className="absolute inset-y-0 left-0 w-12 md:w-24 border-r border-border/20 pointer-events-none hidden lg:block">
-                        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 h-32 w-px bg-primary/20" />
-                        <div className="absolute bottom-1/4 left-1/2 -translate-x-1/2 h-32 w-px bg-primary/20" />
-                        <div className="absolute top-1/2 left-0 -translate-y-1/2 -rotate-90 origin-left text-[10px] font-black uppercase tracking-[0.5em] text-muted-foreground/30 dark:text-muted-foreground/40 whitespace-nowrap">
-                            Institutional Innovation Signal
+                    <div className="absolute inset-y-0 left-0 w-12 md:w-32 border-r border-border/10 pointer-events-none hidden xl:block">
+                        <div className="absolute top-1/4 left-1/2 -track-x-1/2 h-48 w-px bg-gradient-to-b from-transparent via-primary/30 to-transparent" />
+                        <div className="absolute bottom-1/4 left-1/2 -track-x-1/2 h-48 w-px bg-gradient-to-b from-transparent via-primary/30 to-transparent" />
+                        <div className="absolute top-1/2 left-0 -translate-y-1/2 -rotate-90 origin-left text-[9px] font-tech uppercase tracking-[0.8em] text-muted-foreground/30 dark:text-muted-foreground/50 whitespace-nowrap">
+                            SIGNAL // INSTITUTIONAL // INNOVATION
                         </div>
                     </div>
-                    <div className="absolute inset-y-0 right-0 w-12 md:w-24 border-l border-border/20 pointer-events-none hidden lg:block">
-                        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 h-32 w-px bg-primary/20" />
-                        <div className="absolute bottom-1/3 left-1/2 -translate-x-1/2 h-32 w-px bg-primary/20" />
-                        <div className="absolute top-1/2 right-4 -translate-y-1/2 rotate-90 origin-right text-[10px] font-black uppercase tracking-[0.5em] text-muted-foreground/30 dark:text-muted-foreground/40 whitespace-nowrap">
-                            Sri Ramakrishna Engineering College
+                    <div className="absolute inset-y-0 right-0 w-12 md:w-32 border-l border-border/10 pointer-events-none hidden xl:block">
+                        <div className="absolute top-1/3 left-1/2 -track-x-1/2 h-48 w-px bg-gradient-to-b from-transparent via-primary/30 to-transparent" />
+                        <div className="absolute bottom-1/3 left-1/2 -track-x-1/2 h-48 w-px bg-gradient-to-b from-transparent via-primary/30 to-transparent" />
+                        <div className="absolute top-1/2 right-6 -translate-y-1/2 rotate-90 origin-right text-[9px] font-tech uppercase tracking-[0.8em] text-muted-foreground/30 dark:text-muted-foreground/50 whitespace-nowrap">
+                            IDENT // SRI RAMAKRISHNA // ENGG // COLLEGE
                         </div>
                     </div>
 
                     {/* Decorative Background Elements */}
-                    <div className="absolute inset-0 pointer-events-none opacity-20 dark:opacity-40">
-                        <div className="absolute top-0 left-[15%] w-px h-full bg-primary/10" />
-                        <div className="absolute top-0 right-[15%] w-px h-full bg-primary/10" />
-                        <div className="absolute top-1/2 left-0 w-full h-px bg-primary/10" />
+                    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                        <div className="absolute top-0 left-[10%] w-px h-full bg-gradient-to-b from-transparent via-primary/5 to-transparent" />
+                        <div className="absolute top-0 right-[10%] w-px h-full bg-gradient-to-b from-transparent via-primary/5 to-transparent" />
+                        <div className="absolute top-1/3 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/5 to-transparent" />
+                        <div className="absolute top-2/3 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/5 to-transparent" />
                     </div>
                 </>
             )}

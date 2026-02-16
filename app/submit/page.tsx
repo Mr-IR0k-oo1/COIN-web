@@ -11,16 +11,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { Participant, Mentor, AcademicYear, Department } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { useStudentStore } from '@/lib/store/studentStore'
-
-const DEPARTMENTS: Department[] = [
-  'Computer Science',
-  'Information Technology',
-  'Electronics',
-  'Mechanical',
-  'Electrical',
-  'Civil',
-  'Chemical',
-]
+import { DEPARTMENTS } from '@/lib/constants/departments'
 
 const ACADEMIC_YEARS: AcademicYear[] = [
   'First Year',
@@ -167,15 +158,15 @@ function SubmitForm() {
 
     try {
       const submission: any = {
-        hackathon_id: selectedHackathonId,
-        team_name: teamName,
-        external_registration_confirmed: true,
+        hackathonId: selectedHackathonId,
+        teamName: teamName,
+        externalConfirmed: true,
         participants,
         mentors: hasMentor ? mentors : [],
       }
 
-      await addSubmission(submission)
-      router.push(`/success`)
+      const submissionId = await addSubmission(submission)
+      router.push(`/success?id=${submissionId}`)
     } catch (err: any) {
       setErrors({
         submit: err.message || 'Failed to submit participation',
@@ -228,9 +219,8 @@ function SubmitForm() {
         </div>
       </div>
 
-      <div className="premium-card p-1">
-        <div className="premium-card-inner" />
-        <div className="relative z-10 p-10 md:p-12 h-full">
+      <div className="glass-premium rounded-[2.5rem] overflow-hidden">
+        <div className="relative z-10 p-8 md:p-12 h-full">
           {currentStepIndex === 0 && (
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
               <h2 className="text-xl font-bold font-heading text-ash-900 mb-6 dark:text-white">Select Hackathon</h2>
@@ -516,7 +506,7 @@ export default function SubmitPage() {
     <>
       <Header />
       <main className="flex-1 bg-white dark:bg-ash-950 min-h-screen">
-        <Section className="pt-40 pb-32">
+        <Section variant="grid" className="pt-40 pb-32">
           <Suspense fallback={<div className="flex items-center justify-center p-24"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-flame-600"></div></div>}>
             <SubmitForm />
           </Suspense>

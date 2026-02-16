@@ -25,6 +25,7 @@ csv = "1"
 async-trait = "0.1"
 thiserror = "1"
 futures = "0.3"
+rust_xlsxwriter = "0.93.0"
 
 [[bin]]
 name = "coin-backend"

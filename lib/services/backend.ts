@@ -4,7 +4,7 @@
  */
 
 import { api } from '../api'
-import { Hackathon, Submission, BlogPost, DashboardMetrics, Participant, Mentor } from '../types'
+import { Hackathon, Submission, BlogPost, DashboardMetrics, Participant, Mentor, BlogStatus } from '../types'
 
 // Types for backend responses
 interface BackendHackathon {
@@ -124,27 +124,27 @@ function mapBackendHackathon(data: BackendHackathon): Hackathon {
   }
 }
 
-function mapMode(mode: string): 'In-Person' | 'Online' | 'Hybrid' {
+function mapMode(mode: string): 'ONLINE' | 'OFFLINE' {
   switch (mode) {
     case 'ONLINE':
-      return 'Online'
+      return 'ONLINE'
     case 'OFFLINE':
-      return 'In-Person'
+      return 'OFFLINE'
     default:
-      return 'Online'
+      return 'ONLINE'
   }
 }
 
-function mapStatus(status: string): 'Active' | 'Closed' | 'Upcoming' | 'Completed' {
+function mapStatus(status: string): 'UPCOMING' | 'ONGOING' | 'CLOSED' {
   switch (status) {
     case 'UPCOMING':
-      return 'Upcoming'
+      return 'UPCOMING'
     case 'ONGOING':
-      return 'Active'
+      return 'ONGOING'
     case 'CLOSED':
-      return 'Closed'
+      return 'CLOSED'
     default:
-      return 'Upcoming'
+      return 'UPCOMING'
   }
 }
 
@@ -158,22 +158,22 @@ function mapBackendBlogPost(data: BackendBlogPost): BlogPost {
     category: mapBlogCategory(data.category),
     tags: [],
     relatedHackathon: data.related_hackathon,
-    status: data.status === 'published' ? 'Published' : 'Draft',
+    status: data.status as BlogStatus,
     createdAt: data.created_at,
     updatedAt: data.updated_at,
   }
 }
 
-function mapBlogCategory(category: string): 'Article' | 'Winner' | 'Announcement' {
+function mapBlogCategory(category: string): 'article' | 'winner' | 'announcement' {
   switch (category) {
     case 'article':
-      return 'Article'
+      return 'article'
     case 'winner':
-      return 'Winner'
+      return 'winner'
     case 'announcement':
-      return 'Announcement'
+      return 'announcement'
     default:
-      return 'Article'
+      return 'article'
   }
 }
 
@@ -197,20 +197,29 @@ export const backendService = {
     }
   },
 
+  async getHackathonBySlug(slug: string): Promise<Hackathon | null> {
+    try {
+      const data = await api.get<BackendHackathon>(`/hackathons/slug/${slug}`)
+      return mapBackendHackathon(data)
+    } catch {
+      return null
+    }
+  },
+
   async createHackathon(hackathon: any): Promise<Hackathon> {
     const data = await api.post<BackendHackathon>('/admin/hackathons', {
       name: hackathon.name,
       organizer: hackathon.organizer,
       description: hackathon.description,
-      mode: hackathon.mode === 'In-Person' ? 'OFFLINE' : 'ONLINE',
+      mode: hackathon.mode,
       location: hackathon.location,
       start_date: hackathon.startDate,
       end_date: hackathon.endDate,
       registration_deadline: hackathon.registrationDeadline,
-      official_registration_link: hackathon.officialLink,
+      official_registration_link: hackathon.officialRegistrationLink,
       eligibility: hackathon.eligibility,
       semester: hackathon.semester,
-      status: hackathon.status === 'Active' ? 'ONGOING' : hackathon.status === 'Upcoming' ? 'UPCOMING' : 'CLOSED',
+      status: hackathon.status || 'UPCOMING',
     })
     return mapBackendHackathon(data)
   },
@@ -220,12 +229,12 @@ export const backendService = {
       name: updates.name,
       organizer: updates.organizer,
       description: updates.description,
-      mode: updates.mode === 'In-Person' ? 'OFFLINE' : 'ONLINE',
+      mode: updates.mode,
       location: updates.location,
       start_date: updates.startDate,
       end_date: updates.endDate,
       registration_deadline: updates.registrationDeadline,
-      official_registration_link: updates.officialLink,
+      official_registration_link: updates.officialRegistrationLink,
       eligibility: updates.eligibility,
       semester: updates.semester,
     })
@@ -233,9 +242,8 @@ export const backendService = {
   },
 
   async updateHackathonStatus(id: string, status: string): Promise<Hackathon> {
-    const backendStatus = status === 'Active' ? 'ONGOING' : status === 'Upcoming' ? 'UPCOMING' : 'CLOSED'
     const data = await api.patch<BackendHackathon>(`/admin/hackathons/${id}/status`, {
-      status: backendStatus,
+      status,
     })
     return mapBackendHackathon(data)
   },
@@ -303,13 +311,12 @@ export const backendService = {
     return items.map((s: BackendSubmission) => ({
       id: s.id,
       hackathonId: s.hackathon_id,
-      hackathonName: '', // Will be filled if needed or use separate lookup
       teamName: s.team_name,
       participantCount: s.participant_count,
       mentorCount: s.mentor_count,
-      participants: [],
-      mentors: [],
-      externalConfirmed: s.external_registration_confirmed,
+      externalRegistrationConfirmed: s.external_registration_confirmed,
+      status: s.status as any,
+      createdAt: s.created_at,
       submittedAt: s.created_at,
     }))
   },

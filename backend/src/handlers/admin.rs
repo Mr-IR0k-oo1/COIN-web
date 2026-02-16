@@ -3,9 +3,8 @@ use crate::error::{AppError, AppResult};
 use crate::models::*;
 use crate::utils::generate_slug;
 use axum::{
-    extract::{Path, Query, State, Extension},
+    extract::{Extension, Path, Query, State},
     http::StatusCode,
-    response::IntoResponse,
     Json,
 };
 use serde::Deserialize;
@@ -32,7 +31,12 @@ pub async fn login(
     }
 
     // Create JWT token
-    let token = create_jwt(&admin.id.to_string(), &admin.email, "admin", &state.jwt_secret)?;
+    let token = create_jwt(
+        &admin.id.to_string(),
+        &admin.email,
+        "admin",
+        &state.jwt_secret,
+    )?;
 
     Ok(Json(LoginResponse {
         token,
@@ -123,7 +127,7 @@ pub async fn update_hackathon(
             semester = COALESCE($12, semester),
             updated_at = NOW()
          WHERE id = $1
-         RETURNING *"
+         RETURNING *",
     )
     .bind(hackathon_id)
     .bind(&req.name)
@@ -213,8 +217,10 @@ pub async fn list_submissions(
     let mut q = sqlx::query_as::<_, Submission>(&sql);
 
     if let Some(hid) = &query.hackathon_id {
-        q = q.bind(Uuid::parse_str(hid)
-            .map_err(|_| AppError::BadRequest("Invalid hackathon ID".to_string()))?);
+        q = q.bind(
+            Uuid::parse_str(hid)
+                .map_err(|_| AppError::BadRequest("Invalid hackathon ID".to_string()))?,
+        );
     }
 
     if let Some(status) = &query.status {
@@ -233,11 +239,17 @@ pub async fn get_submission(
     let submission_id = Uuid::parse_str(&id)
         .map_err(|_| AppError::BadRequest("Invalid submission ID".to_string()))?;
 
-    let submission: Submission = sqlx::query_as("SELECT * FROM submissions WHERE id = $1")
-        .bind(submission_id)
-        .fetch_optional(&state.db)
-        .await?
-        .ok_or_else(|| AppError::NotFound("Submission not found".to_string()))?;
+    let submission: serde_json::Value = sqlx::query_as::<_, (serde_json::Value,)>(
+        "SELECT s.*, h.name as hackathon_name 
+         FROM submissions s 
+         JOIN hackathons h ON s.hackathon_id = h.id 
+         WHERE s.id = $1",
+    )
+    .bind(submission_id)
+    .fetch_optional(&state.db)
+    .await?
+    .map(|(v,)| v)
+    .ok_or_else(|| AppError::NotFound("Submission not found".to_string()))?;
 
     let participants: Vec<Participant> =
         sqlx::query_as("SELECT * FROM participants WHERE submission_id = $1")
@@ -265,14 +277,13 @@ pub async fn update_submission_status(
     let submission_id = Uuid::parse_str(&id)
         .map_err(|_| AppError::BadRequest("Invalid submission ID".to_string()))?;
 
-    let submission: Submission = sqlx::query_as(
-        "UPDATE submissions SET status = $2 WHERE id = $1 RETURNING *",
-    )
-    .bind(submission_id)
-    .bind(&req.status)
-    .fetch_optional(&state.db)
-    .await?
-    .ok_or_else(|| AppError::NotFound("Submission not found".to_string()))?;
+    let submission: Submission =
+        sqlx::query_as("UPDATE submissions SET status = $2 WHERE id = $1 RETURNING *")
+            .bind(submission_id)
+            .bind(&req.status)
+            .fetch_optional(&state.db)
+            .await?
+            .ok_or_else(|| AppError::NotFound("Submission not found".to_string()))?;
 
     Ok(Json(submission))
 }
@@ -330,8 +341,8 @@ pub async fn update_blog_post(
     Path(id): Path<String>,
     Json(req): Json<UpdateBlogPostRequest>,
 ) -> AppResult<Json<BlogPost>> {
-    let post_id = Uuid::parse_str(&id)
-        .map_err(|_| AppError::BadRequest("Invalid post ID".to_string()))?;
+    let post_id =
+        Uuid::parse_str(&id).map_err(|_| AppError::BadRequest("Invalid post ID".to_string()))?;
 
     // Generate new slug if title changed
     let slug = req.title.as_ref().map(|t| generate_slug(t));
@@ -347,7 +358,7 @@ pub async fn update_blog_post(
             status = COALESCE($8, status),
             updated_at = NOW()
          WHERE id = $1
-         RETURNING *"
+         RETURNING *",
     )
     .bind(post_id)
     .bind(&req.title)
@@ -368,8 +379,8 @@ pub async fn delete_blog_post(
     State(state): State<AppState>,
     Path(id): Path<String>,
 ) -> AppResult<StatusCode> {
-    let post_id = Uuid::parse_str(&id)
-        .map_err(|_| AppError::BadRequest("Invalid post ID".to_string()))?;
+    let post_id =
+        Uuid::parse_str(&id).map_err(|_| AppError::BadRequest("Invalid post ID".to_string()))?;
 
     let result = sqlx::query("DELETE FROM blog_posts WHERE id = $1")
         .bind(post_id)
@@ -383,134 +394,4 @@ pub async fn delete_blog_post(
     Ok(StatusCode::NO_CONTENT)
 }
 
-// Metrics handler
-pub async fn get_metrics(State(state): State<AppState>) -> AppResult<Json<Metrics>> {
-    let total_hackathons: i64 =
-        sqlx::query_scalar("SELECT COUNT(*) FROM hackathons")
-            .fetch_one(&state.db)
-            .await?;
-
-    let total_submissions: i64 =
-        sqlx::query_scalar("SELECT COUNT(*) FROM submissions")
-            .fetch_one(&state.db)
-            .await?;
-
-    let total_students: i64 = sqlx::query_scalar(
-        "SELECT COUNT(DISTINCT email) FROM participants",
-    )
-    .fetch_one(&state.db)
-    .await?;
-
-    let total_mentors: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM mentors")
-        .fetch_one(&state.db)
-        .await?;
-
-    Ok(Json(Metrics {
-        total_hackathons,
-        total_submissions,
-        total_students,
-        total_mentors,
-    }))
-}
-
-// Export handler
-#[derive(Deserialize)]
-pub struct ExportQuery {
-    pub semester: Option<String>,
-    pub hackathon_id: Option<String>,
-    pub department: Option<String>,
-    pub format: Option<String>,
-}
-
-pub async fn export_data(
-    State(state): State<AppState>,
-    Query(query): Query<ExportQuery>,
-) -> AppResult<(StatusCode, axum::response::Response)> {
-    let format = query.format.as_deref().unwrap_or("csv");
-
-    // Build dynamic query with optional filters
-    let mut sql = r#"
-        SELECT 
-            s.id as submission_id,
-            s.created_at as submitted_at,
-            h.semester,
-            h.name as hackathon_name,
-            s.team_name,
-            s.participant_count,
-            s.mentor_count,
-            p.name as participant_name,
-            p.email as participant_email,
-            p.department as participant_department,
-            p.academic_year as participant_year,
-            STRING_AGG(DISTINCT m.name, ', ') as mentor_names,
-            STRING_AGG(DISTINCT m.department, ', ') as mentor_departments,
-            s.external_registration_confirmed as external_confirmed,
-            s.status
-        FROM submissions s
-        JOIN hackathons h ON s.hackathon_id = h.id
-        LEFT JOIN participants p ON s.id = p.submission_id
-        LEFT JOIN mentors m ON s.id = m.submission_id
-        WHERE 1=1
-    "#.to_string();
-
-    if query.semester.is_some() {
-        sql.push_str(" AND h.semester = $1");
-    }
-
-    if query.hackathon_id.is_some() {
-        let param = if query.semester.is_some() { "$2" } else { "$1" };
-        sql.push_str(&format!(" AND h.id = {}", param));
-    }
-
-    if query.department.is_some() {
-        let param = match (query.semester.is_some(), query.hackathon_id.is_some()) {
-            (true, true) => "$3",
-            (true, false) | (false, true) => "$2",
-            (false, false) => "$1",
-        };
-        sql.push_str(&format!(" AND p.department = {}", param));
-    }
-
-    sql.push_str(" GROUP BY s.id, s.created_at, h.semester, h.name, s.team_name, s.participant_count, s.mentor_count, p.name, p.email, p.department, p.academic_year, s.external_registration_confirmed, s.status ORDER BY s.created_at DESC");
-
-    let mut q = sqlx::query_as::<_, crate::models::SubmissionDetail>(&sql);
-
-    if let Some(sem) = &query.semester {
-        q = q.bind(sem);
-    }
-    if let Some(hid) = &query.hackathon_id {
-        q = q.bind(Uuid::parse_str(hid)
-            .map_err(|_| AppError::BadRequest("Invalid hackathon ID".to_string()))?);
-    }
-    if let Some(dept) = &query.department {
-        q = q.bind(dept);
-    }
-
-    let submissions = q.fetch_all(&state.db).await?;
-
-    let data = if format == "xlsx" {
-        crate::export::generate_xlsx(submissions)?
-    } else {
-        crate::export::generate_csv(submissions)?
-    };
-
-    let headers = if format == "xlsx" {
-        [(
-            axum::http::header::CONTENT_TYPE,
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        ), (
-            axum::http::header::CONTENT_DISPOSITION,
-            "attachment; filename=\"export.xlsx\""
-        )]
-    } else {
-        [(
-            axum::http::header::CONTENT_TYPE,
-            "text/csv"
-        ), (
-            axum::http::header::CONTENT_DISPOSITION,
-            "attachment; filename=\"export.csv\""
-        )]
-    };
-
-    Ok((StatusCode::OK, (headers, data).into_response()))
-}
+// Metrics and export handlers have been moved to metrics.rs

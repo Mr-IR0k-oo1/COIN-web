@@ -1,18 +1,11 @@
-export type AcademicYear = 'First Year' | 'Second Year' | 'Third Year' | 'Fourth Year'
+import { Department, AcademicYear } from './constants/departments'
 
-export type Department = 
-  | 'Computer Science'
-  | 'Electronics'
-  | 'Mechanical'
-  | 'Electrical'
-  | 'Civil'
-  | 'Chemical'
-  | 'Information Technology'
+export type { Department, AcademicYear }
 
 export type HackathonMode = 'ONLINE' | 'OFFLINE'
 export type HackathonStatus = 'UPCOMING' | 'ONGOING' | 'CLOSED'
 
-export type BlogCategory = 'Article' | 'Winner' | 'Announcement'
+export type BlogCategory = 'article' | 'winner' | 'announcement'
 export type BlogStatus = 'draft' | 'published'
 
 export interface Hackathon {
@@ -57,6 +50,7 @@ export interface Submission {
   externalRegistrationConfirmed: boolean
   status: SubmissionStatus
   createdAt: string
+  submittedAt?: string
 }
 
 export interface BlogPost {

@@ -18,7 +18,7 @@ export default function Home() {
 
   const fetchHackathons = useHackathonStore((state) => state.fetchHackathons)
   const allHackathons = useHackathonStore((state) => state.hackathons)
-  const activeHackathons = allHackathons.filter((h) => h.status === 'Active')
+  const activeHackathons = allHackathons.filter((h) => h.status === 'ONGOING')
 
   useEffect(() => {
     fetchPosts()
@@ -28,7 +28,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main className="flex-1 overflow-hidden">
+      <main className="flex-1 overflow-hidden noise-bg">
         {/* Hero Section */}
         <PageHero
           fullHeight={true}

@@ -114,8 +114,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .route("/blog", post(handlers::admin::create_blog_post))
         .route("/blog/:id", put(handlers::admin::update_blog_post))
         .route("/blog/:id", delete(handlers::admin::delete_blog_post))
-        .route("/metrics", get(handlers::admin::get_metrics))
-        .route("/export", get(handlers::admin::export_data))
+        .route("/metrics", get(handlers::metrics::get_metrics))
+        .route("/export", get(handlers::metrics::export_data))
         .layer(from_fn(middleware::admin_guard))
         .layer(from_fn_with_state(
             state.clone(),
@@ -131,8 +131,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .layer(CorsLayer::permissive())
         .with_state(state);
 
-    let listener = tokio::net::TcpListener::bind("127.0.0.1:8000").await?;
-    tracing::info!("Server listening on http://127.0.0.1:8000");
+    let addr = std::env::var("BIND_ADDRESS").unwrap_or_else(|_| "0.0.0.0:8000".to_string());
+    let listener = tokio::net::TcpListener::bind(&addr).await?;
+    tracing::info!("Server listening on http://{}", addr);
     axum::serve(listener, app).await?;
 
     Ok(())

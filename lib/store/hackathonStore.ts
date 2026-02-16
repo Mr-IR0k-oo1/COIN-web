@@ -44,8 +44,7 @@ export const useHackathonStore = create<HackathonStore>((set, get) => ({
     const existing = get().hackathons.find((h) => h.slug === slug)
     if (existing) return existing
     try {
-      // Backend get_hackathon handler looks up by ID or slug in public routes
-      const hackathon = await backendService.getHackathonById(slug)
+      const hackathon = await backendService.getHackathonBySlug(slug)
       return hackathon || undefined
     } catch {
       return undefined
