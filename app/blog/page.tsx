@@ -95,7 +95,7 @@ export default function BlogPage() {
                   <div className="absolute top-0 right-0 p-6 opacity-50">
                     <span className={cn(
                       "inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border",
-                      post.category === 'Winner' ? 'bg-amber-500/10 text-amber-600 border-amber-500/20' :
+                      post.category === 'Winner' ? 'bg-blue-500/10 text-blue-600 border-blue-500/20' :
                         post.category === 'Announcement' ? 'bg-blue-500/10 text-blue-600 border-blue-500/20' :
                           'bg-slate-100 text-slate-500 border-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700'
                     )}>

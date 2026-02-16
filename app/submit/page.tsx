@@ -73,8 +73,8 @@ function SubmitForm() {
       const newParticipants: Participant[] = []
       for (let i = 0; i < participantCount; i++) {
         newParticipants.push({
-          fullName: participants[i]?.fullName || '',
-          collegeEmail: participants[i]?.collegeEmail || '',
+          name: participants[i]?.name || '',
+          email: participants[i]?.email || '',
           department: participants[i]?.department || 'Computer Science',
           academicYear: participants[i]?.academicYear || 'First Year',
         })
@@ -117,12 +117,12 @@ function SubmitForm() {
 
     if (currentStep === 'participants') {
       participants.forEach((p, idx) => {
-        if (!p.fullName.trim()) newErrors[`fullName_${idx}`] = 'Full name is required'
-        if (!p.collegeEmail.trim()) newErrors[`email_${idx}`] = 'College email is required'
+        if (!p.name.trim()) newErrors[`name_${idx}`] = 'Full name is required'
+        if (!p.email.trim()) newErrors[`email_${idx}`] = 'College email is required'
       })
 
       // Check for duplicate emails
-      const emails = participants.map((p) => p.collegeEmail)
+      const emails = participants.map((p) => p.email)
       const duplicates = emails.filter((e, idx) => emails.indexOf(e) !== idx)
       if (duplicates.length > 0) {
         newErrors.duplicateEmail = 'Duplicate email addresses found'
@@ -167,9 +167,9 @@ function SubmitForm() {
 
     try {
       const submission: any = {
-        hackathonId: selectedHackathonId,
-        teamName,
-        externalConfirmed: true,
+        hackathon_id: selectedHackathonId,
+        team_name: teamName,
+        external_registration_confirmed: true,
         participants,
         mentors: hasMentor ? mentors : [],
       }
@@ -312,10 +312,10 @@ function SubmitForm() {
                         <label className="text-xs font-bold text-ash-500 dark:text-ash-400">Full Name</label>
                         <input
                           type="text"
-                          value={p.fullName}
+                          value={p.name}
                           onChange={(e) => {
                             const updated = [...participants]
-                            updated[idx].fullName = e.target.value
+                            updated[idx].name = e.target.value
                             setParticipants(updated)
                           }}
                           className="w-full px-4 py-2 border rounded-xl outline-none dark:bg-ash-900 dark:border-ash-700"
@@ -325,10 +325,10 @@ function SubmitForm() {
                         <label className="text-xs font-bold text-ash-500 dark:text-ash-400">College Email</label>
                         <input
                           type="email"
-                          value={p.collegeEmail}
+                          value={p.email}
                           onChange={(e) => {
                             const updated = [...participants]
-                            updated[idx].collegeEmail = e.target.value
+                            updated[idx].email = e.target.value
                             setParticipants(updated)
                           }}
                           className="w-full px-4 py-2 border rounded-xl outline-none dark:bg-ash-900 dark:border-ash-700"
@@ -456,8 +456,8 @@ function SubmitForm() {
                   <div className="space-y-3">
                     {participants.map((p, idx) => (
                       <div key={idx} className="flex justify-between items-center text-sm">
-                        <span className="font-bold dark:text-white">{p.fullName}</span>
-                        <span className="text-ash-500 font-mono tracking-tight">{p.collegeEmail}</span>
+                        <span className="font-bold dark:text-white">{p.name}</span>
+                        <span className="text-ash-500 font-mono tracking-tight">{p.email}</span>
                       </div>
                     ))}
                   </div>

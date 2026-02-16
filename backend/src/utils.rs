@@ -28,6 +28,7 @@ pub fn generate_slug(title: &str) -> String {
         .join("-")
 }
 
+#[allow(dead_code)]
 pub fn validate_uuid(id: &str) -> AppResult<uuid::Uuid> {
     uuid::Uuid::parse_str(id).map_err(|_| AppError::BadRequest("Invalid UUID format".to_string()))
 }

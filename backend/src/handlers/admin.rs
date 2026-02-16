@@ -1,16 +1,15 @@
-use crate::auth::{create_jwt, hash_password, verify_password};
+use crate::auth::{create_jwt, verify_password};
 use crate::error::{AppError, AppResult};
 use crate::models::*;
 use crate::utils::generate_slug;
 use axum::{
-    extract::{Path, Query, State},
+    extract::{Path, Query, State, Extension},
     http::StatusCode,
     response::IntoResponse,
     Json,
 };
 use serde::Deserialize;
 use serde_json::json;
-use sqlx::Row;
 use uuid::Uuid;
 
 use crate::AppState;
@@ -33,7 +32,7 @@ pub async fn login(
     }
 
     // Create JWT token
-    let token = create_jwt(&admin.id.to_string(), &admin.email, &state.jwt_secret)?;
+    let token = create_jwt(&admin.id.to_string(), &admin.email, "admin", &state.jwt_secret)?;
 
     Ok(Json(LoginResponse {
         token,
@@ -48,18 +47,23 @@ pub async fn login(
 // Hackathon handlers
 pub async fn create_hackathon(
     State(state): State<AppState>,
+    Extension(claims): Extension<Claims>,
     Json(req): Json<CreateHackathonRequest>,
 ) -> AppResult<(StatusCode, Json<Hackathon>)> {
     let id = Uuid::new_v4();
-    let created_by = Uuid::new_v4(); // TODO: Extract from JWT
+    let slug = generate_slug(&req.name);
+    // Use admin_id from JWT claims
+    let created_by = Uuid::parse_str(&claims.sub)
+        .map_err(|_| AppError::BadRequest("Invalid admin ID in token".to_string()))?;
 
     let hackathon = sqlx::query_as::<_, Hackathon>(
-        "INSERT INTO hackathons (id, name, organizer, description, mode, location, start_date, end_date, registration_deadline, official_registration_link, eligibility, status, semester, created_by)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+        "INSERT INTO hackathons (id, name, slug, organizer, description, mode, location, start_date, end_date, registration_deadline, official_registration_link, eligibility, status, semester, created_by)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
          RETURNING *"
     )
     .bind(&id)
     .bind(&req.name)
+    .bind(&slug)
     .bind(&req.organizer)
     .bind(&req.description)
     .bind(&req.mode)
@@ -183,6 +187,7 @@ pub async fn delete_hackathon(
 pub struct SubmissionQuery {
     pub hackathon_id: Option<String>,
     pub status: Option<String>,
+    #[allow(dead_code)]
     pub semester: Option<String>,
 }
 
@@ -329,7 +334,7 @@ pub async fn update_blog_post(
         .map_err(|_| AppError::BadRequest("Invalid post ID".to_string()))?;
 
     // Generate new slug if title changed
-    let slug = req.title.as_ref().map(generate_slug);
+    let slug = req.title.as_ref().map(|t| generate_slug(t));
 
     let post: BlogPost = sqlx::query_as(
         "UPDATE blog_posts SET

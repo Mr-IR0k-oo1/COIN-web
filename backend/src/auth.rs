@@ -29,11 +29,12 @@ pub fn verify_password(password: &str, hash: &str) -> AppResult<bool> {
         .or_else(|_| Ok(false))
 }
 
-pub fn create_jwt(admin_id: &str, email: &str, secret: &str) -> AppResult<String> {
+pub fn create_jwt(user_id: &str, email: &str, role: &str, secret: &str) -> AppResult<String> {
     let now = Utc::now().timestamp();
     let claims = Claims {
-        sub: admin_id.to_string(),
+        sub: user_id.to_string(),
         email: email.to_string(),
+        role: role.to_string(),
         exp: now + JWT_EXPIRATION,
     };
 

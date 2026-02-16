@@ -49,19 +49,19 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Primary brand color - Orange
+        // Primary brand color - Blue
         flame: {
-          50: '#FFF7ED',
-          100: '#FFEDD5',
-          200: '#FED7AA',
-          300: '#FDBA74',
-          400: '#FB923C',
-          500: '#F97316', // Primary Orange
-          600: '#EA580C',
-          700: '#C2410C',
-          800: '#9A3412',
-          900: '#7C2D12',
-          950: '#431407',
+          50: '#EFF6FF',
+          100: '#DBEAFE',
+          200: '#BFDBFE',
+          300: '#93C5FD',
+          400: '#60A5FA',
+          500: '#3B82F6', // Primary Blue
+          600: '#2563EB',
+          700: '#1D4ED8',
+          800: '#1E40AF',
+          900: '#1E3A8A',
+          950: '#172554',
         },
         // Accent color - Red
         ember: {
@@ -98,14 +98,11 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'hero-glow':
-          'conic-gradient(from 180deg at 50% 50%, #F97316 0deg, #EF4444 180deg, #DC2626 360deg)',
+        'hero-glow': 'var(--primary)',
       },
       animation: {
         'spin-slow': 'spin 15s linear infinite',
         'blob': 'blob 7s infinite',
-        'gradient-fast': 'gradient 3s ease infinite',
         'shimmer': 'shimmer 2s linear infinite',
       },
       keyframes: {

@@ -54,7 +54,7 @@ export default function Header({ hideNav = false }: HeaderProps) {
       )}
     >
       <motion.div
-        className="fixed top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-flame-400 via-flame-500 to-ember-600 origin-left z-[60]"
+        className="fixed top-0 left-0 right-0 h-[3px] bg-flame-500 origin-left z-[60]"
         style={{ scaleX }}
       />
       <div className="max-w-[90rem] mx-auto px-6 sm:px-12 lg:px-16">

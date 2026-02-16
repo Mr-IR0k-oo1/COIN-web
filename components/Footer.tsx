@@ -28,7 +28,7 @@ export default function Footer() {
       <div className="absolute inset-0 pointer-events-none opacity-[0.03] dark:opacity-20 bg-grid-black dark:bg-grid-white bg-[length:32px_32px]" />
 
       {/* Top Gradient */}
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+      <div className="absolute top-0 left-0 w-full h-px bg-primary/20" />
 
       <div className="relative z-10 max-w-[90rem] mx-auto px-6 sm:px-12 lg:px-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 mb-24">

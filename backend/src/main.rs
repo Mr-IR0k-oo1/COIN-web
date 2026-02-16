@@ -1,13 +1,15 @@
 mod auth;
 mod db;
 mod error;
+mod export;
 mod handlers;
 mod middleware;
 mod models;
 mod utils;
-mod export;
 
 use axum::{
+    middleware::from_fn,
+    middleware::from_fn_with_state,
     routing::{delete, get, patch, post, put},
     Router,
 };
@@ -54,46 +56,56 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         jwt_secret: Arc::new(jwt_secret),
     };
 
-    // Build router
+    // Public API routes
     let public_routes = Router::new()
         .route("/health", get(handlers::health))
         .route("/hackathons", get(handlers::public::list_hackathons))
         .route("/hackathons/:id", get(handlers::public::get_hackathon))
+        .route(
+            "/hackathons/slug/:slug",
+            get(handlers::public::get_hackathon_by_slug),
+        )
         .route("/blog", get(handlers::public::list_blog_posts))
         .route("/blog/:slug", get(handlers::public::get_blog_post))
         .route("/submit", post(handlers::public::submit_participation));
 
-    let student_routes = Router::new()
+    // Student routes
+    let student_public = Router::new()
         .route("/register", post(handlers::student::register))
-        .route("/login", post(handlers::student::login))
+        .route("/login", post(handlers::student::login));
+
+    let student_protected = Router::new()
         .route("/:id", get(handlers::student::get_profile))
         .route("/:id", put(handlers::student::update_profile))
-        .route("/search", get(handlers::student::search));
+        .route("/search", get(handlers::student::search))
+        .layer(from_fn(middleware::student_guard))
+        .layer(from_fn_with_state(
+            state.clone(),
+            middleware::auth_middleware,
+        ));
 
-    let admin_routes = Router::new()
-        .route("/login", post(handlers::admin::login))
+    let student_routes = student_public.merge(student_protected);
+
+    // Admin routes
+    let admin_public = Router::new().route("/login", post(handlers::admin::login));
+
+    let admin_protected = Router::new()
         .route(
             "/hackathons",
-            post(handlers::admin::create_hackathon)
-                .get(handlers::admin::list_hackathons_admin),
+            post(handlers::admin::create_hackathon).get(handlers::admin::list_hackathons_admin),
         )
         .route(
             "/hackathons/:id",
-            put(handlers::admin::update_hackathon)
-                .delete(handlers::admin::delete_hackathon),
+            put(handlers::admin::update_hackathon).delete(handlers::admin::delete_hackathon),
         )
         .route(
             "/hackathons/:id/status",
             patch(handlers::admin::update_hackathon_status),
         )
-        .route(
-            "/submissions",
-            get(handlers::admin::list_submissions),
-        )
+        .route("/submissions", get(handlers::admin::list_submissions))
         .route(
             "/submissions/:id",
-            get(handlers::admin::get_submission)
-                .delete(handlers::admin::delete_submission),
+            get(handlers::admin::get_submission).delete(handlers::admin::delete_submission),
         )
         .route(
             "/submissions/:id/status",
@@ -103,13 +115,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .route("/blog/:id", put(handlers::admin::update_blog_post))
         .route("/blog/:id", delete(handlers::admin::delete_blog_post))
         .route("/metrics", get(handlers::admin::get_metrics))
-        .route("/export", get(handlers::admin::export_data));
+        .route("/export", get(handlers::admin::export_data))
+        .layer(from_fn(middleware::admin_guard))
+        .layer(from_fn_with_state(
+            state.clone(),
+            middleware::auth_middleware,
+        ));
+
+    let admin_routes = admin_public.merge(admin_protected);
 
     let app = Router::new()
         .nest("/api", public_routes)
         .nest("/api/student", student_routes)
         .nest("/api/admin", admin_routes)
-        .layer(middleware::jwt_layer(state.jwt_secret.clone()))
         .layer(CorsLayer::permissive())
         .with_state(state);
 

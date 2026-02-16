@@ -78,7 +78,7 @@ export default function AdminDashboard() {
       title: 'Total Mentors',
       value: metrics?.totalMentors || 0,
       icon: BookOpen,
-      color: 'bg-orange-100 text-orange-600',
+      color: 'bg-flame-100 text-flame-600',
     },
   ]
 

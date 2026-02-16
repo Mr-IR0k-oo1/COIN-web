@@ -8,7 +8,6 @@ use axum::{
 };
 use serde::Deserialize;
 use serde_json::json;
-use sqlx::Row;
 use uuid::Uuid;
 
 use crate::AppState;
@@ -59,6 +58,19 @@ pub async fn get_hackathon(
 
     let hackathon: Hackathon = sqlx::query_as("SELECT * FROM hackathons WHERE id = $1")
         .bind(hackathon_id)
+        .fetch_optional(&state.db)
+        .await?
+        .ok_or_else(|| AppError::NotFound("Hackathon not found".to_string()))?;
+
+    Ok(Json(hackathon))
+}
+
+pub async fn get_hackathon_by_slug(
+    State(state): State<AppState>,
+    Path(slug): Path<String>,
+) -> AppResult<Json<Hackathon>> {
+    let hackathon: Hackathon = sqlx::query_as("SELECT * FROM hackathons WHERE slug = $1")
+        .bind(&slug)
         .fetch_optional(&state.db)
         .await?
         .ok_or_else(|| AppError::NotFound("Hackathon not found".to_string()))?;
@@ -145,21 +157,35 @@ pub async fn submit_participation(
         ));
     }
 
-    // Validate participant count
-    if req.participants.len() != req.participants.len() {
+    // Validate participant count matches declared count
+    let declared_participant_count = req.participants.len() as i32;
+    let declared_mentor_count = req.mentors.len() as i32;
+    
+    // Validate counts are reasonable (you can adjust min/max as needed)
+    if declared_participant_count < 1 {
         return Err(AppError::BadRequest(
-            "Participant count mismatch".to_string(),
+            "At least one participant is required".to_string(),
+        ));
+    }
+    
+    if declared_participant_count > 10 {
+        return Err(AppError::BadRequest(
+            "Maximum 10 participants per team".to_string(),
+        ));
+    }
+    
+    if declared_mentor_count > 5 {
+        return Err(AppError::BadRequest(
+            "Maximum 5 mentors per team".to_string(),
         ));
     }
 
-    // Validate mentor count
-    if req.mentors.len() != req.mentors.len() {
-        return Err(AppError::BadRequest(
-            "Mentor count mismatch".to_string(),
-        ));
+    // Validate team name
+    if req.team_name.trim().is_empty() {
+        return Err(AppError::BadRequest("Team name is required".to_string()));
     }
 
-    // Validate all participant emails
+    // Validate all participant emails are unique and valid
     let mut email_set = std::collections::HashSet::new();
     for participant in &req.participants {
         validate_srec_email(&participant.email)?;
@@ -168,15 +194,6 @@ pub async fn submit_participation(
                 "Duplicate participant emails".to_string(),
             ));
         }
-    }
-
-    // Validate required fields
-    if req.team_name.trim().is_empty() {
-        return Err(AppError::BadRequest("Team name is required".to_string()));
-    }
-
-    if req.participants.is_empty() {
-        return Err(AppError::BadRequest("At least one participant is required".to_string()));
     }
 
     // Create submission with transaction
@@ -190,8 +207,8 @@ pub async fn submit_participation(
     .bind(&submission_id)
     .bind(&hackathon_id)
     .bind(&req.team_name)
-    .bind(req.participants.len() as i32)
-    .bind(req.mentors.len() as i32)
+    .bind(declared_participant_count)
+    .bind(declared_mentor_count)
     .bind(true)
     .execute(&mut *tx)
     .await?;

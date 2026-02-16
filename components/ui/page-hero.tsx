@@ -38,7 +38,7 @@ export function PageHero({
                     duration={3}
                     repeatDelay={1}
                     className={cn(
-                        "[mask-image:radial-gradient(800px_circle_at_center,white,transparent)]",
+                        "opacity-100",
                         "inset-x-0 inset-y-[-30%] h-[200%] skew-y-12 fill-slate-400/20 stroke-slate-400/20 dark:fill-white/10 dark:stroke-white/10",
                     )}
                 />

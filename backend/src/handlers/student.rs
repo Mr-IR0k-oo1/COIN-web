@@ -1,20 +1,18 @@
 use crate::auth::{create_jwt, hash_password, verify_password};
 use crate::error::{AppError, AppResult};
 use crate::models::*;
-// validate_srec_email is not exposed as a public function returning bool, we'll validate directly
 use axum::{
-    extract::{Path, Query, State},
+    extract::{Path, Query, State, Extension},
     http::StatusCode,
-    response::IntoResponse,
     Json,
 };
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 use serde_json::json;
-use sqlx::Row;
 use uuid::Uuid;
 
 use crate::AppState;
 
+#[allow(dead_code)]
 #[derive(Deserialize)]
 pub struct PaginationQuery {
     pub page: Option<i32>,
@@ -69,7 +67,7 @@ pub async fn register(
     .await?;
 
     // Create JWT token
-    let token = create_jwt(&student.id.to_string(), &student.email, &state.jwt_secret)?;
+    let token = create_jwt(&student.id.to_string(), &student.email, "student", &state.jwt_secret)?;
 
     let student_public = StudentPublic {
         id: student.id.to_string(),
@@ -116,7 +114,7 @@ pub async fn login(
     .await?;
 
     // Create JWT token
-    let token = create_jwt(&student.id.to_string(), &student.email, &state.jwt_secret)?;
+    let token = create_jwt(&student.id.to_string(), &student.email, "student", &state.jwt_secret)?;
 
     let student_public = StudentPublic {
         id: student.id.to_string(),
@@ -137,19 +135,59 @@ pub async fn login(
 // Get student profile (requires auth)
 pub async fn get_profile(
     State(state): State<AppState>,
-    axum::extract::ConnectInfo(info): axum::extract::ConnectInfo<std::net::SocketAddr>,
+    Path(student_id): Path<String>,
+    Extension(claims): Extension<Claims>,
 ) -> AppResult<Json<StudentPublic>> {
-    // Extract student ID from JWT (middleware should handle this)
-    // For now, this is a placeholder - middleware will populate this
-    Err(AppError::Unauthorized("Not implemented".to_string()))
+    // Verify student is accessing their own profile
+    if claims.sub != student_id {
+        return Err(AppError::Unauthorized(
+            "Cannot access another student's profile".to_string(),
+        ));
+    }
+
+    let student_uuid = Uuid::parse_str(&student_id)
+        .map_err(|_| AppError::BadRequest("Invalid student ID".to_string()))?;
+
+    let student: Student = sqlx::query_as("SELECT * FROM students WHERE id = $1")
+        .bind(&student_uuid)
+        .fetch_optional(&state.db)
+        .await?
+        .ok_or_else(|| AppError::NotFound("Student not found".to_string()))?;
+
+    let skills: Vec<String> = sqlx::query_scalar(
+        "SELECT skill FROM student_skills WHERE student_id = $1 ORDER BY skill"
+    )
+    .bind(&student_uuid)
+    .fetch_all(&state.db)
+    .await?;
+
+    let student_public = StudentPublic {
+        id: student.id.to_string(),
+        name: student.name,
+        email: student.email,
+        year: student.year,
+        branch: student.branch,
+        bio: student.bio,
+        skills,
+    };
+
+    Ok(Json(student_public))
 }
 
 // Update student profile (requires auth)
 pub async fn update_profile(
     State(state): State<AppState>,
     Path(student_id): Path<String>,
+    Extension(claims): Extension<Claims>,
     Json(req): Json<UpdateStudentRequest>,
 ) -> AppResult<Json<StudentPublic>> {
+    // Verify student is updating their own profile
+    if claims.sub != student_id {
+        return Err(AppError::Unauthorized(
+            "Cannot update another student's profile".to_string(),
+        ));
+    }
+
     let student_uuid = Uuid::parse_str(&student_id)
         .map_err(|_| AppError::BadRequest("Invalid student ID".to_string()))?;
 
@@ -241,37 +279,39 @@ pub async fn search(
     State(state): State<AppState>,
     Query(params): Query<StudentSearchRequest>,
 ) -> AppResult<Json<serde_json::Value>> {
-    // Build query with filters
-    let mut base_query = String::from(
+    // Use parameterized query to prevent SQL injection
+    let mut query_str = String::from(
         "SELECT DISTINCT s.id, s.name, s.email, s.year, s.branch, s.bio FROM students s"
     );
+    
+    let mut param_count = 1;
+    let mut conditions = vec![];
 
-    let mut where_clauses = vec![];
-    let mut has_skills_filter = false;
-
-    if params.year.is_some() {
-        where_clauses.push(format!("s.year = {}", params.year.unwrap()));
+    // Handle year filter
+    if let Some(year) = params.year {
+        conditions.push(format!("s.year = ${}", param_count));
+        param_count += 1;
     }
 
-    if let Some(ref b) = params.branch {
-        where_clauses.push(format!("s.branch ILIKE '{}'", b.replace("'", "''")));
+    // Handle branch filter
+    if params.branch.is_some() {
+        conditions.push(format!("s.branch ILIKE ${}", param_count));
+        param_count += 1;
     }
 
+    // Handle skills filter - requires JOIN
     if params.skills.is_some() {
-        base_query.push_str(" LEFT JOIN student_skills ss ON s.id = ss.student_id");
-        has_skills_filter = true;
+        query_str.push_str(" LEFT JOIN student_skills ss ON s.id = ss.student_id");
+        conditions.push(format!("ss.skill ILIKE ${}", param_count));
+        param_count += 1;
     }
 
-    if let Some(ref sk) = params.skills {
-        where_clauses.push(format!("ss.skill ILIKE '%{}%'", sk.replace("'", "''")));
+    if !conditions.is_empty() {
+        query_str.push_str(" WHERE ");
+        query_str.push_str(&conditions.join(" AND "));
     }
 
-    if !where_clauses.is_empty() {
-        base_query.push_str(" WHERE ");
-        base_query.push_str(&where_clauses.join(" AND "));
-    }
-
-    base_query.push_str(" ORDER BY s.name LIMIT 100");
+    query_str.push_str(" ORDER BY s.name LIMIT 100");
 
     #[derive(sqlx::FromRow)]
     struct StudentRow {
@@ -283,9 +323,21 @@ pub async fn search(
         bio: Option<String>,
     }
 
-    let students_rows: Vec<StudentRow> = sqlx::query_as(&base_query)
-        .fetch_all(&state.db)
-        .await?;
+    // Build parameterized query dynamically
+    let mut query = sqlx::query_as::<_, StudentRow>(&query_str);
+    
+    if let Some(year) = params.year {
+        query = query.bind(year);
+    }
+    if let Some(ref branch) = params.branch {
+        query = query.bind(branch);
+    }
+    if let Some(ref skills) = params.skills {
+        let skills_pattern = format!("%{}%", skills);
+        query = query.bind(skills_pattern);
+    }
+
+    let students_rows: Vec<StudentRow> = query.fetch_all(&state.db).await?;
 
     let mut students_list = vec![];
 

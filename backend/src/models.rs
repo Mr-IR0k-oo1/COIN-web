@@ -13,6 +13,7 @@ pub struct Admin {
 }
 
 // Hackathon
+#[allow(dead_code)]
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "UPPERCASE")]
 pub enum HackathonMode {
@@ -20,6 +21,7 @@ pub enum HackathonMode {
     Offline,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "UPPERCASE")]
 pub enum HackathonStatus {
@@ -32,6 +34,7 @@ pub enum HackathonStatus {
 pub struct Hackathon {
     pub id: Uuid,
     pub name: String,
+    pub slug: Option<String>,
     pub organizer: String,
     pub description: String,
     pub mode: String, // ONLINE or OFFLINE
@@ -85,6 +88,7 @@ pub struct UpdateStatusRequest {
 }
 
 // Submission
+#[allow(dead_code)]
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum SubmissionStatus {
@@ -149,6 +153,7 @@ pub struct Mentor {
 }
 
 // Blog Post
+#[allow(dead_code)]
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum BlogCategory {
@@ -157,6 +162,7 @@ pub enum BlogCategory {
     Announcement,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum BlogStatus {
@@ -197,6 +203,7 @@ pub struct UpdateBlogPostRequest {
     pub content: Option<String>,
     pub category: Option<String>,
     pub author: Option<String>,
+    #[allow(dead_code)]
     pub related_hackathon: Option<String>,
     pub status: Option<String>,
 }
@@ -231,10 +238,11 @@ pub struct AdminResponse {
 }
 
 // JWT Claims
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Claims {
     pub sub: String,
     pub email: String,
+    pub role: String, // "admin" or "student"
     pub exp: i64,
 }
 
@@ -243,6 +251,7 @@ pub struct Claims {
 pub struct SubmissionDetail {
     pub submission_id: Uuid,
     pub submitted_at: DateTime<Utc>,
+    #[allow(dead_code)]
     pub semester: String,
     pub hackathon_name: String,
     pub team_name: String,

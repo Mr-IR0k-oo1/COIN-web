@@ -17,9 +17,7 @@ export default function Mission() {
             id="mission-section"
         >
             {/* Minimal Background */}
-            <div className="absolute inset-0 z-0">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(249,115,22,0.05),transparent_70%)]" />
-            </div>
+            <div className="absolute inset-0 z-0 bg-ash-950" />
 
             <div className="flex flex-col items-center text-center relative z-10 w-full">
                 <div className="inline-flex items-center gap-2 text-flame-500 font-bold uppercase tracking-[0.3em] text-xs mb-8">

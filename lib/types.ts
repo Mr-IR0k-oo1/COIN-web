@@ -9,16 +9,16 @@ export type Department =
   | 'Chemical'
   | 'Information Technology'
 
-export type HackathonMode = 'In-Person' | 'Online' | 'Hybrid'
-export type HackathonStatus = 'Active' | 'Closed' | 'Upcoming' | 'Completed'
+export type HackathonMode = 'ONLINE' | 'OFFLINE'
+export type HackathonStatus = 'UPCOMING' | 'ONGOING' | 'CLOSED'
 
 export type BlogCategory = 'Article' | 'Winner' | 'Announcement'
-export type BlogStatus = 'Draft' | 'Published'
+export type BlogStatus = 'draft' | 'published'
 
 export interface Hackathon {
   id: string
-  slug: string
   name: string
+  slug?: string
   organizer: string
   description: string
   mode: HackathonMode
@@ -26,7 +26,7 @@ export interface Hackathon {
   startDate: string
   endDate: string
   registrationDeadline: string
-  officialLink: string
+  officialRegistrationLink: string
   eligibility: string
   semester: string
   status: HackathonStatus
@@ -35,28 +35,28 @@ export interface Hackathon {
 }
 
 export interface Participant {
-  fullName: string
-  collegeEmail: string
-  department: Department
-  academicYear: AcademicYear
+  name: string
+  email: string
+  department: string
+  academicYear: string
 }
 
 export interface Mentor {
   name: string
-  department: Department
+  department: string
 }
+
+export type SubmissionStatus = 'submitted' | 'verified' | 'archived'
 
 export interface Submission {
   id: string
   hackathonId: string
-  hackathonName: string
   teamName: string
   participantCount: number
   mentorCount: number
-  participants: Participant[]
-  mentors: Mentor[]
-  externalConfirmed: boolean
-  submittedAt: string
+  externalRegistrationConfirmed: boolean
+  status: SubmissionStatus
+  createdAt: string
 }
 
 export interface BlogPost {
@@ -65,13 +65,12 @@ export interface BlogPost {
   title: string
   summary: string
   content: string
-  category: BlogCategory
-  tags: string[]
+  category: string
+  author: string
   relatedHackathon?: string
-  status: BlogStatus
+  status: string
   createdAt: string
   updatedAt: string
-  authorId?: string
 }
 
 export interface DashboardMetrics {

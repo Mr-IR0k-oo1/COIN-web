@@ -35,7 +35,7 @@ export default function Home() {
           badge="System v2.0"
           title={
             <>
-              Design <span className="text-transparent bg-clip-text bg-gradient-to-br from-flame-400 to-amber-600">The Future</span>
+              Design <span className="text-flame-600">The Future</span>
               <br />
               Of <span className="text-slate-500">Innovation.</span>
             </>
@@ -151,26 +151,26 @@ export default function Home() {
                   who: 'Students',
                   desc: 'Discover hackathons, form teams, and build your portfolio.',
                   features: ['Global Opportunities', 'Team Formation', 'Portfolio Building'],
-                  gradient: 'from-blue-500/10 to-cyan-500/10',
+                  gradient: 'bg-blue-500/10',
                   border: 'group-hover:border-blue-500/50'
                 },
                 {
                   who: 'Faculty',
                   desc: 'Mentor students and track department achievements.',
                   features: ['Mentorship Tools', 'Progress Tracking', 'Success Stories'],
-                  gradient: 'from-flame-500/10 to-ember-500/10',
+                  gradient: 'bg-flame-500/10',
                   border: 'group-hover:border-flame-500/50'
                 },
                 {
                   who: 'Administration',
                   desc: 'Get a bird\'s eye view of institutional innovation.',
                   features: ['Data Analytics', 'Accreditation Reports', 'Impact Assessment'],
-                  gradient: 'from-purple-500/10 to-pink-500/10',
+                  gradient: 'bg-purple-500/10',
                   border: 'group-hover:border-purple-500/50'
                 },
               ].map((card, idx) => (
                 <div key={idx} className={`group relative p-8 rounded-3xl border border-slate-200 dark:border-white/10 bg-white dark:bg-neutral-900/40 backdrop-blur-sm transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 ${card.border} ${idx === 2 ? 'md:col-span-2' : ''}`}>
-                  <div className={`absolute inset-0 bg-gradient-to-br ${card.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl`} />
+                  <div className={`absolute inset-0 ${card.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl`} />
 
                   <div className="relative z-10">
                     <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 border border-slate-200 dark:border-white/10">
@@ -210,9 +210,7 @@ export default function Home() {
 
           <div className="relative max-w-6xl mx-auto">
             {/* Connecting Line */}
-            <div className="absolute top-12 left-[10%] w-[80%] h-0.5 bg-border hidden md:block">
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary to-transparent w-1/3 animate-shimmer hidden md:block" />
-            </div>
+            <div className="absolute top-12 left-[10%] w-[80%] h-0.5 bg-border hidden md:block" />
 
             <div className="grid grid-cols-1 md:grid-cols-5 gap-8 relative z-10">
               {[
@@ -300,11 +298,11 @@ export default function Home() {
         {/* Mission Statement */}
         <Section fullHeight={true} className="bg-slate-900 dark:bg-slate-950 text-white relative overflow-hidden">
           <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop')] bg-cover bg-center opacity-10 mix-blend-overlay" />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-slate-900" />
+          <div className="absolute inset-0 bg-slate-900/50" />
 
           <div className="relative z-10 max-w-4xl mx-auto text-center">
             <h2 className="text-5xl md:text-7xl font-display font-black mb-8 leading-tight tracking-tighter">
-              Fueling the <br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">Future</span> of Innovation
+              Fueling the <br /><span className="text-blue-400">Future</span> of Innovation
             </h2>
             <p className="text-xl md:text-2xl text-slate-300 font-light leading-relaxed mb-12">
               We believe in tracking impact and celebrating achievements that drive progress. CoIN is the backbone of SREC's collaborative spirit.
@@ -340,7 +338,7 @@ export default function Home() {
                     <div className="absolute inset-0 bg-gradient-to-br from-secondary to-muted group-hover:scale-105 transition-transform duration-700" />
                     <div className="absolute top-4 left-4">
                       <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider backdrop-blur-md shadow-sm border ${post.category === 'Winner'
-                        ? 'bg-amber-100/80 text-amber-900 border-amber-200'
+                        ? 'bg-blue-100/80 text-blue-900 border-blue-200'
                         : 'bg-primary/10 text-primary border-primary/20'
                         }`}>
                         {post.category}

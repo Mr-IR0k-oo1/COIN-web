@@ -1,7 +1,6 @@
 use crate::error::AppResult;
 use crate::models::SubmissionDetail;
 use csv::Writer;
-use std::io::Cursor;
 
 pub fn generate_csv(submissions: Vec<SubmissionDetail>) -> AppResult<Vec<u8>> {
     let mut wtr = Writer::from_writer(vec![]);

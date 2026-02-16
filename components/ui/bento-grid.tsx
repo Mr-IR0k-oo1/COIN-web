@@ -63,8 +63,8 @@ export const BentoGridItem = ({
                 <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-primary/5 rounded-full blur-[80px]" />
             </div>
 
-            {/* Gradient Overlay for texture */}
-            <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-primary/5 opacity-0 group-hover/bento:opacity-100 transition-opacity duration-500" />
+            {/* Solid overlay for texture */}
+            <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover/bento:opacity-100 transition-opacity duration-500" />
 
             <div className="relative z-10 flex flex-col h-full space-y-4">
                 {header}
