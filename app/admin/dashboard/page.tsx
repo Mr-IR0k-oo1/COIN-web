@@ -63,7 +63,8 @@ export default function DashboardPage() {
   ], [hackathons.length, submissions.length, totalStudents, totalMentors])
 
   const recentSubmissions = useMemo(() => [...submissions]
-    .sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime())
+    .filter(a => a.submittedAt)
+    .sort((a, b) => new Date(b.submittedAt!).getTime() - new Date(a.submittedAt!).getTime())
     .slice(0, 5), [submissions])
 
   return (
@@ -249,7 +250,7 @@ export default function DashboardPage() {
                       </td>
                       <td className="px-8 py-5 text-right">
                         <p className="text-xs font-medium text-ash-400 dark:text-ash-500">
-                          {formatDate(sub.submittedAt)}
+                          {formatDate(sub.submittedAt || '')}
                         </p>
                       </td>
                     </tr>

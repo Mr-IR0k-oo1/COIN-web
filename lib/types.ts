@@ -44,6 +44,7 @@ export type SubmissionStatus = 'submitted' | 'verified' | 'archived'
 export interface Submission {
   id: string
   hackathonId: string
+  hackathonName?: string
   teamName: string
   participantCount: number
   mentorCount: number
@@ -59,7 +60,7 @@ export interface BlogPost {
   title: string
   summary: string
   content: string
-  category: string
+  category: BlogCategory
   author: string
   relatedHackathon?: string
   status: string

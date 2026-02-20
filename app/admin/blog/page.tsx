@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react'
 import { BlogPost, BlogCategory } from '@/lib/types'
 import { Plus, Search, Edit2, Trash2, Layout, Tag, Send, FileText, XCircle, MoreHorizontal, CheckCircle2, Clock } from 'lucide-react'
 
-const CATEGORIES: BlogCategory[] = ['Article', 'Winner', 'Announcement']
+const CATEGORIES: BlogCategory[] = ['article', 'winner', 'announcement']
 
 export default function BlogManagementPage() {
   const posts = useBlogStore((state) => state.posts)
@@ -27,13 +27,10 @@ export default function BlogManagementPage() {
     title: '',
     summary: '',
     content: '',
-    category: 'Article' as BlogCategory,
-    tags: [],
+    category: 'article' as BlogCategory,
     relatedHackathon: undefined,
     status: 'Draft',
   })
-  const [tagInput, setTagInput] = useState('')
-
   useEffect(() => {
     fetchPosts()
     fetchHackathons()
@@ -43,19 +40,16 @@ export default function BlogManagementPage() {
     if (post) {
       setEditingId(post.id)
       setFormData(post)
-      setTagInput(post.tags.join(', '))
     } else {
       setEditingId(null)
       setFormData({
         title: '',
         summary: '',
         content: '',
-        category: 'Article' as BlogCategory,
-        tags: [],
+        category: 'article' as BlogCategory,
         relatedHackathon: undefined,
         status: 'Draft',
       })
-      setTagInput('')
     }
     setShowForm(true)
   }
@@ -63,19 +57,14 @@ export default function BlogManagementPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    const tags = tagInput
-      .split(',')
-      .map((t) => t.trim())
-      .filter((t) => t.length > 0)
-
     const payload = {
       title: formData.title || '',
       summary: formData.summary || '',
       content: formData.content || '',
-      category: formData.category || 'Article',
-      tags,
+      category: (formData.category || 'article') as BlogCategory,
       relatedHackathon: formData.relatedHackathon,
       status: formData.status || 'Draft',
+      author: '',
     }
 
     if (editingId) {
@@ -100,8 +89,8 @@ export default function BlogManagementPage() {
 
   const getCategoryStyles = (category: BlogCategory) => {
     switch (category) {
-      case 'Winner': return 'bg-flame-500/10 text-flame-600 dark:text-flame-400 border-flame-500/20'
-      case 'Announcement': return 'bg-ember-500/10 text-ember-600 dark:text-ember-400 border-ember-500/20'
+      case 'winner': return 'bg-flame-500/10 text-flame-600 dark:text-flame-400 border-flame-500/20'
+      case 'announcement': return 'bg-ember-500/10 text-ember-600 dark:text-ember-400 border-ember-500/20'
       default: return 'bg-ember-500/10 text-ember-600 dark:text-ember-400 border-ember-500/20'
     }
   }
@@ -188,19 +177,6 @@ export default function BlogManagementPage() {
                           <option value="Draft">Draft (Offline)</option>
                           <option value="Published">Published (Live)</option>
                         </select>
-                      </div>
-
-                      <div className="space-y-2">
-                        <label className="text-xs font-bold text-ash-400 uppercase tracking-widest ml-1 flex items-center gap-2">
-                          <Tag size={12} /> Tags
-                        </label>
-                        <input
-                          type="text"
-                          value={tagInput}
-                          onChange={(e) => setTagInput(e.target.value)}
-                          placeholder="innovation, SIH2024..."
-                          className="w-full px-5 py-3 bg-ash-50 dark:bg-ash-900/60 border border-ash-200 dark:border-ash-800 rounded-2xl outline-none text-sm"
-                        />
                       </div>
 
                       <div className="space-y-2">
@@ -333,14 +309,6 @@ export default function BlogManagementPage() {
                     <p className="text-ash-500 dark:text-ash-400 line-clamp-2 text-sm leading-relaxed">
                       {post.summary}
                     </p>
-
-                    <div className="flex flex-wrap gap-2 pt-2">
-                      {post.tags.map(tag => (
-                        <span key={tag} className="text-[10px] bg-ash-50 dark:bg-ash-900 text-ash-400 px-2 py-1 rounded-md">
-                          #{tag}
-                        </span>
-                      ))}
-                    </div>
                   </div>
 
                   <div className="flex flex-row md:flex-col items-center justify-center gap-3">
