@@ -2,7 +2,7 @@ use crate::auth::{create_jwt, hash_password, verify_password};
 use crate::error::{AppError, AppResult};
 use crate::models::*;
 use axum::{
-    extract::{Path, Query, State, Extension},
+    extract::{Extension, Path, Query, State},
     http::StatusCode,
     Json,
 };
@@ -33,7 +33,9 @@ pub async fn register(
 
     // Validate year
     if req.year < 1 || req.year > 4 {
-        return Err(AppError::BadRequest("Academic year must be between 1 and 4".to_string()));
+        return Err(AppError::BadRequest(
+            "Academic year must be between 1 and 4".to_string(),
+        ));
     }
 
     // Hash password
@@ -55,7 +57,7 @@ pub async fn register(
     let student: Student = sqlx::query_as(
         "INSERT INTO students (id, name, email, password_hash, year, branch)
          VALUES ($1, $2, $3, $4, $5, $6)
-         RETURNING *"
+         RETURNING *",
     )
     .bind(&id)
     .bind(&req.name)
@@ -67,7 +69,12 @@ pub async fn register(
     .await?;
 
     // Create JWT token
-    let token = create_jwt(&student.id.to_string(), &student.email, "student", &state.jwt_secret)?;
+    let token = create_jwt(
+        &student.id.to_string(),
+        &student.email,
+        "student",
+        &state.jwt_secret,
+    )?;
 
     let student_public = StudentPublic {
         id: student.id.to_string(),
@@ -106,15 +113,19 @@ pub async fn login(
     }
 
     // Fetch skills
-    let skills: Vec<String> = sqlx::query_scalar(
-        "SELECT skill FROM student_skills WHERE student_id = $1 ORDER BY skill"
-    )
-    .bind(&student.id)
-    .fetch_all(&state.db)
-    .await?;
+    let skills: Vec<String> =
+        sqlx::query_scalar("SELECT skill FROM student_skills WHERE student_id = $1 ORDER BY skill")
+            .bind(&student.id)
+            .fetch_all(&state.db)
+            .await?;
 
     // Create JWT token
-    let token = create_jwt(&student.id.to_string(), &student.email, "student", &state.jwt_secret)?;
+    let token = create_jwt(
+        &student.id.to_string(),
+        &student.email,
+        "student",
+        &state.jwt_secret,
+    )?;
 
     let student_public = StudentPublic {
         id: student.id.to_string(),
@@ -154,12 +165,11 @@ pub async fn get_profile(
         .await?
         .ok_or_else(|| AppError::NotFound("Student not found".to_string()))?;
 
-    let skills: Vec<String> = sqlx::query_scalar(
-        "SELECT skill FROM student_skills WHERE student_id = $1 ORDER BY skill"
-    )
-    .bind(&student_uuid)
-    .fetch_all(&state.db)
-    .await?;
+    let skills: Vec<String> =
+        sqlx::query_scalar("SELECT skill FROM student_skills WHERE student_id = $1 ORDER BY skill")
+            .bind(&student_uuid)
+            .fetch_all(&state.db)
+            .await?;
 
     let student_public = StudentPublic {
         id: student.id.to_string(),
@@ -221,7 +231,7 @@ pub async fn update_profile(
     let updated: Student = sqlx::query_as(
         "UPDATE students SET name = $1, year = $2, branch = $3, bio = $4, updated_at = NOW()
          WHERE id = $5
-         RETURNING *"
+         RETURNING *",
     )
     .bind(&student.name)
     .bind(student.year)
@@ -242,19 +252,17 @@ pub async fn update_profile(
 
         // Insert new skills
         for skill in &new_skills {
-            sqlx::query(
-                "INSERT INTO student_skills (student_id, skill) VALUES ($1, $2)"
-            )
-            .bind(&student_uuid)
-            .bind(skill)
-            .execute(&state.db)
-            .await?;
+            sqlx::query("INSERT INTO student_skills (student_id, skill) VALUES ($1, $2)")
+                .bind(&student_uuid)
+                .bind(skill)
+                .execute(&state.db)
+                .await?;
         }
         skills = new_skills;
     } else {
         // Fetch existing skills
         skills = sqlx::query_scalar(
-            "SELECT skill FROM student_skills WHERE student_id = $1 ORDER BY skill"
+            "SELECT skill FROM student_skills WHERE student_id = $1 ORDER BY skill",
         )
         .bind(&student_uuid)
         .fetch_all(&state.db)
@@ -281,29 +289,33 @@ pub async fn search(
 ) -> AppResult<Json<serde_json::Value>> {
     // Use parameterized query to prevent SQL injection
     let mut query_str = String::from(
-        "SELECT DISTINCT s.id, s.name, s.email, s.year, s.branch, s.bio FROM students s"
+        "SELECT DISTINCT s.id, s.name, s.email, s.year, s.branch, s.bio FROM students s",
     );
-    
-    let mut param_count = 1;
+
     let mut conditions = vec![];
+    let mut param_count = 1;
+
+    // Helper to get current param number and increment
+    let mut next_param = || {
+        let current = param_count;
+        param_count += 1;
+        current
+    };
 
     // Handle year filter
     if params.year.is_some() {
-        conditions.push(format!("s.year = ${}", param_count));
-        param_count += 1;
+        conditions.push(format!("s.year = ${}", next_param()));
     }
 
     // Handle branch filter
     if params.branch.is_some() {
-        conditions.push(format!("s.branch ILIKE ${}", param_count));
-        param_count += 1;
+        conditions.push(format!("s.branch ILIKE ${}", next_param()));
     }
 
     // Handle skills filter - requires JOIN
     if params.skills.is_some() {
         query_str.push_str(" LEFT JOIN student_skills ss ON s.id = ss.student_id");
-        conditions.push(format!("ss.skill ILIKE ${}", param_count));
-        param_count += 1;
+        conditions.push(format!("ss.skill ILIKE ${}", next_param()));
     }
 
     if !conditions.is_empty() {
@@ -325,7 +337,7 @@ pub async fn search(
 
     // Build parameterized query dynamically
     let mut query = sqlx::query_as::<_, StudentRow>(&query_str);
-    
+
     if let Some(year) = params.year {
         query = query.bind(year);
     }
@@ -343,7 +355,7 @@ pub async fn search(
 
     for row in students_rows {
         let skills: Vec<String> = sqlx::query_scalar(
-            "SELECT skill FROM student_skills WHERE student_id = $1 ORDER BY skill"
+            "SELECT skill FROM student_skills WHERE student_id = $1 ORDER BY skill",
         )
         .bind(&row.id)
         .fetch_all(&state.db)

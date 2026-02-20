@@ -27,7 +27,7 @@ pub fn verify_password(password: &str, hash: &str) -> AppResult<bool> {
         .verify_password(password.as_bytes(), &parsed_hash)
         .map(|_| true)
         .or_else(|_| Ok(false))
-}
+} 
 
 pub fn create_jwt(user_id: &str, email: &str, role: &str, secret: &str) -> AppResult<String> {
     let now = Utc::now().timestamp();

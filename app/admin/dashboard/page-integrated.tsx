@@ -138,9 +138,9 @@ export default function AdminDashboard() {
                   </div>
                   <span
                     className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                      h.status === 'Active'
+                      h.status === 'ONGOING'
                         ? 'bg-flame-100 text-flame-800 dark:bg-flame-900/30 dark:text-flame-400'
-                        : h.status === 'Upcoming'
+                        : h.status === 'UPCOMING'
                         ? 'bg-ember-100 text-ember-800 dark:bg-ember-900/30 dark:text-ember-400'
                         : 'bg-ash-100 text-ash-800 dark:bg-ash-800 dark:text-ash-400'
                     }`}
