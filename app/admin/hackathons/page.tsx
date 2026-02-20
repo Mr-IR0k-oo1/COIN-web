@@ -22,7 +22,7 @@ export default function HackathonsPage() {
     name: '',
     organizer: '',
     description: '',
-    mode: 'Hybrid' as HackathonMode,
+    mode: 'ONLINE' as HackathonMode,
     location: '',
     startDate: '',
     endDate: '',
@@ -30,7 +30,7 @@ export default function HackathonsPage() {
     officialRegistrationLink: '',
     eligibility: '',
     semester: '',
-    status: 'Upcoming' as HackathonStatus,
+    status: 'UPCOMING' as HackathonStatus,
   })
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export default function HackathonsPage() {
         name: '',
         organizer: '',
         description: '',
-        mode: 'Hybrid' as HackathonMode,
+        mode: 'ONLINE' as HackathonMode,
         location: '',
         startDate: '',
         endDate: '',
@@ -55,7 +55,7 @@ export default function HackathonsPage() {
         officialRegistrationLink: '',
         eligibility: '',
         semester: '',
-        status: 'Upcoming' as HackathonStatus,
+        status: 'UPCOMING' as HackathonStatus,
       })
     }
     setShowForm(true)
@@ -68,15 +68,15 @@ export default function HackathonsPage() {
       name: formData.name || '',
       organizer: formData.organizer || '',
       description: formData.description || '',
-      mode: formData.mode || 'Hybrid',
+      mode: (formData.mode || 'ONLINE') as HackathonMode,
       location: formData.location || '',
       startDate: formData.startDate || '',
       endDate: formData.endDate || '',
       registrationDeadline: formData.registrationDeadline || '',
-      officialLink: formData.officialLink || '',
+      officialRegistrationLink: formData.officialRegistrationLink || '',
       eligibility: formData.eligibility || '',
       semester: formData.semester || '',
-      status: formData.status || 'Upcoming',
+      status: (formData.status || 'UPCOMING') as HackathonStatus,
     }
 
     if (editingId) {
@@ -101,10 +101,9 @@ export default function HackathonsPage() {
 
   const getStatusInfo = (status: HackathonStatus) => {
     switch (status) {
-      case 'Active': return { icon: CheckCircle2, color: 'text-flame-500', bg: 'bg-flame-500/10', border: 'border-flame-500/20' }
-      case 'Upcoming': return { icon: Clock, color: 'text-ember-500', bg: 'bg-ember-500/10', border: 'border-ember-500/20' }
-      case 'Closed': return { icon: XCircle, color: 'text-ember-500', bg: 'bg-ember-500/10', border: 'border-ember-500/20' }
-      case 'Completed': return { icon: CheckCircle2, color: 'text-ash-500', bg: 'bg-ash-500/10', border: 'border-ash-500/20' }
+      case 'ONGOING': return { icon: CheckCircle2, color: 'text-flame-500', bg: 'bg-flame-500/10', border: 'border-flame-500/20' }
+      case 'UPCOMING': return { icon: Clock, color: 'text-ember-500', bg: 'bg-ember-500/10', border: 'border-ember-500/20' }
+      case 'CLOSED': return { icon: XCircle, color: 'text-ash-500', bg: 'bg-ash-500/10', border: 'border-ash-500/20' }
       default: return { icon: Info, color: 'text-ash-500', bg: 'bg-ash-500/10', border: 'border-ash-500/20' }
     }
   }
@@ -245,14 +244,13 @@ export default function HackathonsPage() {
                     <div className="space-y-2">
                       <label className="text-sm font-bold text-ash-700 dark:text-ash-300 ml-1">Current Status</label>
                       <select
-                        value={formData.status || 'Upcoming'}
+                        value={formData.status || 'UPCOMING'}
                         onChange={(e) => setFormData({ ...formData, status: e.target.value as HackathonStatus })}
                         className="w-full px-5 py-3 bg-ash-50 dark:bg-ash-900/60 border border-ash-200 dark:border-ash-800 rounded-2xl focus:ring-2 focus:ring-flame-500/20 focus:border-flame-500 transition-all outline-none"
                       >
-                        <option value="Active">Active</option>
-                        <option value="Upcoming">Upcoming</option>
-                        <option value="Closed">Closed</option>
-                        <option value="Completed">Completed</option>
+                        <option value="ONGOING">Active</option>
+                        <option value="UPCOMING">Upcoming</option>
+                        <option value="CLOSED">Closed</option>
                       </select>
                     </div>
 
@@ -260,8 +258,8 @@ export default function HackathonsPage() {
                       <label className="text-sm font-bold text-ash-700 dark:text-ash-300 ml-1">Official Website Link</label>
                       <input
                         type="url"
-                        value={formData.officialLink || ''}
-                        onChange={(e) => setFormData({ ...formData, officialLink: e.target.value })}
+                        value={formData.officialRegistrationLink || ''}
+                        onChange={(e) => setFormData({ ...formData, officialRegistrationLink: e.target.value })}
                         className="w-full px-5 py-3 bg-ash-50 dark:bg-ash-900/60 border border-ash-200 dark:border-ash-800 rounded-2xl focus:ring-2 focus:ring-flame-500/20 focus:border-flame-500 transition-all outline-none"
                         placeholder="https://..."
                         required
@@ -388,7 +386,7 @@ export default function HackathonsPage() {
                       <Trash2 size={20} />
                     </button>
                     <a
-                      href={hackathon.officialLink}
+                      href={hackathon.officialRegistrationLink}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="p-2.5 text-ash-400 hover:text-flame-600 dark:hover:text-flame-400 hover:bg-ash-50 dark:hover:bg-white/5 rounded-xl transition-all"

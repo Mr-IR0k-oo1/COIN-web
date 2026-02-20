@@ -49,9 +49,21 @@ export interface Submission {
   participantCount: number
   mentorCount: number
   externalRegistrationConfirmed: boolean
+  externalConfirmed?: boolean
   status: SubmissionStatus
   createdAt: string
   submittedAt?: string
+  participants?: Array<{
+    fullName: string
+    collegeEmail: string
+    department: string
+    academicYear: string
+  }>
+  mentors?: Array<{
+    name: string
+    email: string
+    department: string
+  }>
 }
 
 export interface BlogPost {

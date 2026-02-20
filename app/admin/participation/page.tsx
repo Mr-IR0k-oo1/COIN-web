@@ -10,13 +10,13 @@ import { Department } from '@/lib/types'
 import { Search, Filter, Users, UserCheck, Calendar, ArrowUpRight, SearchSlash, Layers } from 'lucide-react'
 
 const DEPARTMENTS: Department[] = [
-  'Computer Science',
+  'Computer Science and Engineering',
   'Information Technology',
-  'Electronics',
-  'Mechanical',
-  'Electrical',
-  'Civil',
-  'Chemical',
+  'Electronics and Communication Engineering',
+  'Mechanical Engineering',
+  'Electrical and Electronics Engineering',
+  'Civil Engineering',
+  'Artificial Intelligence and Data Science',
 ]
 
 export default function ParticipationPage() {
@@ -184,7 +184,7 @@ export default function ParticipationPage() {
                         </div>
                       </td>
                       <td className="px-8 py-6 text-sm text-ash-500">
-                        {formatDate(submission.submittedAt)}
+                        {formatDate(submission.submittedAt || '')}
                       </td>
                       <td className="px-8 py-6 text-right">
                         <Link

@@ -20,7 +20,7 @@ export default function ReportsPage() {
   const stats = [
     { label: 'Total Archives', value: submissions.length, icon: Database, color: 'text-ember-500', bg: 'bg-ember-500/10' },
     { label: 'Active Personnel', value: submissions.reduce((sum, s) => sum + s.participantCount, 0), icon: ShieldCheck, color: 'text-flame-500', bg: 'bg-flame-500/10' },
-    { label: 'Specialist Units', value: new Set(submissions.flatMap((s) => s.participants.map((p) => p.department))).size, icon: PieChart, color: 'text-ember-500', bg: 'bg-ember-500/10' },
+    { label: 'Specialist Units', value: new Set(submissions.flatMap((s) => s.participants?.map((p) => p.department) || [])).size, icon: PieChart, color: 'text-ember-500', bg: 'bg-ember-500/10' },
     { label: 'Guide Nodes', value: submissions.reduce((sum, s) => sum + s.mentorCount, 0), icon: BarChart3, color: 'text-flame-500', bg: 'bg-flame-500/10' },
   ]
 

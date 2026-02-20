@@ -112,7 +112,7 @@ export default function ParticipationDetailPage({ params }: PageProps) {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {submission.participants.map((p, idx) => (
+                {submission.participants?.map((p, idx) => (
                   <div key={idx} className="bg-ash-50 dark:bg-ash-900/40 rounded-3xl p-6 border border-ash-100 dark:border-ash-800 hover:border-ember-500/30 transition-all">
                     <div className="flex justify-between items-start mb-4">
                       <div className="w-12 h-12 rounded-2xl bg-white dark:bg-ash-800 flex items-center justify-center text-ash-300">
@@ -138,7 +138,7 @@ export default function ParticipationDetailPage({ params }: PageProps) {
               </div>
             </div>
 
-            {submission.mentors.length > 0 && (
+            {submission.mentors && submission.mentors.length > 0 && (
               <div className="bg-white dark:bg-ash-900 border border-ash-200 dark:border-ash-800 rounded-[40px] p-8 md:p-10 shadow-sm">
                 <div className="flex items-center gap-4 mb-10">
                   <div className="w-12 h-12 rounded-2xl bg-flame-500/10 flex items-center justify-center text-flame-600">
@@ -151,7 +151,7 @@ export default function ParticipationDetailPage({ params }: PageProps) {
                 </div>
 
                 <div className="space-y-4">
-                  {submission.mentors.map((m, idx) => (
+                  {submission.mentors?.map((m, idx) => (
                     <div key={idx} className="flex items-center justify-between p-5 bg-ash-50 dark:bg-ash-900/40 rounded-2xl border border-ash-100 dark:border-ash-800">
                       <div className="flex items-center gap-4">
                         <div className="w-10 h-10 rounded-xl bg-white dark:bg-ash-800 flex items-center justify-center text-flame-600">
@@ -180,7 +180,7 @@ export default function ParticipationDetailPage({ params }: PageProps) {
                   </div>
                   <div>
                     <p className="text-[10px] font-bold text-ash-400 uppercase tracking-widest">Logged On</p>
-                    <p className="text-sm font-bold text-ash-700 dark:text-ash-300">{formatDate(submission.submittedAt)}</p>
+                    <p className="text-sm font-bold text-ash-700 dark:text-ash-300">{formatDate(submission.submittedAt || '')}</p>
                   </div>
                 </div>
 
@@ -206,7 +206,7 @@ export default function ParticipationDetailPage({ params }: PageProps) {
                   <div>
                     <p className="text-[10px] font-bold text-ash-400 uppercase tracking-widest">Deployment Nodes</p>
                     <div className="flex flex-wrap gap-1 mt-1">
-                      {Array.from(new Set(submission.participants.map(p => p.department))).map(dept => (
+                      {Array.from(new Set(submission.participants?.map(p => p.department) || [])).map(dept => (
                         <span key={dept} className="text-[10px] bg-ash-100 dark:bg-ash-900 px-2 py-0.5 rounded-md text-ash-500">
                           {dept}
                         </span>
