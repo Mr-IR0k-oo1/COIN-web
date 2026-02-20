@@ -156,6 +156,7 @@ function mapBackendBlogPost(data: BackendBlogPost): BlogPost {
     summary: data.summary,
     content: data.content,
     category: mapBlogCategory(data.category),
+    author: data.author,
     relatedHackathon: data.related_hackathon,
     status: data.status as BlogStatus,
     createdAt: data.created_at,
@@ -330,17 +331,20 @@ export const backendService = {
         teamName: data.submission.team_name,
         participantCount: data.submission.participant_count,
         mentorCount: data.submission.mentor_count,
-        participants: data.participants.map((p): Participant => ({
+        participants: data.participants.map((p) => ({
           fullName: p.name,
           collegeEmail: p.email,
           department: p.department as any,
           academicYear: p.academic_year as any
         })),
-        mentors: data.mentors.map((m): Mentor => ({
+        mentors: data.mentors.map((m) => ({
           name: m.name,
           department: m.department as any
         })),
         externalConfirmed: data.submission.external_registration_confirmed,
+        externalRegistrationConfirmed: data.submission.external_registration_confirmed,
+        status: data.submission.status as any,
+        createdAt: data.submission.created_at,
         submittedAt: data.submission.created_at,
       }
     } catch {

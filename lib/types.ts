@@ -61,7 +61,7 @@ export interface Submission {
   }>
   mentors?: Array<{
     name: string
-    email: string
+    email?: string
     department: string
   }>
 }
