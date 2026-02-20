@@ -337,7 +337,7 @@ export default function Home() {
                     {/* Placeholder for image - using gradient for now */}
                     <div className="absolute inset-0 bg-gradient-to-br from-secondary to-muted group-hover:scale-105 transition-transform duration-700" />
                     <div className="absolute top-4 left-4">
-                      <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider backdrop-blur-md shadow-sm border ${post.category === 'Winner'
+                      <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider backdrop-blur-md shadow-sm border ${post.category === 'winner'
                         ? 'bg-blue-100/80 text-blue-900 border-blue-200'
                         : 'bg-primary/10 text-primary border-primary/20'
                         }`}>

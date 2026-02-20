@@ -91,9 +91,9 @@ export default function BlogDetailPage({ params }: PageProps) {
 
               <div className="flex items-center gap-4 mb-6">
                 <span
-                  className={`px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-widest border ${post.category === 'Winner'
+                  className={`px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-widest border ${post.category === 'winner'
                     ? 'bg-flame-500/10 text-flame-600 border-flame-500/20'
-                    : post.category === 'Announcement'
+                    : post.category === 'announcement'
                       ? 'bg-ember-500/10 text-ember-600 border-ember-500/20'
                       : 'bg-ember-500/10 text-ember-600 border-ember-500/20'
                     }`}
@@ -128,21 +128,7 @@ export default function BlogDetailPage({ params }: PageProps) {
                     </div>
                   )}
 
-                  {post.tags.length > 0 && (
-                    <div className="space-y-3">
-                      <p className="text-[10px] font-bold text-ash-400 uppercase tracking-widest">Metadata Tags</p>
-                      <div className="flex flex-wrap gap-2">
-                        {post.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className="bg-ash-50 dark:bg-ash-900 text-ash-500 border border-ash-200 dark:border-ash-700 px-3 py-1 rounded-full text-xs font-bold"
-                          >
-                            #{tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+                  <div className="pt-8 border-t border-ash-200 dark:border-ash-800"></div>
                 </div>
 
                 <div className="prose prose-slate max-w-none dark:prose-invert">

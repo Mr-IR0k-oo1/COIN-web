@@ -11,7 +11,7 @@ import Section from '@/components/ui/Section'
 import { PageHero } from '@/components/ui/page-hero'
 
 
-const CATEGORIES: BlogCategory[] = ['Article', 'Winner', 'Announcement']
+const CATEGORIES: BlogCategory[] = ['article', 'winner', 'announcement']
 
 export default function BlogPage() {
   const fetchPosts = useBlogStore((state) => state.fetchPosts)
@@ -95,8 +95,8 @@ export default function BlogPage() {
                   <div className="absolute top-0 right-0 p-6 opacity-50">
                     <span className={cn(
                       "inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border",
-                      post.category === 'Winner' ? 'bg-blue-500/10 text-blue-600 border-blue-500/20' :
-                        post.category === 'Announcement' ? 'bg-blue-500/10 text-blue-600 border-blue-500/20' :
+                      post.category === 'winner' ? 'bg-blue-500/10 text-blue-600 border-blue-500/20' :
+                        post.category === 'announcement' ? 'bg-blue-500/10 text-blue-600 border-blue-500/20' :
                           'bg-slate-100 text-slate-500 border-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700'
                     )}>
                       {post.category}
@@ -118,16 +118,13 @@ export default function BlogPage() {
                     <div className="pt-6 border-t border-slate-100 dark:border-white/5 mt-auto flex items-center justify-between">
                       <span className="text-xs font-black uppercase tracking-widest text-slate-400 group-hover:text-flame-500 transition-colors">Read Article &rarr;</span>
 
-                      {(post.relatedHackathon || post.tags.length > 0) && (
+                      {post.relatedHackathon && (
                         <div className="flex gap-2">
-                          {post.tags.slice(0, 1).map((tag) => (
-                            <span
-                              key={tag}
-                              className="text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-500 uppercase tracking-widest px-2 py-1 rounded border border-slate-200 dark:border-slate-700"
-                            >
-                              {tag}
-                            </span>
-                          ))}
+                          <span
+                            className="text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-500 uppercase tracking-widest px-2 py-1 rounded border border-slate-200 dark:border-slate-700"
+                          >
+                            Related Opportunity
+                          </span>
                         </div>
                       )}
                     </div>
